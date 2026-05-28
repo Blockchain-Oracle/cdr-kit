@@ -19,7 +19,8 @@
     "build": "tsdown",
     "lint": "eslint src",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run --passWithNoTests"
+    "test": "vitest run --passWithNoTests",
+    "demo": "tsx scripts/agent-demo.ts"
   },
   "dependencies": {
     "@cdr-kit/contracts": "workspace:*",
