@@ -16,8 +16,14 @@ export const aeneid = {
   pilTemplate: "0x2E896b0b2Fdb7457499B56AAaA4AE55BCB4Cd316",
   royaltyModule: "0xD2f60c40fEbccf6311f8B47c4f2Ec6b040400086",
   wip: "0x1514000000000000000000000000000000000000",
-  // cdr-kit (deployed)
+  // cdr-kit (deployed to Aeneid 2026-05-28)
   openCondition: "0x36fB2e2d10efd1E905b7779A684F34B9c775b62B",
+  cdrKitVault: "0xac592f165D8dD1f27A087bdB39c0b2f619FF6C8C",
+  creatorWriteCondition: "0x85CEB332445ca1d3D1975d6929cA6BED25195b2F",
+  subscriptionCondition: "0xB75Cc6571ac7E0ee30A519192740fc471e187458",
+  tierGateCondition: "0xdA704Faf61b2FFB37205d7Eb8C1D26BD3090455f",
+  composableCondition: "0x74F2f94e7867b07ECDFbcc667050CBec1dE2800B",
+  defaultLicenseTermsId: 2536,
 } as const;
 
 /// CDR precompile calls to allocate/write/read OOG under eth_estimateGas — always set an explicit
