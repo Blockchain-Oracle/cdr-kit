@@ -1,0 +1,14 @@
+# deps (forge libs are tracked as git submodules — see .gitmodules)
+node_modules/
+# build
+contracts/out/
+contracts/cache/
+dist/
+.turbo/
+# env / secrets
+.env
+.env.*
+!.env.example
+# misc
+.DS_Store
+*.log
