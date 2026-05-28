@@ -88,6 +88,9 @@ export async function createVault(
     childConfigs?: Hex[];
     licenseTermsId?: bigint;
     value?: bigint;
+    /** Explicit gas limit. createVault nests a CDR precompile call (allocate) whose gas
+     *  eth_estimateGas underestimates → OOG. Default 3M (observed usage ~1M). */
+    gas?: bigint;
   },
 ): Promise<Hex> {
   const wallet = requireWallet(client);
@@ -103,6 +106,7 @@ export async function createVault(
       params.licenseTermsId ?? 0n,
     ],
     value: params.value ?? 0n,
+    gas: params.gas ?? 3_000_000n,
     account: wallet.account!,
     chain: wallet.chain,
   });
