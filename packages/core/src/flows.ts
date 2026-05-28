@@ -1,14 +1,15 @@
 import { bytesToHex, type Hex } from "viem";
-import { uuidToLabel } from "@piplabs/cdr-sdk";
+import { uuidToLabel, EmptyVaultError, PartialCollectionTimeoutError } from "@piplabs/cdr-sdk";
 import { subscriptionConditionAbi, cdrKitVaultAbi } from "@cdr-kit/contracts";
 import type { CdrKitClient } from "./client.js";
 import { ensureWasm } from "./wasm.js";
+import { CdrError, CdrErrors } from "./errors.js";
 
 export type AccessStep = "paying" | "collecting-partials" | "ready";
 export type ProgressFn = (step: AccessStep) => void;
 
 function requireWallet(c: CdrKitClient) {
-  if (!c.walletClient?.account) throw new Error("cdr-kit: a walletClient with an account is required");
+  if (!c.walletClient?.account) throw CdrErrors.walletRequired();
   return c.walletClient;
 }
 
@@ -33,12 +34,20 @@ export async function accessVault(
   params: { uuid: number; accessAuxData?: Hex; timeoutMs?: number },
 ): Promise<Uint8Array> {
   await ensureWasm();
-  const { dataKey } = await client.cdr.consumer.accessCDR({
-    uuid: params.uuid,
-    accessAuxData: params.accessAuxData ?? "0x",
-    timeoutMs: params.timeoutMs ?? 600_000,
-  });
-  return dataKey;
+  const timeoutMs = params.timeoutMs ?? 600_000;
+  try {
+    const { dataKey } = await client.cdr.consumer.accessCDR({
+      uuid: params.uuid,
+      accessAuxData: params.accessAuxData ?? "0x",
+      timeoutMs,
+    });
+    return dataKey;
+  } catch (e) {
+    if (e instanceof EmptyVaultError) throw CdrErrors.vaultNotFound(params.uuid);
+    if (e instanceof PartialCollectionTimeoutError) throw CdrErrors.readTimeout(timeoutMs, e);
+    if (CdrError.is(e)) throw e;
+    throw CdrErrors.keeperUnavailable(e);
+  }
 }
 
 /** Buyer: subscribe (mutating tx) then access — the 2-step pattern (a view condition can't take payment). */
