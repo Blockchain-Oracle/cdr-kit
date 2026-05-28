@@ -1,0 +1,21 @@
+{
+  "name": "@cdr-kit/langchain",
+  "version": "0.0.0",
+  "description": "LangChain adapter for cdr-kit — getLangChainTools(agent).",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": { "types": "./dist/index.d.mts", "default": "./dist/index.mjs" },
+      "require": { "types": "./dist/index.d.cts", "default": "./dist/index.cjs" }
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "files": ["dist"],
+  "scripts": { "build": "tsdown", "lint": "eslint src", "typecheck": "tsc --noEmit" },
+  "dependencies": { "@cdr-kit/agent": "workspace:*", "@cdr-kit/tools": "workspace:*" },
+  "peerDependencies": { "@langchain/core": ">=0.3" },
+  "devDependencies": { "@langchain/core": "^1.1.48", "tsdown": "^0.22.0", "typescript": "^5.7.2" }
+}

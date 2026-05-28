@@ -1,0 +1,20 @@
+{
+  "name": "@cdr-kit/openai",
+  "version": "0.0.0",
+  "description": "OpenAI / Anthropic tool-calling adapter for cdr-kit — JSON-Schema tools[] + a dispatch router.",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": { "types": "./dist/index.d.mts", "default": "./dist/index.mjs" },
+      "require": { "types": "./dist/index.d.cts", "default": "./dist/index.cjs" }
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "files": ["dist"],
+  "scripts": { "build": "tsdown", "lint": "eslint src", "typecheck": "tsc --noEmit" },
+  "dependencies": { "@cdr-kit/agent": "workspace:*", "@cdr-kit/tools": "workspace:*" },
+  "devDependencies": { "tsdown": "^0.22.0", "typescript": "^5.7.2" }
+}
