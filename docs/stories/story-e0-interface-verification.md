@@ -4,6 +4,8 @@
 
 Blocks: all other epics. Detail: `../../context/research/cdr-protocol-truth.md`.
 
+> **✅ CLOSED on real Aeneid (2026-05-28).** Deployed `OpenCondition` `0x36fB2e2d10efd1E905b7779A684F34B9c775b62B`; `allocate` succeeded (`VaultAllocated uuid=4056`); `write` succeeded and the `cast run` trace shows the precompile invoking our condition via `0x5645dbbf` = `checkWriteCondition(uint32,bytes,bytes,address)` with `(uuid, aux, data, caller)`, returning true. OQ6 (allocate doesn't pre-check) + the 4-param interface are confirmed end-to-end. OQ7 (no vaultOwner getter) confirmed from the ABI. Remaining: full read→decrypt e2e (OQ8) belongs to E4. See live-findings in `cdr-protocol-truth.md`.
+
 ## Acceptance criteria (BDD)
 
 **Scenario: confirm the condition interface selector**
