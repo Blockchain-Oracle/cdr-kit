@@ -48,7 +48,11 @@ export function useAccessVault(uuid: number) {
       try {
         const out = mockKit
           ? await mockKit.accessVault({ uuid, onProgress: (progress) => setState({ status: "collecting-partials", progress }) })
-          : await accessVault(requireClient(client), { uuid, accessAuxData });
+          : await accessVault(requireClient(client), {
+              uuid,
+              accessAuxData,
+              onProgress: (step) => setState({ status: step === "ready" ? "ready" : "collecting-partials" }),
+            });
         setState({ status: "ready", data: out });
         return out;
       } catch (e) {

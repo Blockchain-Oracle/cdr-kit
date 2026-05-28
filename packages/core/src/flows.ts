@@ -28,19 +28,24 @@ export async function writeVaultData(client: CdrKitClient, params: { uuid: numbe
   return txHash;
 }
 
-/** Buyer/agent: read + decrypt (the ~7-min partial-collection flow). Returns the recovered data key. */
+/** Buyer/agent: read + decrypt (the ~7-min partial-collection flow). Returns the recovered data key.
+ *  `onProgress` reports the live phase (`collecting-partials` → `ready`). Determinate partial counts
+ *  are not exposed by the SDK's one-shot `accessCDR`, so the live signal is phase-based, not a tick
+ *  count (mock mode reports determinate `collected/threshold`). */
 export async function accessVault(
   client: CdrKitClient,
-  params: { uuid: number; accessAuxData?: Hex; timeoutMs?: number },
+  params: { uuid: number; accessAuxData?: Hex; timeoutMs?: number; onProgress?: ProgressFn },
 ): Promise<Uint8Array> {
   await ensureWasm();
   const timeoutMs = params.timeoutMs ?? 600_000;
+  params.onProgress?.("collecting-partials");
   try {
     const { dataKey } = await client.cdr.consumer.accessCDR({
       uuid: params.uuid,
       accessAuxData: params.accessAuxData ?? "0x",
       timeoutMs,
     });
+    params.onProgress?.("ready");
     return dataKey;
   } catch (e) {
     if (e instanceof EmptyVaultError) throw CdrErrors.vaultNotFound(params.uuid);
@@ -48,6 +53,12 @@ export async function accessVault(
     if (CdrError.is(e)) throw e;
     throw CdrErrors.keeperUnavailable(e);
   }
+}
+
+/** Warm the validator registry/attestation cache so the next access returns from a warm cache
+ *  (cuts the first-read stall). Best-effort — swallows errors. Call on wallet-connect. */
+export async function prefetchVault(client: CdrKitClient): Promise<void> {
+  await client.cdr.consumer.prefetchRegistry().catch(() => undefined);
 }
 
 /** Buyer: subscribe (mutating tx) then access — the 2-step pattern (a view condition can't take payment). */
