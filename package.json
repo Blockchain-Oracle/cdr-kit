@@ -10,10 +10,12 @@
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "wagmi": "pnpm --filter @cdr-kit/contracts run wagmi",
+    "check:publish": "turbo run build && pnpm -r --filter \"./packages/*\" exec publint",
     "release": "turbo run build && changeset publish"
   },
   "devDependencies": {
     "@changesets/cli": "^2.31.0",
+    "publint": "^0.3.21",
     "@eslint/js": "^9.15.0",
     "eslint": "^9.15.0",
     "prettier": "^3.4.2",
