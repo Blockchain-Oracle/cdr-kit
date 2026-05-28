@@ -29,3 +29,20 @@ Cross-cutting (every epic): ≤400 lines/file, CI matrix green, the 6 cross-cutt
 - `story-e7-dashboard.md` — flagship app + data-marketplace template.
 
 Phase-2 stories (TimeLock, Revocable, MultiSig-EIP712, secrets-vault, x402 bridge, CLI) written when those epics start.
+
+---
+
+## Expanded "full kit" plan (P0–P5) — supersedes E7/E8
+
+E0–E6 are DONE + validated live on Aeneid (engine: contracts, factory, core flows, react, agent, OQ8 round-trip, autonomous agent demo). Research (4 reports) showed we built the **engine, not the kit**. Decisions D16–D18 capture the upgraded vision. New build order:
+
+| Phase | Build | Key (decision) |
+|---|---|---|
+| **P0** | Capture vision in specs (this) | D16–D18 |
+| **P1 — core done right** | `CdrError` taxonomy · discriminated-union status (`idle\|connecting\|paying\|collecting-partials\|ready\|error\|empty`) · Zod-typed condition encoders/decoders + Zod'd keeper responses · keeper retries+backoff+idempotency · **file/IPFS path (>1KB)** · **mock mode** (`mode:'mock'\|'testnet'`) · Vitest | D17 |
+| **P2 — agent kit** | `@cdr-kit/tools` (declarative `{name,description,Zod,invoke}` + zod→json-schema) · `@cdr-kit/mcp` (server binary = OpenClaw/Claude/Cursor skill) · adapters `vercel-ai`/`langchain`/`openai`/`agentkit`/`goat` (+opt `eliza`) · examples `vercel-ai-chatbot`, `claude-mcp` | D16 |
+| **P3 — react completeness** | `CdrProvider`(mode+theme) · full hook set on the RQ state contract · `<VaultGate>`+`<VaultLocked/Unlocked>`+skeleton/empty/error primitives · optimistic gate · `useVaultEvents` · `<CdrInspector>` devtool · `@cdr-kit/react/testing` · generated react hooks in `@cdr-kit/contracts` | D17 |
+| **P4 — polish** | `create-cdr-kit-app` scaffolder · `examples/` · per-package READMEs + docs quickstart · versioning + SDK↔condition compat matrix · `publint`/`attw` in CI | D17 |
+| **P5 — flagship** | Next.js dashboard + data-marketplace template (visual-loop verified; doubles as live playground) | — |
+
+Clean refactors throughout — no backward-compat patching (D18). Skips (research-confirmed not real tool hosts): Hummingbot, Alexa, Olas.

@@ -84,6 +84,24 @@ Append new decisions; don't rewrite history. Each: context → decision → why 
 - **Why:** 2nd-round review: writes were an unspecified hole on the keystone path; 3rd-round: the write gate must not be asymmetric (re-configurable) vs the read gate.
 - **Status:** Locked.
 
+## D16 — Agent kit = tool-distribution layer (not a class)
+- **Decision:** The agent kit ships: `@cdr-kit/tools` (declarative `{name, description, Zod schema, invoke}` over `CdrAgent` — the single source of truth; the LLM reads the *description* to decide to call us) + `@cdr-kit/mcp` (one MCP server binary = the universal surface) + **5 native adapters** `vercel-ai` · `langchain` · `openai` (raw JSON-schema `tools[]` + invoke router, also serves Anthropic) · `agentkit` (Coinbase `ActionProvider`) · `goat` (`PluginBase`), + optional `eliza` (Story-adjacent). `zod→json-schema` is the shared primitive (feeds MCP/OpenAI/Anthropic). `CdrAgent` stays the engine.
+- **The OpenClaw plugin IS the MCP server** — OpenClaw consumes capabilities as MCP skills (`openclaw mcp set …` / ClawHub). MCP won interop in 2026: one server covers Claude/Cursor/Cline/Goose/Windsurf + OpenClaw + n8n/Zapier/Make + OpenAI Realtime. So no bespoke OpenClaw plugin.
+- **Skip (not real tool hosts):** Hummingbot (strategy framework), Alexa (intent/slot, no tool-calling), Olas (heavyweight FSM — only on bounty demand). Mastra/LlamaIndex/CrewAI/ADK/Pydantic-AI/etc. are reached transitively via MCP or the LangChain/OpenAI adapters — build dedicated ones only on demand.
+- **Why:** research on Coinbase AgentKit + GOAT form factor + the runtime landscape. A class + script is the engine, not a kit. Ties back to the original CDR+MCP thesis.
+- **Status:** Locked.
+
+## D17 — Kit DX must-haves (Stripe-tier, not mediocre)
+- **Decision:** Ship the "big-kit" floor: typed **`CdrError` taxonomy** (`WasmNotInitialized`, `ConditionNotMet`, `ReadTimeout`, `OutOfGas`, `PayloadTooLarge`, `KeeperUnavailable`, `WrongNetwork`; each `recoverable` + `suggestedAction`); **discriminated-union status** (`idle|connecting|paying|collecting-partials|ready|error|empty` — the ~15s read is first-class state, skeletons + determinate progress, never a spinner); **Zod-typed** condition encoders/decoders + Zod-validated keeper responses; **mock/sandbox mode** (`mode: 'mock'|'testnet'` runs the whole flow incl the simulated read with no chain/wallet → enables examples/CI/Storybook); **idempotency keys on the keeper REST only** (on-chain is already idempotent via nonce + `AlreadyConfigured`); **retries w/ backoff+jitter** on keeper + read polling (NOT on-chain txs); rate-limit handling; out-of-box loading/error/empty/**gate** UX primitives + optimistic gate. Nice-to-have: `<CdrInspector>` devtool, `useVaultEvents` (over logs), pluggable **redacted** logging (never log plaintext/keys), pagination/caching for discovery, a versioning + SDK↔deployed-condition **compat matrix**, a live playground.
+- **Overkill/skip:** confidential-compute "who-decrypted" audit (D11 — CDR can't), mainnet multichain machinery (keep the seam), full webhook delivery infra, gRPC/GraphQL.
+- **Why:** research on Stripe/Clerk/Supabase/Resend/Liveblocks/wagmi. CDR twist: the chain is already the idempotency+audit ledger; the slow path is a *read*, not a write.
+- **Status:** Locked.
+
+## D18 — Clean refactor, no backward-compat patching
+- **Decision:** In active development, refactor/restructure cleanly — rename packages, change APIs, restructure `agent`→`tools`/`mcp`/adapters, introduce `CdrError` at all throw sites. No compat shims, no patch-on-top.
+- **Why:** nothing published/locked; clean + professional > patchwork (Abu). Aligns with the system default (no backwards-compat hacks in dev). See [[build-big-no-patching]].
+- **Status:** Locked.
+
 ## Closed open questions
 - OQ1 → **allocateFee = 0** on Aeneid (verified on-chain; read at runtime anyway). Registration fee: still read on-chain in E0.
 - OQ2 → **LICENSE_READ_CONDITION = `0xC0640AD4CF2CaA9914C8e5C44234359a9102f7a3`** (live). `0xD429…` (cdr-demo) is NOT deployed.
