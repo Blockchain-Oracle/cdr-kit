@@ -12,3 +12,6 @@ dist/
 # misc
 .DS_Store
 *.log
+# browser/visual-loop artifacts
+.playwright-mcp/
+/*.png
