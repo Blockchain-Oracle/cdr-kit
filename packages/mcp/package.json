@@ -1,0 +1,26 @@
+{
+  "name": "@cdr-kit/mcp",
+  "version": "0.0.0",
+  "description": "MCP server for Story CDR — one binary that plugs into Claude Desktop, Cursor, OpenClaw, and any MCP host.",
+  "type": "module",
+  "bin": { "cdr-kit-mcp": "./dist/index.mjs" },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsdown",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit",
+    "start": "node dist/index.mjs"
+  },
+  "dependencies": {
+    "@cdr-kit/agent": "workspace:*",
+    "@cdr-kit/tools": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.25.0"
+  },
+  "peerDependencies": { "viem": "^2" },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsdown": "^0.22.0",
+    "typescript": "^5.7.2",
+    "viem": "^2.51.3"
+  }
+}
