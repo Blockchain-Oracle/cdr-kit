@@ -19,15 +19,19 @@
     "build": "tsdown",
     "lint": "eslint src",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run --passWithNoTests"
+    "test": "vitest run --passWithNoTests",
+    "e2e": "tsx scripts/e2e-roundtrip.ts"
   },
   "dependencies": {
     "@cdr-kit/contracts": "workspace:*",
+    "@piplabs/cdr-crypto": "^0.2.1",
     "@piplabs/cdr-sdk": "^0.2.1"
   },
   "peerDependencies": { "viem": "^2" },
   "devDependencies": {
+    "consola": "^3.2.3",
     "tsdown": "^0.22.0",
+    "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "viem": "^2.51.3"
   }

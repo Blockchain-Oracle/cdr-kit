@@ -5,5 +5,5 @@ export default defineConfig({
   format: ["esm", "cjs"],
   dts: true,
   treeshake: true,
-  external: ["@piplabs/cdr-sdk", "viem", "@cdr-kit/contracts"],
+  external: ["@piplabs/cdr-sdk", "@piplabs/cdr-crypto", "viem", "@cdr-kit/contracts"],
 });

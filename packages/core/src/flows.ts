@@ -2,6 +2,7 @@ import { bytesToHex, type Hex } from "viem";
 import { uuidToLabel } from "@piplabs/cdr-sdk";
 import { subscriptionConditionAbi, cdrKitVaultAbi } from "@cdr-kit/contracts";
 import type { CdrKitClient } from "./client.js";
+import { ensureWasm } from "./wasm.js";
 
 export type AccessStep = "paying" | "collecting-partials" | "ready";
 export type ProgressFn = (step: AccessStep) => void;
@@ -13,6 +14,7 @@ function requireWallet(c: CdrKitClient) {
 
 /** Seller: encrypt a data key and write it to an already-allocated vault (the CdrKitVault path). */
 export async function writeVaultData(client: CdrKitClient, params: { uuid: number; dataKey: Uint8Array }): Promise<Hex> {
+  await ensureWasm();
   const ciphertext = await client.cdr.uploader.encryptDataKey({
     dataKey: params.dataKey,
     label: uuidToLabel(params.uuid),
@@ -30,6 +32,7 @@ export async function accessVault(
   client: CdrKitClient,
   params: { uuid: number; accessAuxData?: Hex; timeoutMs?: number },
 ): Promise<Uint8Array> {
+  await ensureWasm();
   const { dataKey } = await client.cdr.consumer.accessCDR({
     uuid: params.uuid,
     accessAuxData: params.accessAuxData ?? "0x",
