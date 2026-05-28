@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, type ReactNode } from "react";
 import type { Hex } from "viem";
 import type { CdrReadProgress, CdrStatus, CdrError } from "@cdr-kit/core";
 import { useAccessVault } from "./hooks.js";
+import { useCdrConfig } from "./provider.js";
 
 interface VaultCtxValue {
   status: CdrStatus;
@@ -74,4 +75,24 @@ export function CdrSkeleton({ lines = 3 }: { lines?: number }) {
 /** Explicit empty state (distinct from loading). */
 export function EmptyVaults({ children }: { children?: ReactNode }) {
   return <div data-cdr-empty>{children ?? "No vaults yet."}</div>;
+}
+
+/** Dev panel: shows how the kit is wired (mock vs live, WASM, keeper). Drop it in during dev. */
+export function CdrInspector() {
+  const { apiUrl, wasmReady, mockKit } = useCdrConfig();
+  return (
+    <div
+      data-cdr-inspector
+      style={{
+        font: "12px ui-monospace, monospace",
+        padding: 8,
+        border: "1px solid var(--cdr-border, #d0d0d0)",
+        borderRadius: 6,
+      }}
+    >
+      <strong>cdr-kit</strong>
+      {` · mode: ${mockKit ? "mock" : "live"} · wasm: ${wasmReady ? "ready" : "…"}`}
+      {apiUrl ? ` · api: ${apiUrl}` : ""}
+    </div>
+  );
 }

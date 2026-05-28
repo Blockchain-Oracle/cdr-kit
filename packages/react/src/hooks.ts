@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useMemo, useState } from "react";
-import { usePublicClient, useWalletClient, useReadContract } from "wagmi";
+import { usePublicClient, useWalletClient, useReadContract, useWatchContractEvent } from "wagmi";
 import type { Hex, PublicClient, WalletClient } from "viem";
 import {
   createCdrKitClient,
@@ -127,4 +127,29 @@ export function useVault(uuid: number) {
     query: { enabled: tokenId !== undefined },
   });
   return { tokenId, info: info.data, isLoading: token.isLoading || info.isLoading, error: token.error ?? info.error };
+}
+
+export interface VaultCreatedEvent {
+  tokenId: bigint;
+  uuid: number;
+  ipId: Hex;
+  creator: Hex;
+}
+
+/** Live feed of VaultCreated events from the factory (powers a discovery / activity list). */
+export function useVaultEvents() {
+  const [events, setEvents] = useState<VaultCreatedEvent[]>([]);
+  useWatchContractEvent({
+    address: aeneid.cdrKitVault as Hex,
+    abi: cdrKitVaultAbi,
+    eventName: "VaultCreated",
+    onLogs: (logs) => {
+      const next = logs.map((l) => {
+        const a = (l as { args: { tokenId: bigint; uuid: number; ipId: Hex; creator: Hex } }).args;
+        return { tokenId: a.tokenId, uuid: Number(a.uuid), ipId: a.ipId, creator: a.creator };
+      });
+      setEvents((prev) => [...prev, ...next]);
+    },
+  });
+  return events;
 }
