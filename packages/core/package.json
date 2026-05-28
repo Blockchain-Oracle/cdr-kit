@@ -25,7 +25,8 @@
   "dependencies": {
     "@cdr-kit/contracts": "workspace:*",
     "@piplabs/cdr-crypto": "^0.2.1",
-    "@piplabs/cdr-sdk": "^0.2.1"
+    "@piplabs/cdr-sdk": "^0.2.1",
+    "zod": "^3.24.1"
   },
   "peerDependencies": { "viem": "^2" },
   "devDependencies": {
