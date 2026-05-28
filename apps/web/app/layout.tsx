@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import "@cdr-kit/react/styles.css";
+import { Providers } from "./providers";
 
 const mono = JetBrains_Mono({
   variable: "--font-mono",
@@ -29,7 +30,9 @@ export default function RootLayout({
           href="https://api.fontshare.com/v2/css?f[]=clash-display@600&f[]=general-sans@400,500,600&display=swap"
         />
       </head>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }
