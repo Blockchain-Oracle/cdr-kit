@@ -109,3 +109,22 @@ export function useCreatorVaults(creator?: Hex) {
     query: { enabled: Boolean(creator) },
   });
 }
+
+/** Vault metadata (uuid, ipId, creator, licenseTermsId) resolved from a uuid via the factory. */
+export function useVault(uuid: number) {
+  const token = useReadContract({
+    address: aeneid.cdrKitVault as Hex,
+    abi: cdrKitVaultAbi,
+    functionName: "vaultToToken",
+    args: [uuid],
+  });
+  const tokenId = token.data as bigint | undefined;
+  const info = useReadContract({
+    address: aeneid.cdrKitVault as Hex,
+    abi: cdrKitVaultAbi,
+    functionName: "getVaultInfo",
+    args: tokenId !== undefined ? [tokenId] : undefined,
+    query: { enabled: tokenId !== undefined },
+  });
+  return { tokenId, info: info.data, isLoading: token.isLoading || info.isLoading, error: token.error ?? info.error };
+}
