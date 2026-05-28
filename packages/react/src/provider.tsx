@@ -30,21 +30,23 @@ export interface CdrAppearance {
   variables?: Record<`--cdr-${string}`, string>;
 }
 
-export interface CdrProviderProps {
+export interface CdrConfigProviderProps {
   /** Required for live mode; optional in mock mode. */
   apiUrl?: string;
-  /** Required for live mode; a minimal default is used otherwise. */
-  config?: Config;
   /** Pass a `createMockCdrKit()` to run everything in-memory (no chain/wallet). */
   mockKit?: MockCdrKit;
   /** Theme tokens applied as CSS variables on the cdr-kit root. */
   appearance?: CdrAppearance;
-  queryClient?: QueryClient;
   children: ReactNode;
 }
 
-/** Wires wagmi + react-query, initializes the CDR WASM, and (optionally) runs in mock mode. */
-export function CdrProvider({ apiUrl = "", config, mockKit, appearance, queryClient, children }: CdrProviderProps) {
+/**
+ * CDR context only — initializes the WASM, exposes `apiUrl`/`mockKit`, and themes the root.
+ * Does NOT provide wagmi/react-query. Use this when your app already has its own `WagmiProvider`
+ * + `QueryClientProvider` (e.g. a Privy/RainbowKit stack); otherwise use {@link CdrProvider},
+ * which wraps both for you.
+ */
+export function CdrConfigProvider({ apiUrl = "", mockKit, appearance, children }: CdrConfigProviderProps) {
   const [wasmReady, setWasmReady] = useState(Boolean(mockKit));
   useEffect(() => {
     if (mockKit) return; // mock mode needs no WASM
@@ -60,11 +62,29 @@ export function CdrProvider({ apiUrl = "", config, mockKit, appearance, queryCli
   const value = useMemo<CdrContextValue>(() => ({ apiUrl, wasmReady, mockKit }), [apiUrl, wasmReady, mockKit]);
 
   return (
+    <CdrContext.Provider value={value}>
+      <div data-cdr-root style={appearance?.variables as CSSProperties | undefined}>
+        {children}
+      </div>
+    </CdrContext.Provider>
+  );
+}
+
+export interface CdrProviderProps extends CdrConfigProviderProps {
+  /** Required for live mode; a minimal default is used otherwise. */
+  config?: Config;
+  queryClient?: QueryClient;
+}
+
+/** Batteries-included: wires wagmi + react-query, then {@link CdrConfigProvider}. The 5-line
+ *  quickstart path. For apps with an existing wagmi stack, compose `CdrConfigProvider` instead. */
+export function CdrProvider({ apiUrl, config, mockKit, appearance, queryClient, children }: CdrProviderProps) {
+  return (
     <WagmiProvider config={config ?? defaultConfig}>
       <QueryClientProvider client={queryClient ?? fallbackQueryClient}>
-        <CdrContext.Provider value={value}>
-          <div data-cdr-root style={appearance?.variables as CSSProperties | undefined}>{children}</div>
-        </CdrContext.Provider>
+        <CdrConfigProvider apiUrl={apiUrl} mockKit={mockKit} appearance={appearance}>
+          {children}
+        </CdrConfigProvider>
       </QueryClientProvider>
     </WagmiProvider>
   );
