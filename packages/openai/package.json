@@ -14,7 +14,7 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
   "files": ["dist"],
-  "scripts": { "build": "tsdown", "lint": "eslint src", "typecheck": "tsc --noEmit" },
+  "scripts": { "build": "tsdown", "lint": "eslint src", "typecheck": "tsc --noEmit", "test": "vitest run" },
   "dependencies": { "@cdr-kit/agent": "workspace:*", "@cdr-kit/tools": "workspace:*" },
-  "devDependencies": { "tsdown": "^0.22.0", "typescript": "^5.7.2" }
+  "devDependencies": { "tsdown": "^0.22.0", "typescript": "^5.7.2", "vitest": "^2.1.8" }
 }
