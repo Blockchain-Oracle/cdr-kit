@@ -33,11 +33,15 @@
   },
   "devDependencies": {
     "@tanstack/react-query": "^5.62.0",
+    "@testing-library/react": "^16.1.0",
     "@types/react": "^18.3.12",
+    "happy-dom": "^15.11.7",
     "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "tsdown": "^0.22.0",
     "typescript": "^5.7.2",
     "viem": "^2.51.3",
+    "vitest": "^2.1.8",
     "wagmi": "^2.14.0"
   }
 }

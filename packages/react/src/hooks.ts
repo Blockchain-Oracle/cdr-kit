@@ -7,90 +7,94 @@ import {
   accessVault,
   subscribeAndAccess,
   createVault,
+  CdrErrors,
   type CdrKitClient,
-  type AccessStep,
+  type CdrState,
+  type CdrStatus,
+  type CdrError,
 } from "@cdr-kit/core";
 import { cdrKitVaultAbi, aeneid } from "@cdr-kit/contracts";
 import { useCdrConfig } from "./provider.js";
 
-/** Build a CdrKitClient from the connected wagmi public/wallet clients. */
+/** Build a CdrKitClient from the connected wagmi clients (undefined in mock mode). */
 export function useCdrClient(): CdrKitClient | undefined {
-  const { apiUrl } = useCdrConfig();
+  const { apiUrl, mockKit } = useCdrConfig();
   const publicClient = usePublicClient();
   const { data: walletClient } = useWalletClient();
   return useMemo(() => {
-    if (!publicClient) return undefined;
+    if (mockKit || !publicClient) return undefined;
     return createCdrKitClient({
       apiUrl,
       publicClient: publicClient as unknown as PublicClient,
       walletClient: walletClient as unknown as WalletClient | undefined,
     });
-  }, [apiUrl, publicClient, walletClient]);
+  }, [apiUrl, mockKit, publicClient, walletClient]);
 }
 
-export type ReadStatus = "idle" | "collecting-partials" | "ready" | "error";
+function requireClient(c: CdrKitClient | undefined): CdrKitClient {
+  if (!c) throw CdrErrors.walletRequired();
+  return c;
+}
 
-/** Read + decrypt a vault. Exposes status so UIs can surface the (tens-of-seconds) wait. */
+/** Read + decrypt a vault. Exposes the discriminated status + read progress (D17 contract). */
 export function useAccessVault(uuid: number) {
+  const { mockKit } = useCdrConfig();
   const client = useCdrClient();
-  const [status, setStatus] = useState<ReadStatus>("idle");
-  const [data, setData] = useState<Uint8Array>();
-  const [error, setError] = useState<Error>();
+  const [state, setState] = useState<CdrState<Uint8Array>>({ status: "idle" });
 
   const access = useCallback(
     async (accessAuxData?: Hex) => {
-      if (!client) throw new Error("cdr-kit: client not ready (connect a wallet)");
-      setStatus("collecting-partials");
-      setError(undefined);
+      setState({ status: "collecting-partials" });
       try {
-        const out = await accessVault(client, { uuid, accessAuxData });
-        setData(out);
-        setStatus("ready");
+        const out = mockKit
+          ? await mockKit.accessVault({ uuid, onProgress: (progress) => setState({ status: "collecting-partials", progress }) })
+          : await accessVault(requireClient(client), { uuid, accessAuxData });
+        setState({ status: "ready", data: out });
         return out;
       } catch (e) {
-        setError(e as Error);
-        setStatus("error");
+        setState({ status: "error", error: e as CdrError });
         throw e;
       }
     },
-    [client, uuid],
+    [mockKit, client, uuid],
   );
 
-  return { access, status, data, error };
+  return { access, status: state.status, data: state.data, error: state.error, progress: state.progress };
 }
 
 /** Subscribe (pay) then access — the 2-step flow, with progress. */
 export function useSubscribeAndAccess(uuid: number, subscriptionCondition: Hex = aeneid.subscriptionCondition as Hex) {
+  const { mockKit } = useCdrConfig();
   const client = useCdrClient();
-  const [status, setStatus] = useState<AccessStep | "idle" | "error">("idle");
+  const [status, setStatus] = useState<CdrStatus>("idle");
   const [data, setData] = useState<Uint8Array>();
 
   const run = useCallback(
     async (p: { periods: bigint; maxPricePerPeriod: bigint; value: bigint; accessAuxData?: Hex }) => {
-      if (!client) throw new Error("cdr-kit: client not ready (connect a wallet)");
       try {
-        const out = await subscribeAndAccess(client, { subscriptionCondition, uuid, ...p, onProgress: setStatus });
+        const out = mockKit
+          ? await mockKit.subscribeAndAccess({ uuid, onProgress: setStatus })
+          : await subscribeAndAccess(requireClient(client), { subscriptionCondition, uuid, ...p, onProgress: setStatus });
         setData(out);
+        setStatus("ready");
         return out;
       } catch (e) {
         setStatus("error");
         throw e;
       }
     },
-    [client, uuid, subscriptionCondition],
+    [mockKit, client, uuid, subscriptionCondition],
   );
 
   return { run, status, data };
 }
 
-/** Create a vault via the CdrKitVault factory. */
+/** Create a vault via the CdrKitVault factory (live mode). */
 export function useCreateVault() {
   const client = useCdrClient();
   return useCallback(
-    (params: Omit<Parameters<typeof createVault>[1], "vault"> & { vault?: Hex }) => {
-      if (!client) throw new Error("cdr-kit: client not ready (connect a wallet)");
-      return createVault(client, { vault: aeneid.cdrKitVault as Hex, ...params });
-    },
+    (params: Omit<Parameters<typeof createVault>[1], "vault"> & { vault?: Hex }) =>
+      createVault(requireClient(client), { vault: aeneid.cdrKitVault as Hex, ...params }),
     [client],
   );
 }
