@@ -1,0 +1,67 @@
+/* @cdr-kit/react — opt-in default theme.
+ * Import once at your app root:  import "@cdr-kit/react/styles.css";
+ * Everything is driven by --cdr-* custom properties on [data-cdr-root]; override them to theme.
+ * Selectors use :where() (0 specificity) so your own styles always win. */
+
+:where([data-cdr-root]) {
+  --cdr-fg: #0f1115;
+  --cdr-muted: #6b7280;
+  --cdr-border: #e2e5ea;
+  --cdr-accent: #6d5efc;
+  --cdr-radius: 8px;
+  --cdr-skeleton-base: #e9ebef;
+  --cdr-skeleton-shine: #f6f7f9;
+  --cdr-skeleton: linear-gradient(
+    90deg,
+    var(--cdr-skeleton-base) 0%,
+    var(--cdr-skeleton-shine) 50%,
+    var(--cdr-skeleton-base) 100%
+  );
+}
+
+@media (prefers-color-scheme: dark) {
+  :where([data-cdr-root]) {
+    --cdr-fg: #e8eaed;
+    --cdr-muted: #9aa3af;
+    --cdr-border: #2a2f3a;
+    --cdr-skeleton-base: #1b1f27;
+    --cdr-skeleton-shine: #262c37;
+  }
+}
+
+/* Skeleton: the inline background reads --cdr-skeleton (a gradient here); we add the motion. */
+:where([data-cdr-skeleton]) {
+  width: 100%;
+}
+:where([data-cdr-skeleton]) > div {
+  background-size: 200% 100%;
+  animation: cdr-shimmer 1.4s ease-in-out infinite;
+}
+@keyframes cdr-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+:where([data-cdr-empty]) {
+  color: var(--cdr-muted);
+  border: 1px dashed var(--cdr-border);
+  border-radius: var(--cdr-radius);
+  padding: 24px;
+  text-align: center;
+  font: 14px/1.5 system-ui, -apple-system, sans-serif;
+}
+
+:where([data-cdr-inspector]) {
+  color: var(--cdr-fg);
+  background: color-mix(in srgb, var(--cdr-border) 25%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where([data-cdr-skeleton]) > div {
+    animation: none;
+  }
+}

@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "description": "React provider, <VaultGate>, and hooks for Story CDR — built on @cdr-kit/core.",
   "type": "module",
-  "sideEffects": false,
+  "sideEffects": [
+    "**/*.css"
+  ],
   "exports": {
     ".": {
       "import": {
@@ -15,13 +17,15 @@
         "default": "./dist/index.cjs"
       }
     },
+    "./styles.css": "./styles.css",
     "./package.json": "./package.json"
   },
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
   "files": [
-    "dist"
+    "dist",
+    "styles.css"
   ],
   "scripts": {
     "build": "tsdown",
