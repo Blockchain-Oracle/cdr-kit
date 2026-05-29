@@ -63,8 +63,8 @@ const GlowCard: React.FC<GlowCardProps> = ({
     return sizeMap[size];
   };
 
-  const getInlineStyles = () => {
-    const baseStyles = {
+  const getInlineStyles = (): React.CSSProperties => {
+    const baseStyles: Record<string, string | number> = {
       '--base': base,
       '--spread': spread,
       '--radius': '14',
@@ -99,7 +99,7 @@ const GlowCard: React.FC<GlowCardProps> = ({
       baseStyles.height = typeof height === 'number' ? `${height}px` : height;
     }
 
-    return baseStyles;
+    return baseStyles as React.CSSProperties;
   };
 
   const beforeAfterStyles = `
