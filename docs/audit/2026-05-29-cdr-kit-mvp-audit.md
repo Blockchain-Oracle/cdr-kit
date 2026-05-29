@@ -95,3 +95,24 @@ The kit is a **green localhost MVP, not a shipped/live one**:
 - **P2 — make "live" honest:** finish dashboard live-discovery + revoke (or commit a recorded e2e / CI fork test as proof).
 - **P3 — ship:** changesets + publish to npm.
 - **Minor:** `forge fmt`; commit/clean `foundry.lock`.
+
+---
+
+## 8. Resolution (2026-05-29, post-audit — commits 32530e1, 4ab4d8f, 11c5bad)
+
+The three gaps were closed in sequence (P1 → P2 → P3). Re-verifiable from committed state.
+
+- **Gap §3 / criterion #3 — agent autonomy → CLOSED.**
+  - `agent-demo.ts` now calls `discover()` and selects the vault from the results, then **uses the data downstream** (parses the signal JSON → BUY/HOLD decision), not a string-equality check.
+  - **Real model-in-the-loop:** `examples/vercel-ai-chatbot/index.ts` is a runnable demo where an LLM (`generateText` + `getVercelAITools`) autonomously calls `cdr_discover_vaults` → `cdr_subscribe_and_access` and answers from the decrypted data.
+  - **Tests:** `@cdr-kit/agent` (4), `@cdr-kit/tools` (6), `@cdr-kit/langchain` (2), and a deterministic **model-loop test** (`@cdr-kit/vercel-ai`, scripted `MockLanguageModelV3` drives the real `generateText` loop, no API key); `@cdr-kit/mcp` verify now runs under `pnpm test`. Full suite green.
+
+- **Gap §2 caveat / criterion #4 — "live" dashboard → CLOSED (in-app).**
+  - Factory `createVault` **verified live on Aeneid** via `packages/core/scripts/seed-vaults.ts` (uuids 4200–4202, encrypted samples written) — this closes the prior "never run live" risk on the factory path.
+  - Dashboard live data layer (`apps/web/lib/{use-vaults,live-vaults}.ts`): mock seed offline, on-chain discovery when `NEXT_PUBLIC_CDR_API_URL` is set. **Browser-verified:** live marketplace lists the 3 on-chain vaults; vault-detail runs a real subscribe→access behind a wallet gate; mock mode still does the full decrypt. (Revoke + 2nd-wallet remain Phase-2 — `RevocableCondition` isn't built; the full subscribe→decrypt click-through needs an injected wallet, which the core path already proves.)
+
+- **Gap §2.2 / criterion #6 — distribution → PREPPED, publish pending org.**
+  - All 12 publishable packages bumped to **0.1.0** (changeset), CHANGELOGs written, `pnpm check:publish` clean (publint ✓ on all), build green.
+  - **Blocker:** the `@cdr-kit` npm scope/org does not exist yet (`npm org ls cdr-kit` → "Scope not found"); `blockchainoracle` must create the free `@cdr-kit` org on npmjs.com, then `pnpm release` publishes.
+
+- **Minor:** `forge fmt` applied (30 Foundry tests still pass); `foundry.lock` openzeppelin entry recorded.
