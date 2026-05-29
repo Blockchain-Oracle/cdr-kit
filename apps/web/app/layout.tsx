@@ -22,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`dark ${mono.variable} h-full antialiased`}>
+    <html lang="en" className={`dark ${mono.variable} antialiased`}>
       <head>
         <link rel="preconnect" href="https://api.fontshare.com" crossOrigin="anonymous" />
         <link
@@ -30,7 +30,7 @@ export default function RootLayout({
           href="https://api.fontshare.com/v2/css?f[]=clash-display@600&f[]=general-sans@400,500,600&display=swap"
         />
       </head>
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-screen">
         <Providers>{children}</Providers>
       </body>
     </html>

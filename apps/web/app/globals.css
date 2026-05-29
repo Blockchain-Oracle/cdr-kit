@@ -150,3 +150,17 @@
     color: var(--foreground);
   }
 }
+
+/* Aceternity aurora-background ships expecting a tailwind.config `aurora` keyframe;
+   Tailwind v4 has no config, so define the utility + keyframe here (else it's static). */
+@theme {
+  --animate-aurora: aurora 60s linear infinite;
+}
+@keyframes aurora {
+  from {
+    background-position: 50% 50%, 50% 50%;
+  }
+  to {
+    background-position: 350% 50%, 350% 50%;
+  }
+}

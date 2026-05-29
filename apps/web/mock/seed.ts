@@ -114,3 +114,12 @@ for (const v of seedVaults) {
 }
 
 export const vaultByUuid = (uuid: number) => seedVaults.find((v) => v.uuid === uuid);
+
+let nextCreatedUuid = 9100;
+/** Demo loop: a vault created in the wizard shows up in the marketplace + is accessible. */
+export function addCreatedVault(v: Omit<SeedVault, "uuid">): SeedVault {
+  const created: SeedVault = { ...v, uuid: nextCreatedUuid++ };
+  seedVaults.unshift(created);
+  void mockKit.writeVaultData({ uuid: created.uuid, dataKey: new TextEncoder().encode(created.sample) });
+  return created;
+}

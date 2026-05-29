@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CodeBlock, CodeBlockCode, CodeBlockGroup } from "@/components/ui/code-block";
+import { AuroraBackground } from "@/components/ui/aurora-background";
 
 const SAMPLE = `import { CdrProvider, VaultGate } from "@cdr-kit/react";
 
@@ -21,47 +22,8 @@ const ease = [0.16, 1, 0.3, 1] as const;
 
 export function Hero() {
   return (
-    <section className="relative isolate overflow-hidden">
-      {/* depth layer 1 — masked grid */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10"
-        style={{
-          backgroundImage:
-            "linear-gradient(to right, rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.035) 1px, transparent 1px)",
-          backgroundSize: "56px 56px",
-          maskImage: "radial-gradient(ellipse 80% 60% at 50% -10%, #000 35%, transparent 78%)",
-          WebkitMaskImage: "radial-gradient(ellipse 80% 60% at 50% -10%, #000 35%, transparent 78%)",
-        }}
-      />
-      {/* depth layer 2 — indigo bloom (top center) */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 -top-40 -z-10 h-[640px]"
-        style={{
-          background:
-            "radial-gradient(680px circle at 50% 0%, color-mix(in srgb, var(--primary) 26%, transparent), transparent 68%)",
-        }}
-      />
-      {/* depth layer 3 — emerald glint (offset) */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute right-[12%] top-[18%] -z-10 h-[320px] w-[320px] rounded-full opacity-60 blur-[80px]"
-        style={{ background: "radial-gradient(circle, color-mix(in srgb, var(--signal) 22%, transparent), transparent 70%)" }}
-      />
-      {/* depth layer 4 — grain */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.035] mix-blend-overlay"
-        style={{
-          backgroundImage:
-            "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
-        }}
-      />
-      {/* depth layer 5 — bottom fade into page */}
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-b from-transparent to-background" />
-
-      <div className="mx-auto max-w-6xl px-6 pb-24 pt-20 lg:pt-28">
+    <AuroraBackground className="!h-auto min-h-[90vh] !items-stretch !justify-start">
+      <div className="mx-auto w-full max-w-6xl px-6 pb-24 pt-20 lg:pt-28">
         <div className="grid items-center gap-16 lg:grid-cols-[1.05fr_0.95fr]">
           {/* left — copy */}
           <div>
@@ -163,6 +125,6 @@ export function Hero() {
           </motion.div>
         </div>
       </div>
-    </section>
+    </AuroraBackground>
   );
 }
