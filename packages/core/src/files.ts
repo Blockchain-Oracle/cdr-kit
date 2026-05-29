@@ -4,6 +4,7 @@ import { aeneid } from "@cdr-kit/contracts";
 import type { CdrKitClient } from "./client.js";
 import { ensureWasm } from "./wasm.js";
 import { CdrError, CdrErrors } from "./errors.js";
+import { withRetry, type RetryOptions } from "./retry.js";
 
 /** The CDR inline payload cap. Bodies larger than this must use the file path (off-chain body,
  *  key secured under CDR). Read `CDR.maxEncryptedDataSize()` for the on-chain truth; this is the
@@ -52,23 +53,30 @@ export function createIpfsStorage(opts: {
   addUrl: string;
   gatewayUrl: string;
   headers?: Record<string, string>;
+  /** Backoff/jitter for transient HTTP failures. Defaults to the standard policy. */
+  retry?: RetryOptions;
 }): CdrStorageProvider {
   const gateway = opts.gatewayUrl.replace(/\/$/, "");
+  const retry = opts.retry ?? {};
   return {
-    async upload(data) {
-      const form = new FormData();
-      form.append("file", new Blob([data as unknown as BlobPart]));
-      const res = await fetch(opts.addUrl, { method: "POST", body: form, headers: opts.headers });
-      if (!res.ok) throw CdrErrors.keeperUnavailable(new Error(`storage upload failed: ${res.status}`));
-      const json = (await res.json()) as { Hash?: string; cid?: string; IpfsHash?: string };
-      const cid = json.Hash ?? json.cid ?? json.IpfsHash;
-      if (!cid) throw CdrErrors.unknown("storage upload returned no CID");
-      return cid;
+    upload(data) {
+      return withRetry(async () => {
+        const form = new FormData();
+        form.append("file", new Blob([data as unknown as BlobPart]));
+        const res = await fetch(opts.addUrl, { method: "POST", body: form, headers: opts.headers });
+        if (!res.ok) throw CdrErrors.keeperUnavailable(new Error(`storage upload failed: ${res.status}`));
+        const json = (await res.json()) as { Hash?: string; cid?: string; IpfsHash?: string };
+        const cid = json.Hash ?? json.cid ?? json.IpfsHash;
+        if (!cid) throw CdrErrors.unknown("storage upload returned no CID");
+        return cid;
+      }, retry);
     },
-    async download(cid) {
-      const res = await fetch(`${gateway}/ipfs/${cid}`, { headers: opts.headers });
-      if (!res.ok) throw CdrErrors.keeperUnavailable(new Error(`storage download failed: ${res.status}`));
-      return new Uint8Array(await res.arrayBuffer());
+    download(cid) {
+      return withRetry(async () => {
+        const res = await fetch(`${gateway}/ipfs/${cid}`, { headers: opts.headers });
+        if (!res.ok) throw CdrErrors.keeperUnavailable(new Error(`storage download failed: ${res.status}`));
+        return new Uint8Array(await res.arrayBuffer());
+      }, retry);
     },
   };
 }

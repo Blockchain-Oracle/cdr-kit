@@ -5,4 +5,5 @@ export * from "./client";
 export * from "./conditions";
 export * from "./flows";
 export * from "./files";
+export * from "./retry";
 export * from "./wasm";
