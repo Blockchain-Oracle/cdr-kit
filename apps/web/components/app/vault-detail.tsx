@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Lock, ShieldCheck, Download } from "lucide-react";
-import { useAccessVault } from "@cdr-kit/react";
+import { ArrowLeft, Lock, ShieldCheck, Download, Wallet } from "lucide-react";
+import { useAccessVault, useSubscribeAndAccess, useCdrWallet } from "@cdr-kit/react";
 import { Button } from "@/components/ui/button";
 import { ConditionBadge } from "./condition-badge";
 import { AccessStepper, type AccessPhase } from "./access-stepper";
-import { vaultByUuid } from "@/mock/seed";
+import { useVaultMeta } from "@/lib/use-vaults";
+import { livePriceWei } from "@/lib/live-vaults";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -21,22 +22,46 @@ function Meta({ label, value }: { label: string; value: string }) {
 }
 
 export function VaultDetail({ uuid }: { uuid: number }) {
-  const v = vaultByUuid(uuid);
-  const { access, status, data, error, progress } = useAccessVault(uuid);
+  const { vault: v, isLive } = useVaultMeta(uuid);
+  const wallet = useCdrWallet();
+  const access = useAccessVault(uuid);
+  const sub = useSubscribeAndAccess(uuid);
   const [paying, setPaying] = useState(false);
+  const [errMsg, setErrMsg] = useState<string>();
 
   if (!v) return <div className="p-10 text-muted-foreground">Vault {uuid} not found.</div>;
 
   const withPay = v.condition === "subscription";
+  const useSub = isLive && withPay; // live subscription = pay (subscribe) then read
+  const needsWallet = isLive && !wallet.isConnected;
+
+  const status = useSub ? sub.status : access.status;
+  const data = useSub ? sub.data : access.data;
+  const progress = useSub ? undefined : access.progress;
   const phase: AccessPhase = paying ? "paying" : (status as AccessPhase);
 
   async function run() {
-    if (withPay) {
-      setPaying(true);
-      await sleep(900);
-      setPaying(false);
+    setErrMsg(undefined);
+    if (needsWallet) {
+      wallet.connect();
+      return;
     }
-    await access().catch(() => undefined);
+    try {
+      if (useSub) {
+        const price = livePriceWei(uuid);
+        await sub.run({ periods: BigInt(1), maxPricePerPeriod: price, value: price });
+        return;
+      }
+      if (withPay && !isLive) {
+        setPaying(true);
+        await sleep(900);
+        setPaying(false);
+      }
+      await access.access();
+    } catch (e) {
+      setPaying(false);
+      setErrMsg(e instanceof Error ? e.message : "Access failed.");
+    }
   }
 
   const decoded = data ? new TextDecoder().decode(data) : null;
@@ -49,6 +74,8 @@ export function VaultDetail({ uuid }: { uuid: number }) {
         }
       })()
     : null;
+
+  const ctaLabel = needsWallet ? "Connect wallet" : withPay ? "Subscribe & access" : "Access data";
 
   return (
     <div className="mx-auto w-full max-w-5xl px-6 py-8">
@@ -80,9 +107,9 @@ export function VaultDetail({ uuid }: { uuid: number }) {
 
           <dl className="mt-6 grid grid-cols-2 gap-4 text-sm">
             <Meta label="Data type" value={v.dataType} />
-            <Meta label="Subscribers" value={String(v.subscribers)} />
             <Meta label="Creator" value={v.creatorName} />
             <Meta label="Price" value={v.priceIp != null ? `${v.priceIp} IP / 30d` : "License-gated"} />
+            <Meta label="Network" value={isLive ? "Aeneid (live)" : "mock"} />
           </dl>
         </div>
 
@@ -90,18 +117,21 @@ export function VaultDetail({ uuid }: { uuid: number }) {
         <div className="h-fit rounded-2xl border border-border bg-card/60 p-6">
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-semibold">Access data</h2>
-            <span className="font-mono text-[11px] text-muted-foreground">mock · ~2.6s</span>
+            <span className="font-mono text-[11px] text-muted-foreground">{isLive ? "live · ~15s+" : "mock · ~2.6s"}</span>
           </div>
 
           {phase === "idle" && (
             <div className="mt-4">
               <p className="text-sm text-muted-foreground">
-                {withPay
-                  ? `Subscribe for ${v.priceIp} IP to unlock a 30-day decryption window.`
-                  : "You hold the required license — decrypt the latest payload."}
+                {needsWallet
+                  ? "Connect a wallet on Aeneid to subscribe and decrypt this vault."
+                  : withPay
+                    ? `Subscribe for ${v.priceIp} IP to unlock a 30-day decryption window.`
+                    : "You hold the required license — decrypt the latest payload."}
               </p>
               <Button className="mt-4 w-full gap-2" onClick={run}>
-                {withPay ? "Subscribe & access" : "Access data"}
+                {needsWallet && <Wallet className="h-4 w-4" />}
+                {ctaLabel}
               </Button>
             </div>
           )}
@@ -110,7 +140,7 @@ export function VaultDetail({ uuid }: { uuid: number }) {
             <div className="mt-5">
               <AccessStepper phase={phase} progress={progress} withPay={withPay} />
               {phase === "error" && (
-                <p className="mt-3 text-sm text-destructive">{error?.message ?? "Access failed."}</p>
+                <p className="mt-3 text-sm text-destructive">{errMsg ?? access.error?.message ?? "Access failed."}</p>
               )}
             </div>
           )}

@@ -15,6 +15,7 @@ import {
   SidebarMenuButton,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { useIsLive } from "@/lib/use-vaults";
 
 const items = [
   { label: "Marketplace", href: "/marketplace", icon: Store },
@@ -25,6 +26,7 @@ const items = [
 
 export function AppSidebar() {
   const pathname = usePathname();
+  const isLive = useIsLive();
   return (
     <Sidebar>
       <SidebarHeader className="px-3 py-4">
@@ -70,7 +72,7 @@ export function AppSidebar() {
           <p className="mt-0.5 flex items-center gap-1.5 text-xs font-medium">
             <span className="h-1.5 w-1.5 rounded-full bg-signal" />
             Story Aeneid
-            <span className="ml-auto font-mono text-[10px] text-muted-foreground">mock</span>
+            <span className="ml-auto font-mono text-[10px] text-muted-foreground">{isLive ? "live" : "mock"}</span>
           </p>
         </div>
       </SidebarFooter>

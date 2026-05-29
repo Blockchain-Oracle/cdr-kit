@@ -29,7 +29,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests",
     "e2e": "tsx scripts/e2e-roundtrip.ts",
-    "e2e:file": "tsx scripts/e2e-file.ts"
+    "e2e:file": "tsx scripts/e2e-file.ts",
+    "seed": "tsx scripts/seed-vaults.ts"
   },
   "dependencies": {
     "@cdr-kit/contracts": "workspace:*",

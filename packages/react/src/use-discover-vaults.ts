@@ -14,14 +14,15 @@ const MAX_RANGE = 9_000n;
  * events (D11 — there is no "who-read" signal; discovery is the create event). Returns the same
  * shape as the live-feed {@link useVaultEvents}; use this for the browse/marketplace list.
  */
-export function useDiscoverVaults(opts: { fromBlock?: bigint } = {}) {
+export function useDiscoverVaults(opts: { fromBlock?: bigint; enabled?: boolean } = {}) {
+  const enabled = opts.enabled ?? true;
   const client = usePublicClient();
   const [vaults, setVaults] = useState<VaultCreatedEvent[]>([]);
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(enabled);
   const [error, setError] = useState<Error>();
 
   useEffect(() => {
-    if (!client) return;
+    if (!client || !enabled) return;
     let active = true;
     setLoading(true);
     (async () => {
@@ -52,7 +53,7 @@ export function useDiscoverVaults(opts: { fromBlock?: bigint } = {}) {
     return () => {
       active = false;
     };
-  }, [client, opts.fromBlock]);
+  }, [client, opts.fromBlock, enabled]);
 
   return { vaults, isLoading, error };
 }

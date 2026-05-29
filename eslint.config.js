@@ -2,7 +2,19 @@ import js from "@eslint/js";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  { ignores: ["**/dist/**", "**/generated.ts", "**/node_modules/**", "contracts/**", "**/*.config.*"] },
+  {
+    ignores: [
+      "**/dist/**",
+      "**/.next/**",
+      "**/generated.ts",
+      "**/node_modules/**",
+      "contracts/**",
+      "**/*.config.*",
+      // Vendored premium UI gallery components — installed as-is, not ours to lint.
+      "apps/web/components/ui/**",
+      "apps/web/components/kokonutui/**",
+    ],
+  },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
