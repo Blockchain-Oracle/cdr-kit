@@ -281,7 +281,10 @@ importers:
         version: 0.2.1
       '@piplabs/cdr-sdk':
         specifier: ^0.2.1
-        version: 0.2.1(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76))
+        version: 0.2.1(multiformats@13.4.2)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76))
+      multiformats:
+        specifier: ^13.3.1
+        version: 13.4.2
       zod:
         specifier: ^3.24.1
         version: 3.25.76
@@ -7358,6 +7361,9 @@ packages:
       typescript:
         optional: true
 
+  multiformats@13.4.2:
+    resolution: {integrity: sha512-eh6eHCrRi1+POZ3dA+Dq1C6jhP1GNtr9CRINMb67OKzqW9I5DUuZM/3jLPlzhgpGeiNUlEGEbkCYChXMCc/8DQ==}
+
   multiformats@9.9.0:
     resolution: {integrity: sha512-HoMUjhH9T8DDBNT+6xzkrd9ga/XiBI4xLr58LJACwK6G3HTOPeMz4nB4KJs33L2BelrIJa7P0VuNaVF3hMYfjg==}
 
@@ -11857,11 +11863,13 @@ snapshots:
       '@noble/curves': 1.6.0
       '@noble/hashes': 2.0.1
 
-  '@piplabs/cdr-sdk@0.2.1(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76))':
+  '@piplabs/cdr-sdk@0.2.1(multiformats@13.4.2)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76))':
     dependencies:
       '@piplabs/cdr-contracts': 0.2.1(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76))
       '@piplabs/cdr-crypto': 0.2.1
       viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76)
+    optionalDependencies:
+      multiformats: 13.4.2
 
   '@privy-io/api-base@1.4.3':
     dependencies:
@@ -20823,6 +20831,8 @@ snapshots:
     transitivePeerDependencies:
       - '@types/node'
     optional: true
+
+  multiformats@13.4.2: {}
 
   multiformats@9.9.0: {}
 

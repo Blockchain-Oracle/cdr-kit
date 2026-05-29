@@ -32,7 +32,7 @@ describe("createMemoryStorage", () => {
 });
 
 describe("uploadFile", () => {
-  it("encrypts+uploads via the SDK with open-read/owner-write defaults", async () => {
+  it("encrypts+uploads via the SDK with open read+write defaults", async () => {
     const uploadFileSpy = vi
       .fn()
       .mockResolvedValue({ uuid: 77, cid: "bafyfile", ciphertext: {}, txHashes: { allocate: "0xa", write: "0xw" } });
@@ -44,7 +44,7 @@ describe("uploadFile", () => {
     expect(out).toEqual({ uuid: 77, cid: "bafyfile", txHashes: { allocate: "0xa", write: "0xw" } });
     const arg = uploadFileSpy.mock.calls[0][0];
     expect(arg.readConditionAddr).toBe(aeneid.openCondition);
-    expect(arg.writeConditionAddr).toBe(aeneid.ownerWriteCondition);
+    expect(arg.writeConditionAddr).toBe(aeneid.openCondition);
     expect(arg.storageProvider).toBe(storage);
   });
 });

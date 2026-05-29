@@ -1,5 +1,8 @@
 import type { Hex } from "viem";
 import { EmptyVaultError, PartialCollectionTimeoutError } from "@piplabs/cdr-sdk";
+import { CID } from "multiformats/cid";
+import * as raw from "multiformats/codecs/raw";
+import { sha256 } from "multiformats/hashes/sha2";
 import { aeneid } from "@cdr-kit/contracts";
 import type { CdrKitClient } from "./client.js";
 import { ensureWasm } from "./wasm.js";
@@ -22,19 +25,15 @@ export interface CdrStorageProvider {
   download(cid: string): Promise<Uint8Array>;
 }
 
-async function sha256Hex(data: Uint8Array): Promise<string> {
-  const digest = await crypto.subtle.digest("SHA-256", data as unknown as ArrayBuffer);
-  return Array.from(new Uint8Array(digest))
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
-}
-
-/** In-memory, content-addressed storage for tests/mock/CI — no network. */
+/** In-memory, content-addressed storage for tests/mock/CI — no network. Returns a real CIDv1
+ *  (raw codec, sha-256) so it's a true drop-in wherever a StorageProvider is expected (incl. the
+ *  CDR SDK's downloadFile, which parses the CID). */
 export function createMemoryStorage(): CdrStorageProvider {
   const store = new Map<string, Uint8Array>();
   return {
     async upload(data) {
-      const cid = `mem-${await sha256Hex(data)}`;
+      const hash = await sha256.digest(data);
+      const cid = CID.create(1, raw.code, hash).toString();
       store.set(cid, data);
       return cid;
     },
@@ -83,9 +82,10 @@ export function createIpfsStorage(opts: {
 
 /**
  * Upload a >1KB payload: encrypt the body, push it to `storage` (IPFS), allocate a vault, and write
- * the CID + CDR-secured key reference — all in the SDK's `uploadFile`. Defaults to an open-read /
- * owner-write vault (works with raw allocate); pass cdr-kit condition addresses for gated file
- * vaults once those conditions are configured for the uuid.
+ * the CID + CDR-secured key reference — all in the SDK's `uploadFile`. Defaults to an open read+write
+ * vault (OpenCondition — works with a raw, factory-unconfigured allocate, verified live on Aeneid);
+ * pass cdr-kit condition addresses for gated file vaults once those conditions are configured for the
+ * uuid by the factory.
  */
 export async function uploadFile(
   client: CdrKitClient,
@@ -108,7 +108,7 @@ export async function uploadFile(
     updatable: params.updatable ?? false,
     readConditionAddr: params.readConditionAddr ?? (aeneid.openCondition as Hex),
     readConditionData: params.readConditionData ?? "0x",
-    writeConditionAddr: params.writeConditionAddr ?? (aeneid.ownerWriteCondition as Hex),
+    writeConditionAddr: params.writeConditionAddr ?? (aeneid.openCondition as Hex),
     writeConditionData: params.writeConditionData ?? "0x",
     accessAuxData: params.accessAuxData ?? "0x",
     pin: params.pin ?? true,

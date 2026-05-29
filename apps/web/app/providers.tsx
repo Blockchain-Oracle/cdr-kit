@@ -4,10 +4,16 @@ import type { ReactNode } from "react";
 import { CdrProvider } from "@cdr-kit/react";
 import { mockKit } from "@/mock/seed";
 
-// Use the library's batteries-included CdrProvider so the WagmiProvider + QueryClient and the
-// library's hooks share ONE wagmi instance (avoids the monorepo dual-instance "useConfig must be
-// used within WagmiProvider" mismatch). When we wire Privy + live Aeneid, this swaps to the
-// Privy wagmi stack + CdrConfigProvider(apiUrl).
+const CDR_API_URL = process.env.NEXT_PUBLIC_CDR_API_URL;
+
+/**
+ * Live when `NEXT_PUBLIC_CDR_API_URL` (the Story-API keeper) is set: `CdrProvider` owns the wagmi
+ * instance the hooks use and ships an injected connector, so `useCdrWallet()` connects a real wallet
+ * and the flows hit Aeneid. Otherwise mock-first — the whole flow runs in-memory with no chain/wallet.
+ */
 export function Providers({ children }: { children: ReactNode }) {
+  if (CDR_API_URL) {
+    return <CdrProvider apiUrl={CDR_API_URL}>{children}</CdrProvider>;
+  }
   return <CdrProvider mockKit={mockKit}>{children}</CdrProvider>;
 }

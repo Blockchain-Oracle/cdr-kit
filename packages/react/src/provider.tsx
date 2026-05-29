@@ -1,6 +1,7 @@
 "use client";
 import { createContext, useContext, useEffect, useMemo, useState, type CSSProperties, type ReactNode } from "react";
 import { WagmiProvider, createConfig, http, type Config } from "wagmi";
+import { injected } from "wagmi/connectors";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ensureWasm, aeneidChain, type MockCdrKit } from "@cdr-kit/core";
 
@@ -22,8 +23,13 @@ export function useCdrConfig(): CdrContextValue {
 }
 
 const fallbackQueryClient = new QueryClient();
-// A minimal wagmi config so wagmi hooks resolve even in mock mode (where they go unused).
-const defaultConfig = createConfig({ chains: [aeneidChain], transports: { [aeneidChain.id]: http() } });
+// Default wagmi config: aeneid + an injected connector so the built-in CdrProvider can connect a
+// wallet for live mode. In mock mode the wagmi hooks go unused.
+const defaultConfig = createConfig({
+  chains: [aeneidChain],
+  connectors: [injected()],
+  transports: { [aeneidChain.id]: http() },
+});
 
 /** Theme via CSS custom properties (e.g. `{ "--cdr-skeleton": "#222" }`). */
 export interface CdrAppearance {
