@@ -1,0 +1,34 @@
+---
+title: Templates
+description: The data-marketplace dashboard — a flagship app built entirely on @cdr-kit/react.
+---
+
+cdr-kit ships a **data-marketplace** template: a Next.js dashboard that dogfoods `@cdr-kit/react` end to end.
+It's the reference for building real CDR apps and doubles as the live demo.
+
+## Screens
+
+- **Browse** — a grid of vault cards (condition badge, price, subscribers, creator) with filters.
+- **Vault detail** — metadata + the access stepper: `Paying ▸ Collecting validator partials ▸ Decrypting ▸ Done`,
+  with determinate progress; the result renders (text/JSON) or downloads (file).
+- **Create vault** — a 3-step wizard: data (auto inline-vs-file routing) → condition (dynamic form per type) →
+  IP/PIL terms + allocate fee → one `createVault` tx.
+- **Seller** — per-vault subscribers, revenue, and a **payment/subscription event log** (from `subscribe()`
+  events — CDR can't provide a who-decrypted log).
+- **Buyer** — active subscriptions with expiry countdowns, one-click renew, and re-access.
+
+## Mock-first
+
+The template runs on `createMockCdrKit()` by default — the whole `paying → collecting-partials → ready` flow
+plays in seconds with no wallet or chain, so it's demoable and screenshot-able. It flips to live Aeneid when a
+keeper `apiUrl` + a connected wallet are present.
+
+## Scaffold a starter
+
+```bash
+npm create cdr-kit-app my-app
+cd my-app && pnpm install && pnpm start
+```
+
+`create-cdr-kit-app` drops a runnable starter that exercises the full CDR flow against the mock kit — swap in
+`createCdrKitClient` + the live flow helpers to go on-chain.

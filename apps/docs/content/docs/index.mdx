@@ -1,0 +1,32 @@
+---
+title: Introduction
+description: The developer toolkit for Story Protocol's Confidential Data Rails (CDR).
+---
+
+**cdr-kit** is the wagmi/Stripe layer for Story Protocol's Confidential Data Rails — a standard library of
+audited condition contracts, a typed TypeScript SDK, a React layer, and an autonomous agent kit, so you can
+ship private, paid, license-gated data on Story without hand-rolling the protocol.
+
+CDR's encryption is commodity (Lit/TACo do it too). cdr-kit's edge is the **Story IP coupling** — license-tier
+gating + royalty rails — made usable, plus the DX: typed errors, first-class read-latency status, mock mode,
+and a one-tx vault factory.
+
+## What's in the box
+
+<Cards>
+  <Card title="@cdr-kit/core" href="/docs/core" description="Typed SDK: client, condition encoders, 2-step flows, file/IPFS path, WASM lifecycle." />
+  <Card title="@cdr-kit/react" href="/docs/react" description="<CdrProvider>, <VaultGate>, hooks with paying to collecting to ready status." />
+  <Card title="Agent kit" href="/docs/agent" description="CdrAgent + one MCP server + 5 framework adapters." />
+  <Card title="Condition contracts" href="/docs/contracts" description="Subscription, TierGate, Composable + the CdrKitVault factory." />
+  <Card title="Templates" href="/docs/templates" description="data-marketplace dashboard built on @cdr-kit/react." />
+  <Card title="Quickstart" href="/docs/quickstart" description="Gate real CDR data in under 20 lines; mock mode needs no wallet." />
+</Cards>
+
+## The constraints, up front
+
+- **~7-min read latency.** A CDR read collects validator partial decryptions; it is async. Every read path in
+  cdr-kit exposes determinate status (`paying → collecting-partials → ready`) — never a bare spinner.
+- **2-step pattern.** A condition is a pure `view` and can't take payment — you pay/subscribe (a tx), then the
+  `view` reads the result. The SDK's `subscribeAndAccess` does both.
+- **~1KB inline cap.** Larger payloads route to the [file/IPFS path](/docs/core#file-and-ipfs-path).
+- **Testnet only.** Deployed on Story Aeneid (chain 1315). No mainnet.

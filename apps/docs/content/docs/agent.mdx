@@ -1,0 +1,54 @@
+---
+title: Agent kit
+description: One CdrAgent + one MCP server + 5 framework adapters from a single declarative tool source.
+---
+
+The agent kit lets an autonomous agent discover a vault, pay from its own wallet, pull the data, and use it
+downstream — no human in the loop. One declarative tool source (`{ name, description, Zod schema, invoke }`)
+fans out to an MCP server (universal) and five native framework adapters.
+
+## CdrAgent
+
+```ts
+import { CdrAgent } from "@cdr-kit/agent";
+
+const agent = new CdrAgent({ privateKey, apiUrl });
+
+const vaults = await agent.discover();                 // VaultCreated events
+const data = await agent.subscribeAndAccess({ uuid, periods: 1n, value: 10n ** 18n });
+const bytes = await agent.access(uuid);                 // when already entitled
+```
+
+## Tools + MCP
+
+```ts
+import { createCdrTools } from "@cdr-kit/tools";
+
+const tools = createCdrTools(agent); // [{ name, description, schema, invoke }]
+```
+
+The `@cdr-kit/mcp` binary is the universal surface — one MCP server that works across Claude, Cursor, Cline,
+Goose, Windsurf, OpenClaw, and n8n/Zapier/Make. (MCP stdio logs to **stderr** only.)
+
+## Framework adapters
+
+Each adapter turns the same tool source into the shape a given runtime expects:
+
+```ts
+import { getVercelAITools } from "@cdr-kit/vercel-ai";
+import { getOpenAITools } from "@cdr-kit/openai";       // { tools, dispatch }
+import { getLangChainTools } from "@cdr-kit/langchain";
+import { getCdrActionProvider } from "@cdr-kit/agentkit"; // Coinbase AgentKit
+import { getGoatTools } from "@cdr-kit/goat";
+
+const aiTools = getVercelAITools(agent); // drop into `generateText({ tools })`
+```
+
+| Runtime | Package | Entry |
+|---|---|---|
+| MCP hosts | `@cdr-kit/mcp` | server binary |
+| Vercel AI SDK | `@cdr-kit/vercel-ai` | `getVercelAITools(agent)` |
+| OpenAI / Anthropic | `@cdr-kit/openai` | `getOpenAITools(agent)` |
+| LangChain | `@cdr-kit/langchain` | `getLangChainTools(agent)` |
+| Coinbase AgentKit | `@cdr-kit/agentkit` | `getCdrActionProvider(agent)` |
+| GOAT | `@cdr-kit/goat` | `getGoatTools(agent)` |

@@ -1,0 +1,52 @@
+---
+title: Quickstart
+description: Gate real CDR data in under 20 lines. Mock mode runs with no wallet or chain.
+---
+
+## Install
+
+```bash
+npm i @cdr-kit/react @cdr-kit/core @cdr-kit/contracts wagmi viem @tanstack/react-query
+```
+
+## Gate a vault
+
+`<CdrProvider>` wires wagmi + react-query + the CDR WASM. `<VaultGate>` renders the decrypted bytes once
+the read resolves, or your `loading` / `fallback` while it doesn't.
+
+```tsx title="app/PremiumData.tsx"
+import { CdrProvider, VaultGate } from "@cdr-kit/react";
+
+export function PremiumData({ vaultId }: { vaultId: number }) {
+  return (
+    <CdrProvider apiUrl={process.env.NEXT_PUBLIC_CDR_API_URL}>
+      <VaultGate uuid={vaultId} auto loading={<Stepper />} fallback={<Subscribe />}>
+        {(data) => <pre>{new TextDecoder().decode(data)}</pre>}
+      </VaultGate>
+    </CdrProvider>
+  );
+}
+```
+
+## Run it with no chain (mock mode)
+
+Pass a `createMockCdrKit()` to `CdrProvider` and the whole flow — including the `collecting-partials`
+read with determinate progress — runs in-memory. Great for examples, CI, and Storybook.
+
+```tsx
+import { CdrProvider, createMockCdrKit } from "@cdr-kit/react";
+
+const mock = createMockCdrKit({ readDelayMs: 2500, threshold: 5 });
+
+<CdrProvider mockKit={mock}>
+  {/* every hook + <VaultGate> behaves exactly as live, with no wallet */}
+</CdrProvider>;
+```
+
+## Optional default styles
+
+```ts
+import "@cdr-kit/react/styles.css"; // tasteful headless defaults, themeable via --cdr-* vars
+```
+
+Next: the [SDK](/docs/core), the [React layer](/docs/react), or the [agent kit](/docs/agent).
