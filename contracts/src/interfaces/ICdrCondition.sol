@@ -13,10 +13,12 @@ interface ICdrCondition {
         view
         returns (bool);
 
-    function checkWriteCondition(uint32 uuid, bytes calldata accessAuxData, bytes calldata conditionData, address caller)
-        external
-        view
-        returns (bool);
+    function checkWriteCondition(
+        uint32 uuid,
+        bytes calldata accessAuxData,
+        bytes calldata conditionData,
+        address caller
+    ) external view returns (bool);
 }
 
 /// @title ICdrConfigurable

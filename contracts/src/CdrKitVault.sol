@@ -143,10 +143,7 @@ contract CdrKitVault is ERC721Enumerable, ReentrancyGuard {
     }
 
     /// @notice Mint license tokens for a vault's IP. Only the vault creator may call.
-    function mintLicenseTokens(uint256 tokenId, uint256 amount, address receiver)
-        external
-        returns (uint256 startId)
-    {
+    function mintLicenseTokens(uint256 tokenId, uint256 amount, address receiver) external returns (uint256 startId) {
         if (tokenCreator[tokenId] != msg.sender) revert NotCreator();
         startId = LICENSING_MODULE.mintLicenseTokens(
             tokenToIpId[tokenId], PIL_TEMPLATE, tokenLicenseTerms[tokenId], amount, receiver, "", 0, 0

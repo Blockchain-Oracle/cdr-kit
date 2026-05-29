@@ -29,12 +29,7 @@ contract CreatorWriteCondition is ConditionBase {
     }
 
     /// @inheritdoc ICdrCondition
-    function checkReadCondition(uint32, bytes calldata, bytes calldata, address)
-        external
-        pure
-        override
-        returns (bool)
-    {
+    function checkReadCondition(uint32, bytes calldata, bytes calldata, address) external pure override returns (bool) {
         return false; // write-only gate
     }
 }
