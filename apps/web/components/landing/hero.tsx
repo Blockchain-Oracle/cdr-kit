@@ -22,7 +22,7 @@ const ease = [0.16, 1, 0.3, 1] as const;
 
 export function Hero() {
   return (
-    <AuroraBackground className="!h-auto min-h-[90vh] !items-stretch !justify-start">
+    <AuroraBackground className="!h-auto min-h-[90vh] !items-stretch !justify-start !bg-[#060b16]">
       <div className="mx-auto w-full max-w-6xl px-6 pb-24 pt-20 lg:pt-28">
         <div className="grid items-center gap-16 lg:grid-cols-[1.05fr_0.95fr]">
           {/* left — copy */}

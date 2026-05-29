@@ -53,79 +53,79 @@
 /* Dark-first: :root is the dark palette so the product is dark by default.
    A light theme is deferred — the toggle is a Phase-2 nicety. */
 :root {
-  --background: #08090c;
-  --foreground: #eceef3;
-  --card: #0f1116;
-  --card-foreground: #eceef3;
-  --popover: #171a22;
-  --popover-foreground: #eceef3;
-  --primary: #6366f1; /* violet = locked / encrypted / brand */
+  --background: #060b16;
+  --foreground: #e8ecf5;
+  --card: #0d1424;
+  --card-foreground: #e8ecf5;
+  --popover: #111b30;
+  --popover-foreground: #e8ecf5;
+  --primary: #3b82f6; /* violet = locked / encrypted / brand */
   --primary-foreground: #ffffff;
-  --secondary: #171a22;
-  --secondary-foreground: #eceef3;
-  --muted: #161922;
-  --muted-foreground: #969dab;
-  --accent: #1b2030; /* neutral hover surface — NOT the brand color */
-  --accent-foreground: #eceef3;
+  --secondary: #111b30;
+  --secondary-foreground: #e8ecf5;
+  --muted: #0f1626;
+  --muted-foreground: #8a94ac;
+  --accent: #16203a; /* neutral hover surface — NOT the brand color */
+  --accent-foreground: #e8ecf5;
   --signal: #34d399; /* teal = decrypted / unlocked / live */
   --signal-foreground: #052e21;
   --destructive: #fb6e78;
-  --border: #242935;
-  --input: #242935;
-  --ring: #6366f1;
-  --chart-1: #6366f1;
+  --border: #1e2740;
+  --input: #1e2740;
+  --ring: #3b82f6;
+  --chart-1: #3b82f6;
   --chart-2: #34d399;
   --chart-3: #5b8def;
-  --chart-4: #b57bff;
+  --chart-4: #60a5fa;
   --chart-5: #2bc4a8;
   --radius: 0.875rem;
-  --sidebar: #0b0d12;
-  --sidebar-foreground: #eceef3;
-  --sidebar-primary: #6366f1;
+  --sidebar: #0a1120;
+  --sidebar-foreground: #e8ecf5;
+  --sidebar-primary: #3b82f6;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #171a22;
-  --sidebar-accent-foreground: #eceef3;
-  --sidebar-border: #1c212c;
-  --sidebar-ring: #6366f1;
+  --sidebar-accent: #111b30;
+  --sidebar-accent-foreground: #e8ecf5;
+  --sidebar-border: #1a2336;
+  --sidebar-ring: #3b82f6;
   --font-sans: "General Sans", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Clash Display", "General Sans", sans-serif;
   /* --font-mono is provided by next/font (JetBrains Mono) on <html>. */
 }
 
 .dark {
-  --background: #08090c;
-  --foreground: #eceef3;
-  --card: #0f1116;
-  --card-foreground: #eceef3;
-  --popover: #171a22;
-  --popover-foreground: #eceef3;
-  --primary: #6366f1;
+  --background: #060b16;
+  --foreground: #e8ecf5;
+  --card: #0d1424;
+  --card-foreground: #e8ecf5;
+  --popover: #111b30;
+  --popover-foreground: #e8ecf5;
+  --primary: #3b82f6;
   --primary-foreground: #ffffff;
-  --secondary: #171a22;
-  --secondary-foreground: #eceef3;
-  --muted: #161922;
-  --muted-foreground: #969dab;
-  --accent: #1b2030;
-  --accent-foreground: #eceef3;
+  --secondary: #111b30;
+  --secondary-foreground: #e8ecf5;
+  --muted: #0f1626;
+  --muted-foreground: #8a94ac;
+  --accent: #16203a;
+  --accent-foreground: #e8ecf5;
   --signal: #34d399;
   --signal-foreground: #052e21;
   --destructive: #fb6e78;
-  --border: #242935;
-  --input: #242935;
-  --ring: #6366f1;
-  --chart-1: #6366f1;
+  --border: #1e2740;
+  --input: #1e2740;
+  --ring: #3b82f6;
+  --chart-1: #3b82f6;
   --chart-2: #34d399;
   --chart-3: #5b8def;
-  --chart-4: #b57bff;
+  --chart-4: #60a5fa;
   --chart-5: #2bc4a8;
-  --sidebar: #0b0d12;
-  --sidebar-foreground: #eceef3;
-  --sidebar-primary: #6366f1;
+  --sidebar: #0a1120;
+  --sidebar-foreground: #e8ecf5;
+  --sidebar-primary: #3b82f6;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #171a22;
-  --sidebar-accent-foreground: #eceef3;
-  --sidebar-border: #1c212c;
-  --sidebar-ring: #6366f1;
+  --sidebar-accent: #111b30;
+  --sidebar-accent-foreground: #e8ecf5;
+  --sidebar-border: #1a2336;
+  --sidebar-ring: #3b82f6;
 }
 
 @layer base {
