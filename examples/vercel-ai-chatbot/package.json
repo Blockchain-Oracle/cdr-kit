@@ -1,0 +1,24 @@
+{
+  "name": "cdr-kit-example-vercel-ai-chatbot",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "tsx index.ts"
+  },
+  "dependencies": {
+    "@ai-sdk/anthropic": "^2.0.0",
+    "@cdr-kit/agent": "workspace:*",
+    "@cdr-kit/contracts": "workspace:*",
+    "@cdr-kit/core": "workspace:*",
+    "@cdr-kit/vercel-ai": "workspace:*",
+    "ai": "^6.0.191",
+    "consola": "^3.2.3",
+    "viem": "^2.51.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

@@ -27,7 +27,7 @@
     "build": "tsdown",
     "lint": "eslint src",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run --passWithNoTests"
+    "test": "vitest run"
   },
   "dependencies": {
     "@cdr-kit/agent": "workspace:*",
@@ -37,7 +37,8 @@
   },
   "devDependencies": {
     "tsdown": "^0.22.0",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
   },
   "engines": {
     "node": ">=20"

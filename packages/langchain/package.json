@@ -25,7 +25,8 @@
   "scripts": {
     "build": "tsdown",
     "lint": "eslint src",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
   },
   "dependencies": {
     "@cdr-kit/agent": "workspace:*",
@@ -37,7 +38,8 @@
   "devDependencies": {
     "@langchain/core": "^1.1.48",
     "tsdown": "^0.22.0",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
   },
   "engines": {
     "node": ">=20"

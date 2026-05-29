@@ -13,7 +13,8 @@
     "build": "tsdown",
     "lint": "eslint src",
     "typecheck": "tsc --noEmit",
-    "start": "node dist/index.mjs"
+    "start": "node dist/index.mjs",
+    "test": "pnpm build && node scripts/verify.mjs"
   },
   "dependencies": {
     "@cdr-kit/agent": "workspace:*",
