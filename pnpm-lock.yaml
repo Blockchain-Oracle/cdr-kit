@@ -42,14 +42,17 @@ importers:
   apps/site:
     dependencies:
       '@cdr-kit/contracts':
-        specifier: npm:@cdr-kit/contracts@^0.1.0
-        version: 0.1.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))
+        specifier: workspace:*
+        version: link:../../packages/contracts
       '@cdr-kit/core':
-        specifier: npm:@cdr-kit/core@^0.1.0
-        version: 0.1.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))
+        specifier: workspace:*
+        version: link:../../packages/core
       '@cdr-kit/react':
-        specifier: npm:@cdr-kit/react@^0.1.0
-        version: 0.1.0(@tanstack/react-query@5.100.14(react@19.2.4))(react@19.2.4)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))(wagmi@2.19.5(@tanstack/query-core@5.100.14)(@tanstack/react-query@5.100.14(react@19.2.4))(@types/react@19.2.15)(bufferutil@4.1.0)(encoding@0.1.13)(react@19.2.4)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))(zod@3.25.76))
+        specifier: workspace:*
+        version: link:../../packages/react
+      '@cdr-kit/react-ui':
+        specifier: workspace:*
+        version: link:../../packages/react-ui
       '@tanstack/react-query':
         specifier: ^5.62.0
         version: 5.100.14(react@19.2.4)
@@ -64,10 +67,10 @@ importers:
         version: 19.2.4(react@19.2.4)
       viem:
         specifier: ^2.51.3
-        version: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+        version: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3)
       wagmi:
         specifier: ^2.14.0
-        version: 2.19.5(@tanstack/query-core@5.100.14)(@tanstack/react-query@5.100.14(react@19.2.4))(@types/react@19.2.15)(bufferutil@4.1.0)(encoding@0.1.13)(react@19.2.4)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))(zod@3.25.76)
+        version: 2.19.5(@tanstack/query-core@5.100.14)(@tanstack/react-query@5.100.14(react@19.2.4))(@types/react@19.2.15)(bufferutil@4.1.0)(encoding@0.1.13)(react@19.2.4)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))(zod@4.4.3)
     devDependencies:
       '@types/node':
         specifier: ^20
@@ -359,13 +362,40 @@ importers:
         version: 5.9.3
       viem:
         specifier: ^2.51.3
-        version: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3)
+        version: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)
       vitest:
         specifier: ^2.1.8
         version: 2.1.9(@types/node@25.9.1)(happy-dom@15.11.7)(lightningcss@1.32.0)(msw@2.14.6(@types/node@25.9.1)(typescript@5.9.3))
       wagmi:
         specifier: ^2.14.0
-        version: 2.19.5(@tanstack/query-core@5.100.14)(@tanstack/react-query@5.100.14(react@19.2.4))(@types/react@19.2.15)(bufferutil@4.1.0)(encoding@0.1.13)(react@19.2.4)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))(zod@4.4.3)
+        version: 2.19.5(@tanstack/query-core@5.100.14)(@tanstack/react-query@5.100.14(react@19.2.4))(@types/react@19.2.15)(bufferutil@4.1.0)(encoding@0.1.13)(react@19.2.4)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))(zod@3.25.76)
+
+  packages/react-ui:
+    devDependencies:
+      '@cdr-kit/core':
+        specifier: workspace:*
+        version: link:../core
+      '@cdr-kit/react':
+        specifier: workspace:*
+        version: link:../react
+      '@types/react':
+        specifier: ^19.2.0
+        version: 19.2.15
+      react:
+        specifier: ^19.2.0
+        version: 19.2.4
+      tsdown:
+        specifier: ^0.22.0
+        version: 0.22.0(publint@0.3.21)(tsx@4.22.3)(typescript@5.9.3)
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+      viem:
+        specifier: ^2.51.3
+        version: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)
+      vitest:
+        specifier: ^2.1.8
+        version: 2.1.9(@types/node@25.9.1)(happy-dom@15.11.7)(lightningcss@1.32.0)(msw@2.14.6(@types/node@25.9.1)(typescript@5.9.3))
 
   packages/tools:
     dependencies:
@@ -526,15 +556,6 @@ packages:
     engines: {node: '>=20'}
     peerDependencies:
       viem: ^2
-
-  '@cdr-kit/react@0.1.0':
-    resolution: {integrity: sha512-89yQPRF8vGprBbsJPdjmL0JPZusfV9VB5wGhs9Y0RG8kPalQOaqrL3uuI5lmVc5kHVAb+GxhcNajXZ2z1xHaPw==}
-    engines: {node: '>=20'}
-    peerDependencies:
-      '@tanstack/react-query': '>=5'
-      react: '>=18'
-      viem: ^2
-      wagmi: '>=2'
 
   '@cdr-kit/tools@0.1.0':
     resolution: {integrity: sha512-2Sh1ME7EstZYbFD/OALPV/p9w66IThAF6DeIKc3ITNdGCIzws8BbnNnHbMWKoJkHGhd21kz9R94oWJuyq8TBSA==}
@@ -6560,27 +6581,9 @@ snapshots:
       - '@storacha/client'
       - helia
 
-  '@cdr-kit/contracts@0.1.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))':
-    dependencies:
-      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)
-
   '@cdr-kit/contracts@0.1.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))':
     dependencies:
       viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)
-
-  '@cdr-kit/core@0.1.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))':
-    dependencies:
-      '@cdr-kit/contracts': 0.1.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))
-      '@piplabs/cdr-crypto': 0.2.1
-      '@piplabs/cdr-sdk': 0.2.1(multiformats@13.4.2)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))
-      multiformats: 13.4.2
-      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)
-      zod: 3.25.76
-    transitivePeerDependencies:
-      - '@filoz/synapse-sdk'
-      - '@helia/unixfs'
-      - '@storacha/client'
-      - helia
 
   '@cdr-kit/core@0.1.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))':
     dependencies:
@@ -6590,20 +6593,6 @@ snapshots:
       multiformats: 13.4.2
       viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)
       zod: 3.25.76
-    transitivePeerDependencies:
-      - '@filoz/synapse-sdk'
-      - '@helia/unixfs'
-      - '@storacha/client'
-      - helia
-
-  '@cdr-kit/react@0.1.0(@tanstack/react-query@5.100.14(react@19.2.4))(react@19.2.4)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))(wagmi@2.19.5(@tanstack/query-core@5.100.14)(@tanstack/react-query@5.100.14(react@19.2.4))(@types/react@19.2.15)(bufferutil@4.1.0)(encoding@0.1.13)(react@19.2.4)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))(zod@3.25.76))':
-    dependencies:
-      '@cdr-kit/contracts': 0.1.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))
-      '@cdr-kit/core': 0.1.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))
-      '@tanstack/react-query': 5.100.14(react@19.2.4)
-      react: 19.2.4
-      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)
-      wagmi: 2.19.5(@tanstack/query-core@5.100.14)(@tanstack/react-query@5.100.14(react@19.2.4))(@types/react@19.2.15)(bufferutil@4.1.0)(encoding@0.1.13)(react@19.2.4)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))(zod@3.25.76)
     transitivePeerDependencies:
       - '@filoz/synapse-sdk'
       - '@helia/unixfs'
@@ -8293,10 +8282,6 @@ snapshots:
 
   '@paulmillr/qr@0.2.1': {}
 
-  '@piplabs/cdr-contracts@0.2.1(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))':
-    dependencies:
-      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)
-
   '@piplabs/cdr-contracts@0.2.1(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76))':
     dependencies:
       viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76)
@@ -8311,14 +8296,6 @@ snapshots:
       '@noble/ciphers': 2.1.1
       '@noble/curves': 1.6.0
       '@noble/hashes': 2.0.1
-
-  '@piplabs/cdr-sdk@0.2.1(multiformats@13.4.2)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))':
-    dependencies:
-      '@piplabs/cdr-contracts': 0.2.1(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))
-      '@piplabs/cdr-crypto': 0.2.1
-      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)
-    optionalDependencies:
-      multiformats: 13.4.2
 
   '@piplabs/cdr-sdk@0.2.1(multiformats@13.4.2)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76))':
     dependencies:

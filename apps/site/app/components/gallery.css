@@ -1,0 +1,40 @@
+/* ============================================================
+   apps/site — component gallery page layout
+   Reuses docs sidebar + the @cdr-kit/react-ui visuals.
+   ============================================================ */
+
+.gal-shell { display: grid; grid-template-columns: 256px minmax(0, 1fr); max-width: 1200px; margin-inline: auto; align-items: start; }
+.gal { padding: 40px clamp(24px, 4vw, 60px) 100px; max-width: 920px; min-width: 0; }
+@media (max-width: 860px) { .gal-shell { grid-template-columns: 1fr; } .gal { padding-top: 28px; } }
+
+.decision { border: 1px solid var(--primary-line); background: var(--primary-soft); border-radius: var(--r-lg); padding: 22px 24px; margin-bottom: 14px; }
+.decision .dh { display: flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--primary); margin-bottom: 12px; }
+.decision h2 { font-family: var(--display); font-size: 1.3rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 8px; }
+.decision p { color: var(--ink-2); font-size: 0.95rem; line-height: 1.6; margin-bottom: 8px; }
+.decision p:last-child { margin-bottom: 0; }
+.decision b { color: var(--ink); }
+.decision code { font-family: var(--mono); font-size: 0.86em; background: var(--card); border: 1px solid var(--line); border-radius: 5px; padding: 1px 6px; color: var(--ink); }
+
+.gx { margin-top: 52px; scroll-margin-top: calc(var(--nav-h) + 16px); }
+.gx-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+.gx-head h2 { font-family: var(--mono); font-size: 1.15rem; font-weight: 500; letter-spacing: -0.01em; color: var(--ink); }
+.gx-head h2 .ang { color: var(--ink-3); }
+.gx-sub { color: var(--ink-2); font-size: 0.95rem; line-height: 1.6; margin-bottom: 18px; max-width: 64ch; }
+.gx-sub code { font-family: var(--mono); font-size: 0.86em; background: var(--paper-2); border: 1px solid var(--line); border-radius: 5px; padding: 1px 5px; color: var(--ink); }
+.ship-tag { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 0.68rem; padding: 3px 9px; border-radius: 999px; color: var(--signal); border: 1px solid var(--signal-line); background: var(--signal-soft); }
+
+.spec-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+
+.phasectl { display: inline-flex; gap: 2px; padding: 3px; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--paper-2); margin-bottom: 22px; flex-wrap: wrap; }
+.phasectl button { font-family: var(--mono); font-size: 0.74rem; padding: 6px 11px; border-radius: var(--r-sm); color: var(--ink-2); transition: all .14s; }
+.phasectl button[aria-pressed="true"] { background: var(--card); color: var(--ink); box-shadow: var(--sh-1); }
+
+.vgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; width: 100%; }
+@media (max-width: 620px) { .vgrid { grid-template-columns: 1fr; } }
+
+.prim-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+@media (max-width: 620px) { .prim-grid { grid-template-columns: 1fr; } }
+.prim { border: 1px solid var(--line); border-radius: var(--r-md); background: var(--card); padding: 16px; }
+.prim .pn { font-family: var(--mono); font-size: 0.78rem; color: var(--primary); margin-bottom: 4px; }
+.prim .pd { font-size: 0.8rem; color: var(--ink-2); margin-bottom: 14px; line-height: 1.45; }
+.prim .pdemo { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-height: 36px; }
