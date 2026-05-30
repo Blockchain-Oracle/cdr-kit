@@ -5,7 +5,7 @@
  * a buyer subscribes from the dashboard, then reads + decrypts.
  *
  * Run: source contracts/.env && pnpm --filter @cdr-kit/core run seed
- * Copy the printed JSON into apps/web/lib/live-vaults.ts (title/description/price aren't on-chain).
+ * Copy the printed JSON into your dashboard's vault label map (title/description/price aren't on-chain).
  */
 import { parseEventLogs, type Hex } from "viem";
 import { createCdrKitClient } from "../src/client.js";
@@ -92,5 +92,5 @@ for (const seed of SEEDS) {
   out.push({ uuid, condition: "subscription", priceWei: priceWei.toString(), ...meta });
 }
 
-log.box(`Seeded ${out.length} vaults. Paste into apps/web/lib/live-vaults.ts:\n\n${JSON.stringify(out, null, 2)}`);
+log.box(`Seeded ${out.length} vaults. Paste into your label map:\n\n${JSON.stringify(out, null, 2)}`);
 process.exit(0);

@@ -10,9 +10,6 @@ export default tseslint.config(
       "**/node_modules/**",
       "contracts/**",
       "**/*.config.*",
-      // Vendored premium UI gallery components — installed as-is, not ours to lint.
-      "apps/web/components/ui/**",
-      "apps/web/components/kokonutui/**",
     ],
   },
   js.configs.recommended,
