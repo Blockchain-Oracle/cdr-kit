@@ -1,0 +1,56 @@
+import { ConditionBadge } from "@cdr-kit/react-ui";
+import { Badge } from "@/components/primitives/badge";
+import { DocPage, PropsTable } from "@/components/docs/doc-page";
+import { Demo } from "@/components/docs/demo";
+
+const CODE = `import { ConditionBadge } from "@cdr-kit/react-ui";
+
+<ConditionBadge kind="subscription" />
+<ConditionBadge kind="tiergate" />
+<ConditionBadge kind="composable" />
+<ConditionBadge kind="open" />`;
+
+export default function Page() {
+  return (
+    <DocPage
+      data={{
+        breadcrumb: ["@cdr-kit/react-ui", "Components", "ConditionBadge"],
+        title: "<ConditionBadge>",
+        badges: <Badge tone="primary">styled</Badge>,
+        lede: <>Color-mapped pill for a vault&apos;s read-condition kind. Pure presentational, zero app logic.</>,
+        importLine: 'import { ConditionBadge } from "@cdr-kit/react-ui"',
+        sections: [
+          {
+            id: "preview",
+            title: "Live preview",
+            content: (
+              <Demo
+                preview={
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 10, alignItems: "center" }}>
+                    <ConditionBadge kind="subscription" />
+                    <ConditionBadge kind="tiergate" />
+                    <ConditionBadge kind="composable" />
+                    <ConditionBadge kind="open" />
+                  </div>
+                }
+                code={CODE}
+              />
+            ),
+          },
+          {
+            id: "props",
+            title: "Props",
+            content: (
+              <PropsTable rows={[
+                { name: "kind", type: '"subscription" | "tiergate" | "composable" | "open"', required: true, description: "Determines the color (primary / warn / signal / neutral) and the default label." },
+                { name: "children", type: "ReactNode", description: "Optional label override. Defaults to a human-readable kind name." },
+              ]} />
+            ),
+          },
+        ],
+        prev: { href: "/docs/components/empty-vaults", label: "EmptyVaults" },
+        next: { href: "/docs/components/access-stepper", label: "AccessStepper" },
+      }}
+    />
+  );
+}

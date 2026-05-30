@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import { highlight } from "@/lib/highlight";
 
 /** Preview / Code tabs over a single demo. Pass the preview component + a code snippet string. */
 export function Demo({
@@ -11,13 +12,14 @@ export function Demo({
   badge,
 }: {
   preview: ReactNode;
-  code: ReactNode;
-  language?: string;
+  /** Code snippet — passed through the syntax highlighter when string. JSX is rendered as-is. */
+  code: string | ReactNode;
+  language?: "tsx" | "ts" | "json" | "bash";
   reset?: () => void;
   badge?: ReactNode;
 }) {
   const [pane, setPane] = useState<"preview" | "code">("preview");
-  void language;
+  const rendered = typeof code === "string" ? highlight(code, language) : code;
   return (
     <div className={pane === "code" ? "demo show-code" : "demo"}>
       <div className="demo-bar">
@@ -45,7 +47,7 @@ export function Demo({
       <div className="demo-code-pane">
         <div className="code">
           <pre>
-            <code>{code}</code>
+            <code>{rendered}</code>
           </pre>
         </div>
       </div>

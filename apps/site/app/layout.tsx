@@ -5,6 +5,7 @@ import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import { Reveal } from "@/components/reveal";
 import "./globals.css";
+import "@cdr-kit/react-ui/styles.css";
 
 export const metadata: Metadata = {
   title: "cdr-kit — ship private, paid, license-gated data on Story",

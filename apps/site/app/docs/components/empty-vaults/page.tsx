@@ -21,7 +21,7 @@ export default function EmptyVaultsPage() {
           },
         ],
         prev: { href: "/docs/components/cdr-skeleton", label: "CdrSkeleton" },
-        next: { href: "/docs/hooks/use-access-vault", label: "useAccessVault" },
+        next: { href: "/docs/components/condition-badge", label: "ConditionBadge" },
       }}
     />
   );

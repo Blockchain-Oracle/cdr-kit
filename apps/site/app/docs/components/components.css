@@ -1,0 +1,58 @@
+/* Components index — grid of cards + a "live" sampler at the bottom. */
+
+.comp-section { margin-top: 44px; }
+.comp-section-head { margin-bottom: 18px; }
+.comp-section-head h2 {
+  font-family: var(--display); font-size: 1.3rem; font-weight: 700; letter-spacing: -0.02em;
+  display: block; margin: 0 0 4px;
+}
+.comp-section-head h2::after { display: none; }
+.comp-section-head p { font-size: 0.92rem; color: var(--ink-2); margin: 0; }
+
+.comp-subheading {
+  font-family: var(--mono); font-size: 0.74rem; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3);
+  margin: 26px 0 12px;
+}
+
+.comp-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
+}
+@media (max-width: 720px) { .comp-grid { grid-template-columns: 1fr; } }
+.comp-card {
+  display: flex; flex-direction: column; gap: 6px;
+  padding: 14px 16px;
+  border: 1px solid var(--line); border-radius: var(--r-md);
+  background: var(--card);
+  transition: border-color .14s, transform .14s, box-shadow .14s;
+}
+.comp-card:hover { border-color: var(--line-2); transform: translateY(-2px); box-shadow: var(--sh-1); }
+.comp-card-head { display: flex; align-items: center; gap: 8px; }
+.comp-name { font-family: var(--mono); font-size: 0.84rem; color: var(--primary); font-weight: 500; }
+.comp-tag {
+  font-family: var(--mono); font-size: 0.62rem; color: var(--ink-3);
+  border: 1px solid var(--line); border-radius: 4px; padding: 1px 5px; letter-spacing: 0.02em;
+}
+.comp-desc { font-size: 0.86rem; color: var(--ink-2); line-height: 1.5; margin: 0; }
+
+/* Live sampler bits (subset of the old gallery.css). */
+.spec-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+
+.phasectl {
+  display: inline-flex; gap: 2px; padding: 3px; border: 1px solid var(--line);
+  border-radius: var(--r-md); background: var(--paper-2); margin-bottom: 22px; flex-wrap: wrap;
+}
+.phasectl button {
+  font-family: var(--mono); font-size: 0.74rem; padding: 6px 11px; border-radius: var(--r-sm);
+  color: var(--ink-2); transition: all .14s;
+}
+.phasectl button[aria-pressed="true"] { background: var(--card); color: var(--ink); box-shadow: var(--sh-1); }
+
+.vgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; width: 100%; }
+@media (max-width: 620px) { .vgrid { grid-template-columns: 1fr; } }
+
+.prim-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+@media (max-width: 620px) { .prim-grid { grid-template-columns: 1fr; } }
+.prim { border: 1px solid var(--line); border-radius: var(--r-md); background: var(--card); padding: 16px; }
+.prim .pn { font-family: var(--mono); font-size: 0.78rem; color: var(--primary); margin-bottom: 10px; }
+.prim .pdemo { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-height: 36px; }

@@ -4,11 +4,11 @@ import { ThemeToggle } from "./theme-toggle";
 
 const links = [
   { href: "/docs", label: "Docs" },
-  { href: "/docs/components/vault-gate", label: "Components" },
-  { href: "/components", label: "Gallery" },
-  { href: "/#agent", label: "Agent Kit" },
-  { href: "/#conditions", label: "Contracts" },
-  { href: "/#mcp", label: "MCP" },
+  { href: "/docs/components", label: "Components" },
+  { href: "/docs/hooks/use-access-vault", label: "Hooks" },
+  { href: "/docs/agent-kit", label: "Agent Kit" },
+  { href: "/docs/contracts", label: "Contracts" },
+  { href: "/docs/agent-kit/mcp", label: "MCP" },
   { href: "/#live", label: "Live on Aeneid" },
 ];
 

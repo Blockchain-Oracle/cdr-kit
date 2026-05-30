@@ -26,12 +26,27 @@ export const SIDEBAR: SideGroup[] = [
   {
     heading: "Components",
     links: [
+      { href: "/docs/components", label: "Overview" },
+      // headless — @cdr-kit/react
       { href: "/docs/components/cdr-provider", label: "CdrProvider" },
       { href: "/docs/components/vault-gate", label: "VaultGate" },
       { href: "/docs/components/vault", label: "Vault", tag: "compound" },
       { href: "/docs/components/cdr-inspector", label: "CdrInspector" },
       { href: "/docs/components/cdr-skeleton", label: "CdrSkeleton" },
       { href: "/docs/components/empty-vaults", label: "EmptyVaults" },
+      // styled — @cdr-kit/react-ui
+      { href: "/docs/components/condition-badge", label: "ConditionBadge", tag: "styled" },
+      { href: "/docs/components/access-stepper", label: "AccessStepper", tag: "styled" },
+      { href: "/docs/components/subscribe-button", label: "SubscribeButton", tag: "styled" },
+      { href: "/docs/components/vault-card", label: "VaultCard", tag: "styled" },
+      { href: "/docs/components/copy-button", label: "CopyButton", tag: "styled" },
+      { href: "/docs/components/short-address", label: "ShortAddress", tag: "styled" },
+      { href: "/docs/components/explorer-link", label: "ExplorerLink", tag: "styled" },
+      { href: "/docs/components/ip-price", label: "IpPrice", tag: "styled" },
+      { href: "/docs/components/cdr-network-chip", label: "CdrNetworkChip", tag: "styled" },
+      { href: "/docs/components/cdr-spinner", label: "CdrSpinner", tag: "styled" },
+      { href: "/docs/components/cdr-progress", label: "CdrProgress", tag: "styled" },
+      { href: "/docs/components/cdr-error", label: "CdrError", tag: "styled" },
     ],
   },
   {
