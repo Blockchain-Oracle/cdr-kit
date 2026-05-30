@@ -1,0 +1,40 @@
+import { Badge } from "@/components/primitives/badge";
+import { DocPage } from "@/components/docs/doc-page";
+
+export default function Page() {
+  return (
+    <DocPage
+      data={{
+        breadcrumb: ["@cdr-kit", "Scaffolder"],
+        title: "npm create cdr-kit",
+        badges: <Badge tone="primary">create-cdr-kit-app</Badge>,
+        lede: <>The fastest way to start. <code>npm create cdr-kit</code> bootstraps a working consumer app from one of the canonical templates — pick framework, agent stack, and starter pattern in a Next-style interactive flow.</>,
+        sections: [
+          {
+            id: "invoke",
+            title: "Invoke",
+            content: (
+              <div className="win doc-code"><div className="win-bar"><span className="lights"><i /><i /><i /></span><span className="win-title">terminal</span></div><div className="code"><pre><code>{`$ npm create cdr-kit          # or
+$ pnpm create cdr-kit
+$ bun create cdr-kit
+$ yarn create cdr-kit`}</code></pre></div></div>
+            ),
+          },
+          {
+            id: "templates",
+            title: "Templates",
+            content: (
+              <ul>
+                <li><b>data-marketplace</b> — paywalled-data Next.js app with the dashboard pattern.</li>
+                <li><b>paywall</b> — single page gated by a Subscription condition.</li>
+                <li><b>mcp-quickstart</b> — Node MCP server + Claude Desktop config.</li>
+                <li><b>autonomous-agent</b> — LLM agent (Vercel AI SDK) that discovers + subscribes + decides.</li>
+              </ul>
+            ),
+          },
+        ],
+        prev: { href: "/docs/contracts/cdr-kit-vault", label: "CdrKitVault" },
+      }}
+    />
+  );
+}

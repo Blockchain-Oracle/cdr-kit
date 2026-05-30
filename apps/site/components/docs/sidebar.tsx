@@ -1,0 +1,100 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+interface SideLink {
+  href: string;
+  label: string;
+  tag?: string;
+}
+
+interface SideGroup {
+  heading: string;
+  links: SideLink[];
+}
+
+export const SIDEBAR: SideGroup[] = [
+  {
+    heading: "Getting started",
+    links: [
+      { href: "/docs", label: "Introduction" },
+      { href: "/docs/quickstart", label: "Quickstart" },
+      { href: "/docs/theming", label: "Theming" },
+    ],
+  },
+  {
+    heading: "Components",
+    links: [
+      { href: "/docs/components/cdr-provider", label: "CdrProvider" },
+      { href: "/docs/components/vault-gate", label: "VaultGate" },
+      { href: "/docs/components/vault", label: "Vault", tag: "compound" },
+      { href: "/docs/components/cdr-inspector", label: "CdrInspector" },
+      { href: "/docs/components/cdr-skeleton", label: "CdrSkeleton" },
+      { href: "/docs/components/empty-vaults", label: "EmptyVaults" },
+    ],
+  },
+  {
+    heading: "Hooks",
+    links: [
+      { href: "/docs/hooks/use-access-vault", label: "useAccessVault" },
+      { href: "/docs/hooks/use-subscribe-and-access", label: "useSubscribeAndAccess" },
+      { href: "/docs/hooks/use-create-vault", label: "useCreateVault" },
+      { href: "/docs/hooks/use-discover-vaults", label: "useDiscoverVaults" },
+      { href: "/docs/hooks/use-vault", label: "useVault" },
+      { href: "/docs/hooks/use-vault-events", label: "useVaultEvents" },
+      { href: "/docs/hooks/use-creator-vaults", label: "useCreatorVaults" },
+      { href: "/docs/hooks/use-cdr-wallet", label: "useCdrWallet" },
+    ],
+  },
+  {
+    heading: "Agent kit",
+    links: [
+      { href: "/docs/agent-kit", label: "CdrAgent" },
+      { href: "/docs/agent-kit/vercel-ai", label: "Vercel AI SDK" },
+      { href: "/docs/agent-kit/openai", label: "OpenAI / Anthropic" },
+      { href: "/docs/agent-kit/langchain", label: "LangChain" },
+      { href: "/docs/agent-kit/agentkit", label: "Coinbase AgentKit" },
+      { href: "/docs/agent-kit/goat", label: "GOAT SDK" },
+      { href: "/docs/agent-kit/mcp", label: "MCP server" },
+    ],
+  },
+  {
+    heading: "Contracts",
+    links: [
+      { href: "/docs/contracts", label: "Condition library" },
+      { href: "/docs/contracts/subscription-condition", label: "SubscriptionCondition" },
+      { href: "/docs/contracts/tier-gate-condition", label: "TierGateCondition" },
+      { href: "/docs/contracts/composable-condition", label: "ComposableCondition" },
+      { href: "/docs/contracts/open-condition", label: "OpenCondition" },
+      { href: "/docs/contracts/creator-write-condition", label: "CreatorWriteCondition" },
+      { href: "/docs/contracts/cdr-kit-vault", label: "CdrKitVault", tag: "factory" },
+    ],
+  },
+  {
+    heading: "Scaffolder",
+    links: [{ href: "/docs/scaffolder", label: "npm create cdr-kit" }],
+  },
+];
+
+export function Sidebar() {
+  const pathname = usePathname();
+  return (
+    <aside className="side">
+      {SIDEBAR.map((group) => (
+        <div key={group.heading} className="side-group">
+          <h5>{group.heading}</h5>
+          {group.links.map((l) => {
+            const active = pathname === l.href;
+            return (
+              <Link key={l.href} href={l.href} className={active ? "side-link active" : "side-link"}>
+                {l.label}
+                {l.tag && <span className="tag">{l.tag}</span>}
+              </Link>
+            );
+          })}
+        </div>
+      ))}
+    </aside>
+  );
+}
