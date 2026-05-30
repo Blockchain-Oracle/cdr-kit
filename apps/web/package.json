@@ -11,9 +11,9 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
-    "@cdr-kit/contracts": "workspace:*",
-    "@cdr-kit/core": "workspace:*",
-    "@cdr-kit/react": "workspace:*",
+    "@cdr-kit/contracts": "npm:@cdr-kit/contracts@^0.1.0",
+    "@cdr-kit/core": "npm:@cdr-kit/core@^0.1.0",
+    "@cdr-kit/react": "npm:@cdr-kit/react@^0.1.0",
     "@privy-io/react-auth": "^2.13.0",
     "@privy-io/wagmi": "^1.0.4",
     "@radix-ui/react-avatar": "^1.1.11",

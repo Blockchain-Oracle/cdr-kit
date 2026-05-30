@@ -103,14 +103,14 @@ importers:
         specifier: ^1.5.0
         version: 1.5.0(@types/react@19.2.15)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@cdr-kit/contracts':
-        specifier: workspace:*
-        version: link:../../packages/contracts
+        specifier: npm:@cdr-kit/contracts@^0.1.0
+        version: 0.1.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))
       '@cdr-kit/core':
-        specifier: workspace:*
-        version: link:../../packages/core
+        specifier: npm:@cdr-kit/core@^0.1.0
+        version: 0.1.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))
       '@cdr-kit/react':
-        specifier: workspace:*
-        version: link:../../packages/react
+        specifier: npm:@cdr-kit/react@^0.1.0
+        version: 0.1.0(@tanstack/react-query@5.100.14(react@19.2.4))(react@19.2.4)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))(wagmi@2.19.5(@tanstack/query-core@5.100.14)(@tanstack/react-query@5.100.14(react@19.2.4))(@types/react@19.2.15)(bufferutil@4.1.0)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(react@19.2.4)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))(zod@4.4.3))
       '@privy-io/react-auth':
         specifier: ^2.13.0
         version: 2.25.0(@solana-program/token@0.5.1(@solana/kit@2.3.0(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)(ws@8.18.0(bufferutil@4.1.0)(utf-8-validate@5.0.10))))(@solana/kit@2.3.0(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)(ws@8.18.0(bufferutil@4.1.0)(utf-8-validate@5.0.10)))(@solana/spl-token@0.4.14(@solana/web3.js@1.98.4(bufferutil@4.1.0)(encoding@0.1.13)(typescript@5.9.3)(utf-8-validate@5.0.10))(bufferutil@4.1.0)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)(utf-8-validate@5.0.10))(@solana/web3.js@1.98.4(bufferutil@4.1.0)(encoding@0.1.13)(typescript@5.9.3)(utf-8-validate@5.0.10))(@types/react@19.2.15)(bs58@6.0.0)(bufferutil@4.1.0)(fastestsmallesttextencoderdecoder@1.0.22)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)(use-sync-external-store@1.4.0(react@19.2.4))(utf-8-validate@5.0.10)(zod@4.4.3)
@@ -215,17 +215,17 @@ importers:
         specifier: ^2.0.0
         version: 2.0.80(zod@4.4.3)
       '@cdr-kit/agent':
-        specifier: workspace:*
-        version: link:../../packages/agent
+        specifier: npm:@cdr-kit/agent@^0.1.0
+        version: 0.1.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
       '@cdr-kit/contracts':
-        specifier: workspace:*
-        version: link:../../packages/contracts
+        specifier: npm:@cdr-kit/contracts@^0.1.0
+        version: 0.1.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
       '@cdr-kit/core':
-        specifier: workspace:*
-        version: link:../../packages/core
+        specifier: npm:@cdr-kit/core@^0.1.0
+        version: 0.1.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
       '@cdr-kit/vercel-ai':
-        specifier: workspace:*
-        version: link:../../packages/vercel-ai
+        specifier: npm:@cdr-kit/vercel-ai@^0.1.0
+        version: 0.1.0(ai@6.0.191(zod@4.4.3))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
       ai:
         specifier: ^6.0.191
         version: 6.0.191(zod@4.4.3)
@@ -790,6 +790,43 @@ packages:
     peerDependenciesMeta:
       '@types/react':
         optional: true
+
+  '@cdr-kit/agent@0.1.0':
+    resolution: {integrity: sha512-cN61F9t/sDQ/Z9g+Ws+QUwSSimfvyTIVdyiKwSzE2Blvj0ZPSevPFCAmQE54V40R9sqHNao68cHGWFKFcadPFw==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      viem: ^2
+
+  '@cdr-kit/contracts@0.1.0':
+    resolution: {integrity: sha512-puD56/78IcBxuSDov2fCklm6UFpooViB536QC4vvOacbfVGmoQqCOIPfXWx0JIdml+Qcnr3EQl2BTwO/VXFcRQ==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      viem: ^2
+
+  '@cdr-kit/core@0.1.0':
+    resolution: {integrity: sha512-rWLXIIB4776DL7+fqGVNSuKw9LtxIDGCu/gpUFaC4vuJLCXRiNuUPudjnPzGxgtg7qCdj8E+e8kRTQrMf7XTgw==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      viem: ^2
+
+  '@cdr-kit/react@0.1.0':
+    resolution: {integrity: sha512-89yQPRF8vGprBbsJPdjmL0JPZusfV9VB5wGhs9Y0RG8kPalQOaqrL3uuI5lmVc5kHVAb+GxhcNajXZ2z1xHaPw==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      '@tanstack/react-query': '>=5'
+      react: '>=18'
+      viem: ^2
+      wagmi: '>=2'
+
+  '@cdr-kit/tools@0.1.0':
+    resolution: {integrity: sha512-2Sh1ME7EstZYbFD/OALPV/p9w66IThAF6DeIKc3ITNdGCIzws8BbnNnHbMWKoJkHGhd21kz9R94oWJuyq8TBSA==}
+    engines: {node: '>=20'}
+
+  '@cdr-kit/vercel-ai@0.1.0':
+    resolution: {integrity: sha512-moBgRiGuer7DX/uB4C0yw+NO3mkj67MokK/7VmdjYEqmhN9IHzAGjKvxAP5ZCMlwkL9mICrFkHx4r/8XNHlDjg==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      ai: '>=6'
 
   '@cfworker/json-schema@4.1.1':
     resolution: {integrity: sha512-gAmrUZSGtKc3AiBL71iNWxDsyUC5uMaKKGdvzYsBoTW/xi42JQHl7eKV2OYzCUqvc+D2RCcf7EXY2iCyFIk6og==}
@@ -10012,6 +10049,93 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.2.15
 
+  '@cdr-kit/agent@0.1.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))':
+    dependencies:
+      '@cdr-kit/contracts': 0.1.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+      '@cdr-kit/core': 0.1.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+      consola: 3.4.2
+      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)
+    transitivePeerDependencies:
+      - '@filoz/synapse-sdk'
+      - '@helia/unixfs'
+      - '@storacha/client'
+      - helia
+
+  '@cdr-kit/contracts@0.1.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))':
+    dependencies:
+      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3)
+
+  '@cdr-kit/contracts@0.1.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))':
+    dependencies:
+      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)
+
+  '@cdr-kit/core@0.1.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))':
+    dependencies:
+      '@cdr-kit/contracts': 0.1.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))
+      '@piplabs/cdr-crypto': 0.2.1
+      '@piplabs/cdr-sdk': 0.2.1(multiformats@13.4.2)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))
+      multiformats: 13.4.2
+      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3)
+      zod: 3.25.76
+    transitivePeerDependencies:
+      - '@filoz/synapse-sdk'
+      - '@helia/unixfs'
+      - '@storacha/client'
+      - helia
+
+  '@cdr-kit/core@0.1.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))':
+    dependencies:
+      '@cdr-kit/contracts': 0.1.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+      '@piplabs/cdr-crypto': 0.2.1
+      '@piplabs/cdr-sdk': 0.2.1(multiformats@13.4.2)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+      multiformats: 13.4.2
+      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)
+      zod: 3.25.76
+    transitivePeerDependencies:
+      - '@filoz/synapse-sdk'
+      - '@helia/unixfs'
+      - '@storacha/client'
+      - helia
+
+  '@cdr-kit/react@0.1.0(@tanstack/react-query@5.100.14(react@19.2.4))(react@19.2.4)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))(wagmi@2.19.5(@tanstack/query-core@5.100.14)(@tanstack/react-query@5.100.14(react@19.2.4))(@types/react@19.2.15)(bufferutil@4.1.0)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(react@19.2.4)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))(zod@4.4.3))':
+    dependencies:
+      '@cdr-kit/contracts': 0.1.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))
+      '@cdr-kit/core': 0.1.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))
+      '@tanstack/react-query': 5.100.14(react@19.2.4)
+      react: 19.2.4
+      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3)
+      wagmi: 2.19.5(@tanstack/query-core@5.100.14)(@tanstack/react-query@5.100.14(react@19.2.4))(@types/react@19.2.15)(bufferutil@4.1.0)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(react@19.2.4)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))(zod@4.4.3)
+    transitivePeerDependencies:
+      - '@filoz/synapse-sdk'
+      - '@helia/unixfs'
+      - '@storacha/client'
+      - helia
+
+  '@cdr-kit/tools@0.1.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))':
+    dependencies:
+      '@cdr-kit/agent': 0.1.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+      '@cdr-kit/core': 0.1.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+      zod: 3.25.76
+      zod-to-json-schema: 3.25.2(zod@3.25.76)
+    transitivePeerDependencies:
+      - '@filoz/synapse-sdk'
+      - '@helia/unixfs'
+      - '@storacha/client'
+      - helia
+      - viem
+
+  '@cdr-kit/vercel-ai@0.1.0(ai@6.0.191(zod@4.4.3))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))':
+    dependencies:
+      '@cdr-kit/agent': 0.1.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+      '@cdr-kit/tools': 0.1.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+      ai: 6.0.191(zod@4.4.3)
+    transitivePeerDependencies:
+      - '@filoz/synapse-sdk'
+      - '@helia/unixfs'
+      - '@storacha/client'
+      - helia
+      - viem
+
   '@cfworker/json-schema@4.1.1': {}
 
   '@changesets/apply-release-plan@7.1.1':
@@ -11931,9 +12055,17 @@ snapshots:
     dependencies:
       lit: 3.3.0
 
+  '@piplabs/cdr-contracts@0.2.1(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))':
+    dependencies:
+      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3)
+
   '@piplabs/cdr-contracts@0.2.1(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76))':
     dependencies:
       viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76)
+
+  '@piplabs/cdr-contracts@0.2.1(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))':
+    dependencies:
+      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)
 
   '@piplabs/cdr-crypto@0.2.1':
     dependencies:
@@ -11942,11 +12074,27 @@ snapshots:
       '@noble/curves': 1.6.0
       '@noble/hashes': 2.0.1
 
+  '@piplabs/cdr-sdk@0.2.1(multiformats@13.4.2)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))':
+    dependencies:
+      '@piplabs/cdr-contracts': 0.2.1(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))
+      '@piplabs/cdr-crypto': 0.2.1
+      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3)
+    optionalDependencies:
+      multiformats: 13.4.2
+
   '@piplabs/cdr-sdk@0.2.1(multiformats@13.4.2)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76))':
     dependencies:
       '@piplabs/cdr-contracts': 0.2.1(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76))
       '@piplabs/cdr-crypto': 0.2.1
       viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76)
+    optionalDependencies:
+      multiformats: 13.4.2
+
+  '@piplabs/cdr-sdk@0.2.1(multiformats@13.4.2)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))':
+    dependencies:
+      '@piplabs/cdr-contracts': 0.2.1(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+      '@piplabs/cdr-crypto': 0.2.1
+      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)
     optionalDependencies:
       multiformats: 13.4.2
 
