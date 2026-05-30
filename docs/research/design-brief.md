@@ -458,3 +458,65 @@ For each component / hook page in the redesigned showcase, the agent needs to de
 5. **"Behind the scenes" note** — the protocol concept the consumer should understand (e.g. "this fires a real on-chain subscribe tx and then a threshold read that takes ~15s on Aeneid").
 
 Plus: a top-level architectural diagram showing how `<CdrProvider>` → hooks → components → CDR network → Story IP fits together. The library has 8 hooks + 5 components + 2 providers; without that diagram the design risks looking like a flat menu of unrelated parts.
+
+### Open question for the design agent: should the library ship more components?
+
+The dashboard at `apps/web/` was built on top of `@cdr-kit/react`'s **hooks** (not its components), and in doing so it built a set of polished UI pieces that arguably belong *in* the library as styled variants. The library today has 5 components (mostly headless render-prop slots); the dashboard has 7 components on top, several of which are pure presentational primitives that would slot into any cdr-kit consumer's app. **Whether to promote any/all of them up into `@cdr-kit/react` (as styled variants of the headless primitives, the Clerk pattern) is a design-agent call, not a brief-author call.** This section gives you the raw inventory so you can answer it.
+
+**Dashboard-app components that exist today in `apps/web/components/app/`** (built on the hooks; not exported anywhere):
+
+| Component | One-line | Source |
+|---|---|---|
+| `AccessStepper` | Visual stepper for the access state machine (`paying → collecting-partials → ready / error`). Uses framer-motion for the per-phase transitions. The keyframe UI for the ~15s wait. | `apps/web/components/app/access-stepper.tsx` |
+| `AppHeader` | Top bar with page title, network chip (`Aeneid · mock` / `Aeneid · live`), and a Connect Wallet button (delegates to `useCdrWallet`). | `apps/web/components/app/app-header.tsx` |
+| `ConditionBadge` | Small pill showing condition type (Subscription / Tier-gated / Composable / Open). Pure presentational. | `apps/web/components/app/condition-badge.tsx` |
+| `VaultCard` | Marketplace card: title, condition badge, dataType chip, subscriber count, creator avatar+name, price (`X IP / 30d` or `License-gated`). Uses a "GlowCard" premium effect. | `apps/web/components/app/vault-card.tsx` |
+| `VaultDetail` | Full per-vault detail view: condition pill + uuid, title + description, access-condition box, meta grid (data type / creator / price / network), and the access panel (subscribe/access CTA, embedded `AccessStepper`, decrypted JSON output). | `apps/web/components/app/vault-detail.tsx` |
+| `CreateWizard` | Multi-step form for the seller flow: pick condition kind → configure terms → confirm. Wraps `useCreateVault`. | `apps/web/components/app/create-wizard.tsx` |
+| `AppSidebar` | App chrome: nav (Marketplace / Create vault / Seller / Buyer), Docs link, network-status footer chip. | `apps/web/components/app/sidebar.tsx` |
+
+**Natural promotion candidates** (vault-centric, generic across consumers, pure presentational on top of the status enum):
+
+- `<ConditionBadge kind="subscription" />` — zero app logic; renders the same in any consumer's app.
+- `<AccessStepper status="collecting-partials" />` — pure derivation off the status enum; would let consumers drop in a designed progress UI without rebuilding the stepper.
+- `<VaultCard uuid={...} />` — would slot into any vault-listing surface; equivalent to a styled `<Vault>` variant (Clerk's `<UserButton/>` to its `useUser()`).
+- `<SubscribeButton uuid={...} />` — a styled CTA that bundles `useSubscribeAndAccess` + the access stepper inline. The drop-in equivalent of `<VaultGate>` for paywalled access, with batteries.
+
+**Less obvious candidates** (app-specific, but components designers might still want):
+
+- `<CdrNetworkChip />` — the "Aeneid · mock/live" indicator. Reads from `useCdrConfig`. Tiny but every consumer wants it.
+- `<WalletConnectButton />` — a styled wrapper over `useCdrWallet`. Many consumers will already have their own (Privy/RainbowKit); the library variant would be for the no-existing-wallet-stack case.
+- `<CreateVaultWizard />` — a heavier promotion; multi-step forms inside libraries are a maintenance burden. Probably better as a scaffolder template than a library export.
+- `<AppHeader>`, `<AppSidebar>` — app chrome, not vault-centric. Almost certainly should NOT be promoted (they're consumer-app-territory).
+
+**Common DX primitives currently missing from both library and dashboard** (the design agent may decide some belong in the library, some in the docs gallery as "recipes", and some not at all):
+
+- **Copy-to-clipboard control.** Nothing in the dashboard exposes a "copy uuid", "copy address", or "copy code snippet" affordance, and the library doesn't either. The showcase site's code panels will need this.
+- **IP price formatter / Hex-address truncator.** `0.002 IP / 30d` and `0xc183…96E2` are formatted ad-hoc in `apps/web/lib/live-vaults.ts`. Could be helper hooks (`useFormatIp(wei)`, `useShortAddress(hex)`) or unstyled formatter components.
+- **Toasts / notifications.** No success/error toasts on subscribe-confirmed, vault-created, etc. The dashboard's only feedback is in-place state changes.
+- **Block-explorer link affordance.** A vault has an `ipId` + `tokenId` + creator address + tx hashes — each could link to Aeneid explorer. No primitive for this today.
+- **Loading spinner / determinate progress bar.** Only the 3-line `CdrSkeleton` exists. Live `collecting-partials` is indeterminate; mock mode reports determinate `{ collected, threshold }` — neither has a designed visual primitive yet.
+- **Empty + error states beyond `<EmptyVaults>`.** `<EmptyVaults>` is a div + text. There's no `<CdrError>`, no friendly error formatter, no retry-action wrapper.
+- **Code-block component.** Every component-gallery page will want copy-paste-able code with syntax highlighting. Fumadocs handles this for the docs MDX; the showcase pages need an equivalent.
+
+**Engineering reality the design agent should know before promoting components:**
+
+`@cdr-kit/react` today has **no styling deps**: no Tailwind, no shadcn, no lucide-icons, no framer-motion. Its only peer deps are React, wagmi, viem, and @tanstack/react-query. The current 5 components ship with either zero styling (render-props) or minimal inline styles + CSS custom properties (skeleton, inspector). The dashboard components, by contrast, all depend on Tailwind + shadcn + lucide + (some) framer-motion.
+
+If we promote any styled component into the library, we have to choose:
+
+1. **Vanilla CSS / data-attributes + CSS variables** (today's stance) — consumers theme via `--cdr-*` vars; component ships unopinionated visuals. Zero new peer-deps. Aesthetic ceiling is lower.
+2. **Tailwind-styled but with class overrides** — ship the components with Tailwind classes; consumers need Tailwind to get the styling. Adds a hard requirement.
+3. **CSS-in-JS / a tiny runtime style system** (e.g. vanilla-extract, panda) — ships visuals without forcing Tailwind. Adds a runtime + bundle cost.
+4. **Two-package split** — keep `@cdr-kit/react` headless and add a sibling `@cdr-kit/react-ui` (or `-styled`) with the designed variants. Clerk and RainbowKit effectively do this internally. Cleanest separation; costs a new package.
+
+The design agent should call this. Whichever direction it goes, document the choice so future contributors don't fight it.
+
+### What `/lib-preview` (the bare visual surface) shows you vs what the dashboard shows
+
+When making the "do we ship more components?" call, compare these two surfaces:
+
+- **`/lib-preview`** (`apps/web/app/(app)/lib-preview/page.tsx`) — what `@cdr-kit/react` ships *as installed*. Mostly placeholders, render-prop slots, and the 3-line skeleton. The bare floor.
+- **`/marketplace` / `/vault/[uuid]` / `/create`** — what `apps/web` built *on top of* the hooks. Designed cards, designed stepper, designed CTAs, designed wizard. The ceiling that's currently locked inside the dashboard.
+
+The visual gap between the two surfaces is roughly the size of the "should we ship more?" question. That gap could close by (a) the design agent designing styled library variants, (b) the design agent designing the showcase to render headless examples beautifully without promoting them into the library, or (c) some mix. All three are valid; the call is yours.
