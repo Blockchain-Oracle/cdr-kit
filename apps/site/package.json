@@ -1,0 +1,29 @@
+{
+  "name": "@cdr-kit/site",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "next typegen && tsc --noEmit"
+  },
+  "dependencies": {
+    "@cdr-kit/contracts": "npm:@cdr-kit/contracts@^0.1.0",
+    "@cdr-kit/core": "npm:@cdr-kit/core@^0.1.0",
+    "@cdr-kit/react": "npm:@cdr-kit/react@^0.1.0",
+    "@tanstack/react-query": "^5.62.0",
+    "next": "16.2.6",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "viem": "^2.51.3",
+    "wagmi": "^2.14.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "typescript": "^5"
+  }
+}
