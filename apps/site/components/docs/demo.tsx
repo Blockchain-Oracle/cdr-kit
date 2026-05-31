@@ -2,6 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import { highlight } from "@/lib/highlight";
+import { CopyButton } from "../primitives/copy-button";
 
 /** Preview / Code tabs over a single demo. Pass the preview component + a code snippet string. */
 export function Demo({
@@ -33,6 +34,7 @@ export function Demo({
         </div>
         {badge && <span style={{ marginLeft: 8 }}>{badge}</span>}
         <span className="spacer" />
+        {pane === "code" && typeof code === "string" && <CopyButton value={code} />}
         {reset && (
           <button type="button" className="demo-reset" onClick={reset}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">

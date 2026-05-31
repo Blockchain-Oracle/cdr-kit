@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Badge } from "@/components/primitives/badge";
 import { DocPage } from "@/components/docs/doc-page";
+import { CodePanel } from "@/components/docs/code-panel";
 
 const CODE = `import { CdrAgent } from "@cdr-kit/agent";
 
@@ -30,7 +31,7 @@ export default function AgentKitPage() {
           {
             id: "usage",
             title: "Usage",
-            content: <div className="win doc-code"><div className="win-bar"><span className="lights"><i /><i /><i /></span><span className="win-title">agent-demo.ts</span></div><div className="code"><pre><code>{CODE}</code></pre></div></div>,
+            content: <CodePanel title="agent-demo.ts" code={CODE} />,
           },
           {
             id: "adapters",

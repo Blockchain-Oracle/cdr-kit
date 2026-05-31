@@ -23,3 +23,15 @@ export const KeyRound = (p: SVGProps<SVGSVGElement>) => (
 export const AlertCircle = (p: SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" {...stroke} {...p}><circle cx="12" cy="12" r="9" /><path d="M12 7v6M12 17h.01" /></svg>
 );
+export const Lock = (p: SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" {...stroke} {...p}><rect x="4" y="11" width="16" height="10" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>
+);
+export const LockOpen = (p: SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" {...stroke} {...p}><rect x="4" y="11" width="16" height="10" rx="2" /><path d="M8 11V8a4 4 0 0 1 7.46-2" /></svg>
+);
+export const X = (p: SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" {...stroke} {...p}><path d="M6 6l12 12M18 6L6 18" /></svg>
+);
+export const Download = (p: SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" {...stroke} {...p}><path d="M12 3v12M7 11l5 5 5-5M5 21h14" /></svg>
+);

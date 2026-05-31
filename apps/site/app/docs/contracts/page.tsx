@@ -2,6 +2,7 @@ import Link from "next/link";
 import { aeneid } from "@cdr-kit/contracts";
 import { Badge } from "@/components/primitives/badge";
 import { DocPage } from "@/components/docs/doc-page";
+import { CodePanel } from "@/components/docs/code-panel";
 
 export default function ContractsPage() {
   return (
@@ -33,12 +34,12 @@ export default function ContractsPage() {
             content: (
               <>
                 <p>Conditions are pure <code>view</code> functions the validator network calls at read/write time. The 4-param signature:</p>
-                <div className="win doc-code"><div className="win-bar"><span className="lights"><i /><i /><i /></span><span className="win-title">ICdrCondition.sol</span></div><div className="code"><pre><code>{`function checkReadCondition(
+                <CodePanel title="ICdrCondition.sol" code={`function checkReadCondition(
   uint32 uuid,
   bytes accessAuxData,
   bytes conditionData,
   address caller
-) external view returns (bool);`}</code></pre></div></div>
+) external view returns (bool);`} />
               </>
             ),
           },

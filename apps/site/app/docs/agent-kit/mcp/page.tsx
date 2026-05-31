@@ -1,5 +1,6 @@
 import { Badge } from "@/components/primitives/badge";
 import { DocPage } from "@/components/docs/doc-page";
+import { CodePanel } from "@/components/docs/code-panel";
 
 const INSTALL = "$ npm install -g @cdr-kit/mcp";
 const JSON_CONFIG = `{
@@ -26,7 +27,7 @@ export default function Page() {
           {
             id: "install",
             title: "Install",
-            content: <div className="win doc-code"><div className="win-bar"><span className="lights"><i /><i /><i /></span><span className="win-title">terminal</span></div><div className="code"><pre><code>{INSTALL}</code></pre></div></div>,
+            content: <CodePanel title="terminal" code={INSTALL} />,
           },
           {
             id: "claude-desktop",
@@ -38,7 +39,7 @@ export default function Page() {
                   <code>~/Library/Application Support/Claude/claude_desktop_config.json</code>; Cursor:{" "}
                   <code>~/.cursor/mcp.json</code>; Windsurf: <code>~/.codeium/windsurf/mcp_config.json</code>).
                 </p>
-                <div className="win doc-code"><div className="win-bar"><span className="lights"><i /><i /><i /></span><span className="win-title">mcp_config.json</span></div><div className="code"><pre><code>{JSON_CONFIG}</code></pre></div></div>
+                <CodePanel title="mcp_config.json" code={JSON_CONFIG} />
               </>
             ),
           },

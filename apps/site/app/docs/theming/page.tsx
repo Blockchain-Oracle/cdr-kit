@@ -1,4 +1,5 @@
 import { DocPage } from "@/components/docs/doc-page";
+import { CodePanel } from "@/components/docs/code-panel";
 
 const APPEARANCE_CODE = `<CdrProvider
   appearance={{
@@ -41,10 +42,7 @@ export default function ThemingPage() {
             id: "passing",
             title: "Passing tokens",
             content: (
-              <div className="win doc-code">
-                <div className="win-bar"><span className="lights"><i /><i /><i /></span><span className="win-title">App.tsx</span></div>
-                <div className="code"><pre><code>{APPEARANCE_CODE}</code></pre></div>
-              </div>
+              <CodePanel title="App.tsx" code={APPEARANCE_CODE} />
             ),
           },
           {

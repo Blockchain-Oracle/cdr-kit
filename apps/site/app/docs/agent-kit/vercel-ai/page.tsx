@@ -1,5 +1,6 @@
 import { Badge } from "@/components/primitives/badge";
 import { DocPage } from "@/components/docs/doc-page";
+import { CodePanel } from "@/components/docs/code-panel";
 
 const CODE = `import { generateText, stepCountIs } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
@@ -24,7 +25,7 @@ export default function Page() {
         badges: <Badge tone="primary">@cdr-kit/vercel-ai</Badge>,
         lede: <>Returns a <code>ToolSet</code> for <code>generateText</code> / <code>streamText</code>. The model autonomously picks the three CDR tools and drives the loop.</>,
         importLine: 'import { getVercelAITools } from "@cdr-kit/vercel-ai"',
-        sections: [{ id: "usage", title: "Usage", content: <div className="win doc-code"><div className="win-bar"><span className="lights"><i /><i /><i /></span><span className="win-title">agent.ts</span></div><div className="code"><pre><code>{CODE}</code></pre></div></div> }],
+        sections: [{ id: "usage", title: "Usage", content: <CodePanel title="agent.ts" code={CODE} /> }],
         prev: { href: "/docs/agent-kit", label: "CdrAgent" },
         next: { href: "/docs/agent-kit/openai", label: "OpenAI / Anthropic" },
       }}

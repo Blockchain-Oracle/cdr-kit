@@ -1,5 +1,6 @@
 import { Badge } from "@/components/primitives/badge";
 import { DocPage } from "@/components/docs/doc-page";
+import { CodePanel } from "@/components/docs/code-panel";
 
 const PROVIDER_CODE = `import { CdrProvider } from "@cdr-kit/react";
 import { wagmiConfig } from "./wagmi";
@@ -34,22 +35,7 @@ export default function QuickstartPage() {
           {
             id: "install",
             title: "Install",
-            content: (
-              <div className="win doc-code">
-                <div className="win-bar">
-                  <span className="lights"><i /><i /><i /></span>
-                  <span className="win-title">terminal</span>
-                </div>
-                <div className="code">
-                  <pre>
-                    <code>
-                      <span className="tok-punc">$</span> pnpm add{" "}
-                      <span className="tok-str">@cdr-kit/react @cdr-kit/core</span> wagmi viem
-                    </code>
-                  </pre>
-                </div>
-              </div>
-            ),
+            content: <CodePanel title="terminal" language="bash" code="$ pnpm add @cdr-kit/react @cdr-kit/core wagmi viem" />,
           },
           {
             id: "provider",
@@ -61,17 +47,7 @@ export default function QuickstartPage() {
                   crypto WASM. Pass <code>config</code> + <code>apiUrl</code> for live mode, or <code>mockKit</code> for
                   offline dev.
                 </p>
-                <div className="win doc-code">
-                  <div className="win-bar">
-                    <span className="lights"><i /><i /><i /></span>
-                    <span className="win-title">App.tsx</span>
-                  </div>
-                  <div className="code">
-                    <pre>
-                      <code>{PROVIDER_CODE}</code>
-                    </pre>
-                  </div>
-                </div>
+                <CodePanel title="App.tsx" code={PROVIDER_CODE} />
               </>
             ),
           },
@@ -84,38 +60,14 @@ export default function QuickstartPage() {
                   <code>&lt;VaultGate&gt;</code> checks the on-chain condition, collects key shares, and hands you the
                   decrypted bytes. Pass a fallback for the &quot;not yet entitled&quot; state.
                 </p>
-                <div className="win doc-code">
-                  <div className="win-bar">
-                    <span className="lights"><i /><i /><i /></span>
-                    <span className="win-title">SignalCard.tsx</span>
-                  </div>
-                  <div className="code">
-                    <pre>
-                      <code>{GATE_CODE}</code>
-                    </pre>
-                  </div>
-                </div>
+                <CodePanel title="SignalCard.tsx" code={GATE_CODE} />
               </>
             ),
           },
           {
             id: "scaffold",
             title: "Or scaffold a starter",
-            content: (
-              <div className="win doc-code">
-                <div className="win-bar">
-                  <span className="lights"><i /><i /><i /></span>
-                  <span className="win-title">terminal</span>
-                </div>
-                <div className="code">
-                  <pre>
-                    <code>
-                      <span className="tok-punc">$</span> npm create cdr-kit
-                    </code>
-                  </pre>
-                </div>
-              </div>
-            ),
+            content: <CodePanel title="terminal" language="bash" code="$ npm create cdr-kit" />,
           },
         ],
         prev: { href: "/docs", label: "Introduction" },

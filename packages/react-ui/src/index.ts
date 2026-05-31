@@ -10,3 +10,7 @@ export { CdrNetworkChip, type CdrNetworkChipProps } from "./cdr-network-chip";
 export { CdrSpinner, type CdrSpinnerProps } from "./cdr-spinner";
 export { CdrProgress, type CdrProgressProps } from "./cdr-progress";
 export { CdrError, type CdrErrorProps } from "./cdr-error";
+export { UnlockablePill, type UnlockablePillProps } from "./unlockable-pill";
+export { UnlockableCard, type UnlockableCardProps } from "./unlockable-card";
+export { unlockedAuto } from "./unlocked-auto";
+export { useFloatingCard, type FloatingPos } from "./use-floating-card";

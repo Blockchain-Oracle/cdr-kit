@@ -1,6 +1,7 @@
 import { Badge } from "@/components/primitives/badge";
 import { Breadcrumb, Callout, DocTitle, H2, PrevNext, PropsTable } from "@/components/docs/parts";
 import { Demo } from "@/components/docs/demo";
+import { CodePanel } from "@/components/docs/code-panel";
 import { Toc } from "@/components/docs/toc";
 import { VaultGateDemo } from "@/components/docs/demos/vault-gate-demo";
 
@@ -68,25 +69,9 @@ export default function VaultGatePage() {
           The simplest gate: pass a <code>uuid</code> and a render-prop. With <code>auto</code>, <code>VaultGate</code>{" "}
           requests access on mount; without it, it waits for an imperative trigger from the access hook.
         </p>
-        <div className="win doc-code">
-          <div className="win-bar">
-            <span className="lights">
-              <i />
-              <i />
-              <i />
-            </span>
-            <span className="win-title">SignalCard.tsx</span>
-          </div>
-          <div className="code">
-            <pre>
-              <code>
-                {`<VaultGate uuid={4200} auto fallback={<SubscribeButton />}>
+        <CodePanel title="SignalCard.tsx" code={`<VaultGate uuid={4200} auto fallback={<SubscribeButton />}>
   {(data) => <SignalView bytes={data} />}
-</VaultGate>`}
-              </code>
-            </pre>
-          </div>
-        </div>
+</VaultGate>`} />
 
         <H2 id="props">Props</H2>
         <PropsTable
@@ -162,27 +147,11 @@ export default function VaultGatePage() {
           surface works with zero chain dependencies — ideal for Storybook, tests, and the previews on this page. Going
           live is a one-line swap:
         </p>
-        <div className="win doc-code">
-          <div className="win-bar">
-            <span className="lights">
-              <i />
-              <i />
-              <i />
-            </span>
-            <span className="win-title">provider.tsx</span>
-          </div>
-          <div className="code">
-            <pre>
-              <code>
-                {`// local / tests — no wallet, no chain
+        <CodePanel title="provider.tsx" code={`// local / tests — no wallet, no chain
 <CdrProvider mockKit={createMockCdrKit()}> … </CdrProvider>
 
 // live on Aeneid — same children, real round-trip
-<CdrProvider config={wagmiConfig} apiUrl={apiUrl}> … </CdrProvider>`}
-              </code>
-            </pre>
-          </div>
-        </div>
+<CdrProvider config={wagmiConfig} apiUrl={apiUrl}> … </CdrProvider>`} />
 
         <PrevNext
           prev={{ href: "/docs/components/cdr-provider", label: "CdrProvider" }}

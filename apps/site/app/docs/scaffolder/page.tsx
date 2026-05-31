@@ -1,5 +1,6 @@
 import { Badge } from "@/components/primitives/badge";
 import { DocPage } from "@/components/docs/doc-page";
+import { CodePanel } from "@/components/docs/code-panel";
 
 export default function Page() {
   return (
@@ -14,10 +15,10 @@ export default function Page() {
             id: "invoke",
             title: "Invoke",
             content: (
-              <div className="win doc-code"><div className="win-bar"><span className="lights"><i /><i /><i /></span><span className="win-title">terminal</span></div><div className="code"><pre><code>{`$ npm create cdr-kit          # or
+              <CodePanel title="terminal" code={`$ npm create cdr-kit          # or
 $ pnpm create cdr-kit
 $ bun create cdr-kit
-$ yarn create cdr-kit`}</code></pre></div></div>
+$ yarn create cdr-kit`} />
             ),
           },
           {

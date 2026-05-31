@@ -1,5 +1,6 @@
 import { Badge } from "@/components/primitives/badge";
 import { DocPage } from "@/components/docs/doc-page";
+import { CodePanel } from "@/components/docs/code-panel";
 
 const CODE = `import { CdrAgent } from "@cdr-kit/agent";
 import { cdrActionProvider } from "@cdr-kit/agentkit";
@@ -17,7 +18,7 @@ export default function Page() {
         badges: <Badge tone="primary">@cdr-kit/agentkit</Badge>,
         lede: <>Coinbase AgentKit <code>ActionProvider</code> exposing the three CDR tools as on-chain actions.</>,
         importLine: 'import { cdrActionProvider } from "@cdr-kit/agentkit"',
-        sections: [{ id: "usage", title: "Usage", content: <div className="win doc-code"><div className="win-bar"><span className="lights"><i /><i /><i /></span><span className="win-title">agentkit.ts</span></div><div className="code"><pre><code>{CODE}</code></pre></div></div> }],
+        sections: [{ id: "usage", title: "Usage", content: <CodePanel title="agentkit.ts" code={CODE} /> }],
         prev: { href: "/docs/agent-kit/langchain", label: "LangChain" },
         next: { href: "/docs/agent-kit/goat", label: "GOAT SDK" },
       }}

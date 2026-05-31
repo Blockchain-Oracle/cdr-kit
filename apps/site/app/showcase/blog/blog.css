@@ -1,0 +1,178 @@
+/* Showcase blog — premium magazine layout for the <UnlockablePill> wedge demo. */
+
+.blog {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 64px 24px 120px;
+  font-family: var(--sans);
+  color: var(--ink);
+}
+
+.blog-head { margin-bottom: 44px; }
+.blog-back {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--ink-3);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 32px;
+  transition: color .14s;
+}
+.blog-back:hover { color: var(--ink); }
+.blog-eyebrow {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--primary);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0 0 14px;
+}
+.blog-title {
+  font-family: var(--display);
+  font-size: clamp(2.4rem, 5.4vw, 3.8rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  margin: 0 0 18px;
+  color: var(--ink);
+}
+.blog-sub {
+  font-size: 1.12rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+  margin: 0 0 24px;
+  max-width: 56ch;
+}
+.blog-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: var(--ink-3);
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+.blog-author {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--ink);
+  font-weight: 600;
+}
+.blog-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), oklch(0.66 0.15 65));
+}
+.blog-dot { color: var(--ink-3); }
+
+.blog-body p {
+  font-size: 1.12rem;
+  line-height: 1.78;
+  color: var(--ink);
+  margin: 0 0 24px;
+  font-feature-settings: "kern", "liga", "calt", "onum";
+}
+.blog-lede {
+  font-size: 1.26rem !important;
+  line-height: 1.66 !important;
+  color: var(--ink) !important;
+  margin-bottom: 32px !important;
+}
+.blog-lede::first-letter {
+  font-family: var(--display);
+  font-size: 4em;
+  float: left;
+  line-height: 0.88;
+  margin: 6px 12px 0 0;
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.blog-cut {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 48px 0 32px;
+}
+.blog-cut-line {
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+.blog-cut-label {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.blog-cta {
+  font-size: 0.95rem !important;
+  line-height: 1.65 !important;
+  color: var(--ink-2) !important;
+  padding: 20px 22px;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+}
+.blog-cta a {
+  color: var(--primary);
+  text-decoration: none;
+  border-bottom: 1px solid oklch(0.52 0.20 268 / 0.4);
+  transition: border-color .14s;
+}
+.blog-cta a:hover { border-bottom-color: var(--primary); }
+.blog-cta code {
+  font-family: var(--mono);
+  font-size: 0.86em;
+  background: var(--card);
+  padding: 1px 6px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+
+/* First-time-reader hint near the first pill — dismissible, localStorage-remembered. */
+.blog-hint {
+  display: flex; align-items: center; gap: 12px;
+  margin: 0 0 28px;
+  padding: 12px 14px 12px 18px;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--warn);
+  border-radius: var(--r-sm);
+  font-size: 0.88rem;
+  color: var(--ink-2);
+  line-height: 1.45;
+  animation: blog-hint-in 0.4s cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+.blog-hint-arrow { display: none; }
+.blog-hint-text b { color: var(--ink); font-weight: 600; }
+.blog-hint-dismiss {
+  margin-left: auto; flex-shrink: 0;
+  font-family: var(--mono); font-size: 0.72rem; font-weight: 600;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--ink-3);
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--card);
+  cursor: pointer;
+  transition: color .14s, border-color .14s;
+}
+.blog-hint-dismiss:hover { color: var(--ink); border-color: var(--line-2); }
+@keyframes blog-hint-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (max-width: 560px) {
+  .blog { padding: 40px 18px 96px; }
+  .blog-title { font-size: 2.2rem; }
+  .blog-body p { font-size: 1.04rem; }
+  .blog-lede { font-size: 1.14rem !important; }
+}

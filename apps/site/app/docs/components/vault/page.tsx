@@ -1,5 +1,6 @@
 import { Badge } from "@/components/primitives/badge";
 import { DocPage } from "@/components/docs/doc-page";
+import { CodePanel } from "@/components/docs/code-panel";
 
 const CODE = `<Vault uuid={4200} auto>
   <Vault.Locked>   <SubscribeButton /> </Vault.Locked>
@@ -27,10 +28,7 @@ export default function VaultCompoundPage() {
             id: "usage",
             title: "Usage",
             content: (
-              <div className="win doc-code">
-                <div className="win-bar"><span className="lights"><i /><i /><i /></span><span className="win-title">SignalView.tsx</span></div>
-                <div className="code"><pre><code>{CODE}</code></pre></div>
-              </div>
+              <CodePanel title="SignalView.tsx" code={CODE} />
             ),
           },
           {

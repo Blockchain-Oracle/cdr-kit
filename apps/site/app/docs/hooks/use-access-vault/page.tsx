@@ -1,5 +1,6 @@
 import { Badge } from "@/components/primitives/badge";
 import { DocPage } from "@/components/docs/doc-page";
+import { CodePanel } from "@/components/docs/code-panel";
 
 const SIG = `function useAccessVault(uuid: number): {
   access: (accessAuxData?: Hex) => Promise<Uint8Array>;
@@ -22,7 +23,7 @@ export default function UseAccessVaultPage() {
           {
             id: "signature",
             title: "Signature",
-            content: <div className="win doc-code"><div className="win-bar"><span className="lights"><i /><i /><i /></span><span className="win-title">type</span></div><div className="code"><pre><code>{SIG}</code></pre></div></div>,
+            content: <CodePanel title="type" code={SIG} language="ts" />,
           },
           {
             id: "states",

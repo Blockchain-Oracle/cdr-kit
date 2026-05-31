@@ -7,6 +7,8 @@ interface SideLink {
   href: string;
   label: string;
   tag?: string;
+  /** If set, the tag becomes a separate clickable link to this href. */
+  tagHref?: string;
 }
 
 interface SideGroup {
@@ -38,6 +40,7 @@ export const SIDEBAR: SideGroup[] = [
       { href: "/docs/components/condition-badge", label: "ConditionBadge", tag: "styled" },
       { href: "/docs/components/access-stepper", label: "AccessStepper", tag: "styled" },
       { href: "/docs/components/subscribe-button", label: "SubscribeButton", tag: "styled" },
+      { href: "/docs/components/unlockable", label: "UnlockablePill", tag: "see demo →", tagHref: "/showcase/blog" },
       { href: "/docs/components/vault-card", label: "VaultCard", tag: "styled" },
       { href: "/docs/components/copy-button", label: "CopyButton", tag: "styled" },
       { href: "/docs/components/short-address", label: "ShortAddress", tag: "styled" },
@@ -90,22 +93,42 @@ export const SIDEBAR: SideGroup[] = [
     heading: "Scaffolder",
     links: [{ href: "/docs/scaffolder", label: "npm create cdr-kit" }],
   },
+  {
+    heading: "Showcase",
+    links: [{ href: "/showcase/blog", label: "Pay-to-unlock blog", tag: "new" }],
+  },
 ];
 
-export function Sidebar() {
+export interface SidebarProps {
+  open?: boolean;
+  onClose?: () => void;
+}
+
+export function Sidebar({ open = false, onClose }: SidebarProps = {}) {
   const pathname = usePathname();
   return (
-    <aside className="side">
+    <aside className={open ? "side open" : "side"}>
       {SIDEBAR.map((group) => (
         <div key={group.heading} className="side-group">
           <h5>{group.heading}</h5>
           {group.links.map((l) => {
             const active = pathname === l.href;
             return (
-              <Link key={l.href} href={l.href} className={active ? "side-link active" : "side-link"}>
-                {l.label}
-                {l.tag && <span className="tag">{l.tag}</span>}
-              </Link>
+              <div key={l.href} className="side-row">
+                <Link
+                  href={l.href}
+                  className={active ? "side-link active" : "side-link"}
+                  onClick={onClose}
+                >
+                  {l.label}
+                  {l.tag && !l.tagHref && <span className="tag">{l.tag}</span>}
+                </Link>
+                {l.tag && l.tagHref && (
+                  <Link href={l.tagHref} className="side-tag-link" onClick={onClose}>
+                    {l.tag}
+                  </Link>
+                )}
+              </div>
             );
           })}
         </div>

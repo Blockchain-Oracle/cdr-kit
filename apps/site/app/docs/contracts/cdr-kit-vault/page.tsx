@@ -1,6 +1,7 @@
 import { aeneid } from "@cdr-kit/contracts";
 import { Badge } from "@/components/primitives/badge";
 import { DocPage } from "@/components/docs/doc-page";
+import { CodePanel } from "@/components/docs/code-panel";
 
 export default function Page() {
   return (
@@ -16,13 +17,13 @@ export default function Page() {
             id: "create",
             title: "createVault signature",
             content: (
-              <div className="win doc-code"><div className="win-bar"><span className="lights"><i /><i /><i /></span><span className="win-title">CdrKitVault.sol</span></div><div className="code"><pre><code>{`function createVault(
+              <CodePanel title="CdrKitVault.sol" code={`function createVault(
   address readConditionAddr,
   bytes calldata readConfig,
   address[] calldata childConditions,
   bytes[] calldata childConfigs,
   uint256 licenseTermsId
-) external payable returns (uint32 uuid, uint256 tokenId, address ipId);`}</code></pre></div></div>
+) external payable returns (uint32 uuid, uint256 tokenId, address ipId);`} />
             ),
           },
           {
