@@ -1,11 +1,9 @@
 "use client";
-import { useEffect, useRef, type ReactNode, type RefObject } from "react";
-import { createPortal } from "react-dom";
+import { forwardRef, type ComponentPropsWithoutRef, type ReactNode } from "react";
 import type { CdrStatus } from "@cdr-kit/core";
 import type { UnlockableRenderState } from "@cdr-kit/react";
 import { AccessStepper, type AccessStatus } from "./access-stepper";
 import { CdrError } from "./cdr-error";
-import { useFloatingCard } from "./use-floating-card";
 import { Lock, LockOpen, X } from "./icons";
 
 function asAccessStatus(s: CdrStatus): AccessStatus {
@@ -13,62 +11,42 @@ function asAccessStatus(s: CdrStatus): AccessStatus {
   return "idle";
 }
 
-export interface UnlockableCardProps {
-  anchorRef: RefObject<HTMLElement | null>;
+export interface UnlockableCardProps extends Omit<ComponentPropsWithoutRef<"div">, "title"> {
   state: UnlockableRenderState;
   priceLabel: string;
   /** Renders the decrypted bytes into the card body. */
   unlockedRenderer: (data: Uint8Array) => ReactNode;
-  /** Short title shown above the price (e.g. the highlighted phrase or vault label). */
+  /** Card header title (ReactNode — accepts strings, JSX, anything). */
   title?: ReactNode;
-  /** Sub-line under the title, e.g. "1 photo · attached". */
   subtitle?: ReactNode;
+  /** Called when the close button is clicked. (Radix handles Escape/outside-click separately.) */
+  onClose?: () => void;
 }
 
-export function UnlockableCard({ anchorRef, state, priceLabel, unlockedRenderer, title, subtitle }: UnlockableCardProps) {
-  const pos = useFloatingCard(true, anchorRef);
-  const cardRef = useRef<HTMLDivElement | null>(null);
-  const close = state.close;
-
-  useEffect(() => {
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") close();
-    }
-    function onClick(e: MouseEvent) {
-      const target = e.target as Node;
-      if (cardRef.current?.contains(target)) return;
-      if (anchorRef.current?.contains(target)) return;
-      close();
-    }
-    window.addEventListener("keydown", onKey);
-    window.addEventListener("mousedown", onClick);
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      window.removeEventListener("mousedown", onClick);
-    };
-  }, [close, anchorRef]);
-
-  if (typeof document === "undefined") return null;
-
+/** Card body rendered inside the Radix Popover.Content portal. Pure presentational — all
+ *  positioning/focus/dismiss is handled by Radix; we drive content from the unlock state. */
+export const UnlockableCard = forwardRef<HTMLDivElement, UnlockableCardProps>(function UnlockableCard(
+  { state, priceLabel, unlockedRenderer, title, subtitle, onClose, className, ...rest },
+  ref,
+) {
   const inFlight = state.status === "paying" || state.status === "collecting-partials";
   const unlocked = state.status === "ready" && state.data;
   const errored = state.status === "error" || state.error;
 
-  const className = `cdr-ui-unl-card cdr-ui-unl-card--${pos.mode}${unlocked ? " is-unlocked" : ""}${pos.placement === "above" ? " is-above" : ""}`;
-  const style =
-    pos.mode === "popover"
-      ? { top: pos.top, left: pos.left, width: pos.width, transform: pos.placement === "above" ? "translateY(-100%)" : undefined }
-      : undefined;
-
-  return createPortal(
-    <div ref={cardRef} className={className} style={style} role="dialog" aria-modal={pos.mode === "sheet"} aria-label="Unlockable content" data-cdr-ui="">
+  return (
+    <div
+      ref={ref}
+      className={["cdr-ui-unl-card", unlocked ? "is-unlocked" : "", className ?? ""].filter(Boolean).join(" ")}
+      data-cdr-ui=""
+      {...rest}
+    >
       <header className="cdr-ui-unl-head">
         <span className="cdr-ui-unl-icon">{unlocked ? <LockOpen width={16} height={16} /> : <Lock width={16} height={16} />}</span>
         <div className="cdr-ui-unl-meta">
           {title && <div className="t">{title}</div>}
           {subtitle && <div className="s">{subtitle}</div>}
         </div>
-        <button type="button" className="cdr-ui-unl-close" onClick={state.close} aria-label="Close">
+        <button type="button" className="cdr-ui-unl-close" onClick={onClose} aria-label="Close">
           <X width={14} height={14} />
         </button>
       </header>
@@ -77,7 +55,11 @@ export function UnlockableCard({ anchorRef, state, priceLabel, unlockedRenderer,
         {unlocked ? (
           unlockedRenderer(state.data!)
         ) : inFlight ? (
-          <AccessStepper status={asAccessStatus(state.status)} progress={state.status === "collecting-partials" ? { collected: 4, threshold: 7 } : undefined} withPay={state.status !== "collecting-partials" || false} />
+          <AccessStepper
+            status={asAccessStatus(state.status)}
+            progress={state.status === "collecting-partials" ? { collected: 4, threshold: 7 } : undefined}
+            withPay={state.status !== "collecting-partials"}
+          />
         ) : errored ? (
           <CdrError title="Unlock failed" message={state.error?.message ?? "Something went wrong while reading the vault."} onRetry={() => void state.request()} />
         ) : (
@@ -93,7 +75,6 @@ export function UnlockableCard({ anchorRef, state, priceLabel, unlockedRenderer,
           </div>
         )}
       </div>
-    </div>,
-    document.body,
+    </div>
   );
-}
+});

@@ -1,5 +1,35 @@
 # @cdr-kit/goat
 
+## 0.3.0
+
+### Minor Changes
+
+- **`@cdr-kit/react-ui`** — adopt `@radix-ui/react-popover` for the `<UnlockablePill>` floating card. Closes a11y gaps in the previous custom implementation: full focus trap inside the open card, focus returns to the pill on close, ARIA Dialog roles, robust outside-click + escape handling. Mobile bottom-sheet behavior preserved via CSS.
+
+  New peer dependency: `@radix-ui/react-popover >=1.1.0`.
+
+  The `UnlockablePill` API is unchanged; `useFloatingCard` is removed (was an internal hook, no documented consumers).
+
+  **`create-cdr-kit-app`** — 7 new templates (now 9 total):
+  - `blog` — Next.js 16 + UnlockablePill (the onscroll pattern). Three live pills out of the box.
+  - `paywall` — Next.js single-page SubscribeButton gating a content block.
+  - `mcp-server` — stdio MCP server for Claude Desktop / Cursor. Ships with `claude_desktop_config.json`.
+  - `agent-vercel-ai` — Vercel AI SDK chatbot wired to CDR tools.
+  - `agent-openai` — Raw OpenAI / Anthropic tool-calling loop.
+  - `agent-langchain` — LangChain ReAct agent.
+  - `agent-agentkit` — Coinbase AgentKit action provider.
+  - `agent-goat` — GOAT SDK tool set.
+
+  Invoke: `npm create cdr-kit my-app -- --template <name>`. Each template is mock-runnable out of the box (no wallet, no chain); README walks through going live on Aeneid.
+
+  Coupled-minor bump across all 12 cdr-kit packages plus `create-cdr-kit-app` so consumers see a single 0.3.0 matrix.
+
+### Patch Changes
+
+- Updated dependencies
+  - @cdr-kit/agent@0.3.0
+  - @cdr-kit/tools@0.3.0
+
 ## 0.2.0
 
 ### Minor Changes

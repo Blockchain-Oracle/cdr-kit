@@ -8,10 +8,12 @@ export default defineConfig({
   outputOptions: { banner: '"use client";' },
   external: [
     "react",
+    "react-dom",
     "react/jsx-runtime",
     "@cdr-kit/react",
     "@cdr-kit/core",
     "@cdr-kit/contracts",
+    "@radix-ui/react-popover",
     "viem",
   ],
 });

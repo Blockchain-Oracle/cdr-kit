@@ -1,6 +1,7 @@
 "use client";
-import { useRef, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import type { Hex } from "viem";
+import * as Popover from "@radix-ui/react-popover";
 import { useUnlockable, type UnlockableMode } from "@cdr-kit/react";
 import { Lock, LockOpen } from "./icons";
 import { UnlockableCard } from "./unlockable-card";
@@ -25,6 +26,7 @@ export interface UnlockablePillProps {
 }
 
 /** Inline "free to read, pay to unlock" pill — click to open the floating unlock card.
+ *  Built on `@radix-ui/react-popover` for a11y (focus trap, focus return, escape, click-outside, ARIA Dialog).
  *  The anchor text (children) stays plaintext; the encrypted payload is in CDR vault `uuid`. */
 export function UnlockablePill({
   uuid,
@@ -36,43 +38,44 @@ export function UnlockablePill({
   unlockedRenderer = unlockedAuto,
   children,
 }: UnlockablePillProps) {
+  const [open, setOpen] = useState(false);
   const state = useUnlockable({ uuid, mode, subscriptionCondition });
-  const anchorRef = useRef<HTMLSpanElement | null>(null);
   const unlocked = state.status === "ready" && state.data;
 
   return (
-    <>
-      <span
-        ref={anchorRef}
-        className={`cdr-ui-unl-pill${unlocked ? " is-unlocked" : ""}${state.isOpen ? " is-open" : ""}`}
-        role="button"
-        tabIndex={0}
-        aria-expanded={state.isOpen}
-        aria-haspopup="dialog"
-        data-cdr-ui=""
-        onClick={state.toggle}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            state.toggle();
-          }
-        }}
-      >
-        <span className="cdr-ui-unl-pill-text">{children}</span>
-        <span className="cdr-ui-unl-pill-badge" aria-hidden="true">
-          {unlocked ? <LockOpen width={11} height={11} /> : <Lock width={11} height={11} />}
+    <Popover.Root open={open} onOpenChange={setOpen}>
+      <Popover.Trigger asChild>
+        <span
+          className={`cdr-ui-unl-pill${unlocked ? " is-unlocked" : ""}${open ? " is-open" : ""}`}
+          role="button"
+          tabIndex={0}
+          data-cdr-ui=""
+        >
+          <span className="cdr-ui-unl-pill-text">{children}</span>
+          <span className="cdr-ui-unl-pill-badge" aria-hidden="true">
+            {unlocked ? <LockOpen width={11} height={11} /> : <Lock width={11} height={11} />}
+          </span>
         </span>
-      </span>
-      {state.isOpen && (
-        <UnlockableCard
-          anchorRef={anchorRef}
-          state={state}
-          priceLabel={priceLabel}
-          unlockedRenderer={unlockedRenderer}
-          title={title}
-          subtitle={subtitle}
-        />
-      )}
-    </>
+      </Popover.Trigger>
+      <Popover.Portal>
+        <Popover.Content
+          align="center"
+          side="bottom"
+          sideOffset={10}
+          collisionPadding={12}
+          className={`cdr-ui-unl-popover${unlocked ? " is-unlocked" : ""}`}
+          asChild
+        >
+          <UnlockableCard
+            state={state}
+            priceLabel={priceLabel}
+            unlockedRenderer={unlockedRenderer}
+            title={title}
+            subtitle={subtitle}
+            onClose={() => setOpen(false)}
+          />
+        </Popover.Content>
+      </Popover.Portal>
+    </Popover.Root>
   );
 }

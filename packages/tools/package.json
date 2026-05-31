@@ -1,6 +1,6 @@
 {
   "name": "@cdr-kit/tools",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Framework-agnostic CDR agent tools ({name, description, Zod schema, invoke}) — the single source mapped to MCP + every agent framework.",
   "type": "module",
   "sideEffects": false,
