@@ -52,6 +52,52 @@ export async function attachLicenseTerms(
   return story.attachLicenseTerms(client, params);
 }
 
+/** Register a derivative IP — child inherits parent terms. License-token mode passes tokens;
+ *  parent-terms mode passes licenseTermsIds (mint-and-attach in one step). */
+export async function registerDerivative(
+  agent: CdrAgent,
+  params: {
+    childIpId: Hex;
+    parentIpIds: Hex[];
+    licenseTermsIds: bigint[];
+    licenseTokenIds?: bigint[];
+    maxMintingFee?: bigint;
+    maxRts?: number;
+    maxRevenueShare?: number;
+  },
+): Promise<{ txHash: Hex }> {
+  const { story, client } = await loadStory(agent);
+  log.info({ child: params.childIpId, parents: params.parentIpIds.length }, "register derivative");
+  return story.registerDerivative(client, params);
+}
+
+/** Register fresh PIL license terms (without attaching to an IP). Returns the new licenseTermsId. */
+export async function registerPilTerms(
+  agent: CdrAgent,
+  params: { terms: unknown; licensingConfig?: unknown },
+): Promise<{ licenseTermsId: bigint; txHash: Hex }> {
+  const { story, client } = await loadStory(agent);
+  log.info("register PIL terms");
+  return story.registerPilTerms(client, params);
+}
+
+/** Wrap native IP into WIP (Wrapped IP) — required before paying royalties via the RoyaltyModule. */
+export async function wrapIp(agent: CdrAgent, params: { amountWei: bigint }): Promise<{ txHash: Hex }> {
+  const { story, client } = await loadStory(agent);
+  log.info({ amount: params.amountWei }, "wrap IP → WIP");
+  return story.wrapIp(client, params);
+}
+
+/** Approve a spender (typically the RoyaltyModule) to pull `amountWei` of WIP from this wallet. */
+export async function approveWip(
+  agent: CdrAgent,
+  params: { spender: Hex; amountWei: bigint },
+): Promise<{ txHash: Hex }> {
+  const { story, client } = await loadStory(agent);
+  log.info({ spender: params.spender, amount: params.amountWei }, "approve WIP");
+  return story.approveWip(client, params);
+}
+
 export async function mintLicenseTokens(
   agent: CdrAgent,
   params: {

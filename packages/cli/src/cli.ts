@@ -4,6 +4,7 @@ import { createCdrTools } from "@cdr-kit/tools";
 import { loadOrCreateWallet, walletPath } from "./lib/wallet.js";
 import { resolveNetwork } from "./lib/network.js";
 import { ok, err, note, setJsonMode } from "./lib/output.js";
+import { registerAdvancedCommands } from "./cli-advanced.js";
 
 declare const __PKG_VERSION__: string;
 const PKG_VERSION = __PKG_VERSION__;
@@ -345,6 +346,10 @@ export function createCli(): Command {
       const server = createMcpServer({ agent });
       await server.connect(new StdioServerTransport());
     });
+
+  // 0.5 advanced surface: create (time-window/dead-man/escrow/multi-sig), multi-sig
+  // {approve, sign, access}, poke, escrow {pay, confirm}, ip {register, attach-terms, mint-license}.
+  registerAdvancedCommands(program, buildAgent);
 
   return program;
 }

@@ -14,7 +14,7 @@ describe("getVercelAITools", () => {
     expect(Object.keys(tools)).toContain("cdr_access_vault");
     expect(Object.keys(tools)).toContain("cdr_discover_vaults");
     expect(Object.keys(tools)).toContain("cdr_subscribe_and_access");
-    expect(Object.keys(tools).length).toBe(22);
+    expect(Object.keys(tools).length).toBe(34);
     expect(typeof tools["cdr_access_vault"]?.description).toBe("string");
   });
 

@@ -93,16 +93,22 @@ export function MultiSigApprovalTracker({ uuid, signedBy = [], children }: Multi
   const status = useMultiSigStatus(uuid);
   // Combine on-chain approve() count + any off-chain sig collection state the caller passed.
   // Either path alone hitting threshold satisfies the read.
+  // Match `checkReadCondition` semantics: each path is evaluated independently and ORed for
+  // readiness. Collapsing to one number via max/sum would either mis-report readiness or hide
+  // a configuration mismatch (1 signer split across paths looks like 1+1=2 but neither path
+  // alone meets threshold=2 — the contract would reject the read).
   const signedSet = new Set(signedBy.map((s) => s.toLowerCase()));
   const offChainCount = status.signers.filter((s) => signedSet.has(s.toLowerCase())).length;
-  const signedCount = Math.max(status.onChainApprovals, offChainCount);
-  const isReady = signedCount >= status.threshold;
-  const merged = { ...status, signedCount, isReady };
+  const onChainReady = status.onChainApprovals >= status.threshold;
+  const offChainReady = offChainCount >= status.threshold;
+  const isReady = onChainReady || offChainReady;
+  const merged = { ...status, onChainCount: status.onChainApprovals, offChainCount, isReady };
   if (children) return <>{children(merged)}</>;
   if (status.isLoading) return <span data-cdr-multisig="loading">…</span>;
   return (
     <span data-cdr-multisig={isReady ? "ready" : "pending"}>
-      {signedCount} of {status.threshold} approved · epoch {String(status.epoch)}
+      on-chain {status.onChainApprovals}/{status.threshold} · off-chain {offChainCount}/{status.threshold}
+      {" · "}epoch {String(status.epoch)}
     </span>
   );
 }

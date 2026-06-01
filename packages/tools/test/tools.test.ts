@@ -13,14 +13,18 @@ function makeAgent() {
 const byName = (tools: CdrTool[], name: string) => tools.find((t) => t.name === name)!;
 
 describe("createCdrTools", () => {
-  it("exposes the full 22-tool CDR surface (read + introspect + author + 0.5 advanced conditions + Story IP + on-chain multi-sig approve)", () => {
+  it("exposes the full 34-tool CDR surface (full 0.5 advanced + escrow + multi-sig + Story IP completeness)", () => {
     const { agent } = makeAgent();
     expect(createCdrTools(agent).map((t) => t.name).sort()).toEqual([
       "cdr_access_license_gated",
+      "cdr_access_multi_sig",
       "cdr_access_vault",
       "cdr_approve_multi_sig",
+      "cdr_approve_wip",
       "cdr_attach_license_terms",
       "cdr_check_entitlement",
+      "cdr_claim_escrow_after_timeout",
+      "cdr_confirm_escrow_delivery",
       "cdr_create_dead_man_vault",
       "cdr_create_escrow_vault",
       "cdr_create_multi_sig_vault",
@@ -33,10 +37,18 @@ describe("createCdrTools", () => {
       "cdr_get_vault_info",
       "cdr_list_subscriptions",
       "cdr_mint_license_token",
+      "cdr_pay_escrow",
+      "cdr_poke_dead_man",
       "cdr_publish_data",
+      "cdr_refund_escrow",
+      "cdr_register_derivative",
       "cdr_register_ip",
+      "cdr_register_pil_terms",
+      "cdr_rotate_multi_sig_signers",
+      "cdr_sign_multi_sig_approval",
       "cdr_subscribe_and_access",
       "cdr_upload_file",
+      "cdr_wrap_ip",
       "cdr_write_vault_data",
     ]);
   });

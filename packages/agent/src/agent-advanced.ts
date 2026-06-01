@@ -191,6 +191,63 @@ export async function payEscrow(agent: CdrAgent, p: { uuid: number; price: bigin
   });
 }
 
+/** Seller-side: claim escrow funds + auto-grant buyer read access after `timeoutSecs` of
+ *  buyer silence. Must be called by the configured seller for that listing. */
+export async function claimEscrowAfterTimeout(
+  agent: CdrAgent,
+  p: { uuid: number; buyer: Hex },
+): Promise<Hex> {
+  const addrs = resolveAddresses(agent.network);
+  const wc = agent.client.walletClient;
+  if (!wc) throw new Error("agent has no wallet client");
+  return wc.writeContract({
+    address: addrs.conditionalEscrowCondition as Hex,
+    abi: conditionalEscrowConditionAbi,
+    functionName: "claimAfterTimeout",
+    args: [p.uuid, p.buyer],
+    chain: null,
+    account: wc.account!,
+  });
+}
+
+/** Arbiter-side: refund a buyer who paid but disputes delivery. Resets paidAt; buyer can re-pay. */
+export async function refundEscrow(
+  agent: CdrAgent,
+  p: { uuid: number; buyer: Hex },
+): Promise<Hex> {
+  const addrs = resolveAddresses(agent.network);
+  const wc = agent.client.walletClient;
+  if (!wc) throw new Error("agent has no wallet client");
+  return wc.writeContract({
+    address: addrs.conditionalEscrowCondition as Hex,
+    abi: conditionalEscrowConditionAbi,
+    functionName: "arbiterRefund",
+    args: [p.uuid, p.buyer],
+    chain: null,
+    account: wc.account!,
+  });
+}
+
+/** Creator-side: swap multi-sig signer set / threshold. Bumps `epoch`, which invalidates
+ *  BOTH in-flight off-chain sigs AND on-chain approvals from the previous epoch. */
+export async function rotateMultiSigSigners(
+  agent: CdrAgent,
+  p: { uuid: number; signers: Hex[]; threshold: number },
+): Promise<Hex> {
+  const addrs = resolveAddresses(agent.network);
+  const wc = agent.client.walletClient;
+  if (!wc) throw new Error("agent has no wallet client");
+  const sorted = [...p.signers].sort((a, b) => (BigInt(a) < BigInt(b) ? -1 : 1));
+  return wc.writeContract({
+    address: addrs.multiSigCondition as Hex,
+    abi: multiSigConditionAbi,
+    functionName: "rotateSigners",
+    args: [p.uuid, sorted, p.threshold],
+    chain: null,
+    account: wc.account!,
+  });
+}
+
 /** Buyer confirms delivery — releases funds to seller AND grants read access. */
 export async function confirmEscrowDelivery(agent: CdrAgent, uuid: number): Promise<Hex> {
   const addrs = resolveAddresses(agent.network);

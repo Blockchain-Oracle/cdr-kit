@@ -156,6 +156,10 @@ export function useMultiSigStatus(uuid: number, address: Hex = aeneid.multiSigCo
     abi: multiSigConditionAbi,
     functionName: "currentApprovalsCount",
     args: [uuid],
+    // Polls every 4s so a signer pressing approve() in another tab shows up in the dashboard
+    // within the next refresh window — without paying for a websocket subscription. Consumers
+    // who want lower latency can wire `useWatchContractEvent` on `Approved` themselves.
+    query: { refetchInterval: 4000 },
   });
   const d = read.data as readonly [readonly Hex[], number, bigint] | undefined;
   return {

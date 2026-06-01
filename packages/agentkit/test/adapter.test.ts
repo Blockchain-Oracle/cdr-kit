@@ -18,7 +18,7 @@ describe("getCdrActionProvider (Coinbase AgentKit)", () => {
     const bare = actions()
       .map((a) => a.name.replace("CustomActionProvider_", ""))
       .sort();
-    expect(bare).toContain("cdr_access_vault"); expect(bare).toContain("cdr_discover_vaults"); expect(bare).toContain("cdr_subscribe_and_access"); expect(bare.length).toBe(22);
+    expect(bare).toContain("cdr_access_vault"); expect(bare).toContain("cdr_discover_vaults"); expect(bare).toContain("cdr_subscribe_and_access"); expect(bare.length).toBe(34);
   });
 
   it("an action routes through to the agent", async () => {

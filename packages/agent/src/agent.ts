@@ -398,6 +398,18 @@ export class CdrAgent {
   confirmEscrowDelivery(uuid: number): Promise<Hex> {
     return advanced.confirmEscrowDelivery(this, uuid);
   }
+  /** Seller-side: claim funds + auto-grant buyer read after the listing timeout lapses. */
+  claimEscrowAfterTimeout(p: Parameters<typeof advanced.claimEscrowAfterTimeout>[1]): Promise<Hex> {
+    return advanced.claimEscrowAfterTimeout(this, p);
+  }
+  /** Arbiter-side: refund a disputed payment. */
+  refundEscrow(p: Parameters<typeof advanced.refundEscrow>[1]): Promise<Hex> {
+    return advanced.refundEscrow(this, p);
+  }
+  /** Creator-side: swap multi-sig signer set / threshold; bumps epoch — invalidates BOTH paths. */
+  rotateMultiSigSigners(p: Parameters<typeof advanced.rotateMultiSigSigners>[1]): Promise<Hex> {
+    return advanced.rotateMultiSigSigners(this, p);
+  }
 
   /* ============================================================ */
   /* 0.5.0 Story IP integration — delegated to ./agent-story.ts    */
@@ -414,5 +426,21 @@ export class CdrAgent {
   }
   publish(params: Parameters<typeof story.publish>[1]): ReturnType<typeof story.publish> {
     return story.publish(this, params);
+  }
+  /** Register a derivative IP — inherits parent's PIL terms. */
+  registerDerivative(params: Parameters<typeof story.registerDerivative>[1]): ReturnType<typeof story.registerDerivative> {
+    return story.registerDerivative(this, params);
+  }
+  /** Register fresh PIL terms (returns licenseTermsId) without attaching to a specific IP. */
+  registerPilTerms(params: Parameters<typeof story.registerPilTerms>[1]): ReturnType<typeof story.registerPilTerms> {
+    return story.registerPilTerms(this, params);
+  }
+  /** Wrap native IP → WIP (ERC-20 form, required for royalty payments). */
+  wrapIp(params: Parameters<typeof story.wrapIp>[1]): ReturnType<typeof story.wrapIp> {
+    return story.wrapIp(this, params);
+  }
+  /** Approve a WIP spender (typically the RoyaltyModule) to pull `amountWei`. */
+  approveWip(params: Parameters<typeof story.approveWip>[1]): ReturnType<typeof story.approveWip> {
+    return story.approveWip(this, params);
   }
 }

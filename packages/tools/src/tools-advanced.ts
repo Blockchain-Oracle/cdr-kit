@@ -12,6 +12,38 @@ const approveMultiSigSchema = z.object({
   uuid: z.number().int().describe("MultiSigCondition-gated vault uuid to approve."),
 });
 
+const uuidOnlySchema = z.object({
+  uuid: z.number().int().describe("Vault uuid"),
+});
+
+const escrowMutateSchema = z.object({
+  uuid: z.number().int(),
+  buyer: z.string().describe("Buyer address (the wallet that called pay() on this listing)"),
+});
+
+const payEscrowSchema = z.object({
+  uuid: z.number().int(),
+  price: z.string().describe("Listing price in wei (decimal) — excess refunded automatically"),
+});
+
+const rotateSignersSchema = z.object({
+  uuid: z.number().int(),
+  signers: z.array(z.string()).min(1).describe("New signer set (auto-sorted ascending)"),
+  threshold: z.number().int().min(1).describe("New threshold"),
+});
+
+const signMultiSigApprovalSchema = z.object({
+  uuid: z.number().int(),
+  caller: z.string().describe("Address that will submit the read tx (sigs bind to caller)"),
+  deadline: z.string().describe("Unix timestamp after which the sig expires (decimal)"),
+});
+
+const accessMultiSigSchema = z.object({
+  uuid: z.number().int(),
+  deadline: z.string().describe("Deadline the sigs were signed against (must still be future)"),
+  sigs: z.array(z.string()).describe("0x-hex sigs, sorted by recovered signer address ascending"),
+});
+
 /** 0.5.0 advanced-condition vault creators (TimeWindow / DeadMan / Escrow / MultiSig). */
 export function advancedConditionTools(agent: CdrAgent): CdrTool[] {
   return [
@@ -93,6 +125,112 @@ export function advancedConditionTools(agent: CdrAgent): CdrTool[] {
       invoke: async (raw) => {
         const { uuid } = approveMultiSigSchema.parse(raw);
         const txHash = await agent.approveMultiSig(uuid);
+        return { txHash };
+      },
+    },
+    {
+      name: "cdr_sign_multi_sig_approval",
+      description:
+        "Off-chain EIP-712 sign for a multi-sig vault approval. Returns the 65-byte signature; collect threshold-many sigs from different signers and submit via cdr_access_multi_sig.",
+      inputSchema: signMultiSigApprovalSchema,
+      invoke: async (raw) => {
+        const p = signMultiSigApprovalSchema.parse(raw);
+        const signature = await agent.signMultiSigApproval({
+          uuid: p.uuid,
+          caller: p.caller as `0x${string}`,
+          deadline: BigInt(p.deadline),
+        });
+        return { signature };
+      },
+    },
+    {
+      name: "cdr_access_multi_sig",
+      description:
+        "Read a multi-sig vault by submitting threshold-many EIP-712 sigs as accessAuxData. Sigs must be sorted by recovered signer address ascending. Returns the decrypted text.",
+      inputSchema: accessMultiSigSchema,
+      invoke: async (raw) => {
+        const p = accessMultiSigSchema.parse(raw);
+        const data = await agent.accessMultiSig({
+          uuid: p.uuid,
+          deadline: BigInt(p.deadline),
+          sigs: p.sigs as `0x${string}`[],
+        });
+        return { uuid: p.uuid, text: new TextDecoder().decode(data) };
+      },
+    },
+    {
+      name: "cdr_rotate_multi_sig_signers",
+      description:
+        "Creator-only: swap multi-sig signer set / threshold. Bumps epoch — invalidates BOTH in-flight off-chain sigs AND on-chain approvals from the previous epoch. Use to remove a compromised signer immediately.",
+      inputSchema: rotateSignersSchema,
+      invoke: async (raw) => {
+        const p = rotateSignersSchema.parse(raw);
+        const txHash = await agent.rotateMultiSigSigners({
+          uuid: p.uuid,
+          signers: p.signers as `0x${string}`[],
+          threshold: p.threshold,
+        });
+        return { txHash };
+      },
+    },
+    {
+      name: "cdr_poke_dead_man",
+      description:
+        "Creator-only: reset the dead-man-switch heartbeat. Bumps unlockAt back to `now + duration`. Cannot poke after the window has lapsed (one-way trapdoor).",
+      inputSchema: uuidOnlySchema,
+      invoke: async (raw) => {
+        const { uuid } = uuidOnlySchema.parse(raw);
+        const txHash = await agent.pokeDeadMan(uuid);
+        return { txHash };
+      },
+    },
+    {
+      name: "cdr_pay_escrow",
+      description:
+        "Buyer-side step 1: escrow the listing price for a ConditionalEscrow vault. Excess value is refunded same-tx. Returns the pay tx hash.",
+      inputSchema: payEscrowSchema,
+      invoke: async (raw) => {
+        const p = payEscrowSchema.parse(raw);
+        const txHash = await agent.payEscrow({ uuid: p.uuid, price: BigInt(p.price) });
+        return { txHash };
+      },
+    },
+    {
+      name: "cdr_confirm_escrow_delivery",
+      description:
+        "Buyer-side step 2: confirm delivery. Releases the escrowed funds to the seller AND grants the buyer read access. Returns the confirm tx hash.",
+      inputSchema: uuidOnlySchema,
+      invoke: async (raw) => {
+        const { uuid } = uuidOnlySchema.parse(raw);
+        const txHash = await agent.confirmEscrowDelivery(uuid);
+        return { txHash };
+      },
+    },
+    {
+      name: "cdr_claim_escrow_after_timeout",
+      description:
+        "Seller-side: claim escrow funds + grant buyer read access after `timeoutSecs` of buyer silence. Caller must be the configured seller.",
+      inputSchema: escrowMutateSchema,
+      invoke: async (raw) => {
+        const p = escrowMutateSchema.parse(raw);
+        const txHash = await agent.claimEscrowAfterTimeout({
+          uuid: p.uuid,
+          buyer: p.buyer as `0x${string}`,
+        });
+        return { txHash };
+      },
+    },
+    {
+      name: "cdr_refund_escrow",
+      description:
+        "Arbiter-side: refund a buyer who paid but disputes delivery. Resets the buyer's paidAt to 0 (they can re-pay later). Caller must be the configured arbiter.",
+      inputSchema: escrowMutateSchema,
+      invoke: async (raw) => {
+        const p = escrowMutateSchema.parse(raw);
+        const txHash = await agent.refundEscrow({
+          uuid: p.uuid,
+          buyer: p.buyer as `0x${string}`,
+        });
         return { txHash };
       },
     },

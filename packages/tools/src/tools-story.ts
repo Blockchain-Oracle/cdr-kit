@@ -1,5 +1,29 @@
+import { z } from "zod";
 import type { CdrAgent } from "@cdr-kit/agent";
 import type { CdrTool } from "./types.js";
+
+const registerDerivativeSchema = z.object({
+  childIpId: z.string().describe("Derivative IP asset address"),
+  parentIpIds: z.array(z.string()).min(1).describe("Parent IP asset addresses"),
+  licenseTermsIds: z.array(z.string()).min(1).describe("Parent licenseTermsIds (decimal)"),
+  licenseTokenIds: z.array(z.string()).optional().describe("Optional license token ids to consume"),
+  maxMintingFee: z.string().default("0"),
+  maxRevenueShare: z.number().int().min(0).max(100).default(0),
+});
+
+const wrapIpSchema = z.object({
+  amountWei: z.string().describe("Amount of native IP to wrap into WIP (decimal wei)"),
+});
+
+const approveWipSchema = z.object({
+  spender: z.string().describe("Spender address (typically RoyaltyModule)"),
+  amountWei: z.string().describe("Approval amount in wei (decimal)"),
+});
+
+const registerPilTermsSchema = z.object({
+  pilTermsJson: z.string().describe("JSON-stringified PIL terms struct (consult PILFlavor helpers off-tool to build)"),
+});
+
 import {
   attachLicenseTermsSchema,
   mintLicenseTokenSchema,
@@ -104,6 +128,60 @@ export function storyTools(agent: CdrAgent): CdrTool[] {
           ipRegisterTxHash: res.ipRegisterTxHash,
           writeTxHash: res.writeTxHash,
         };
+      },
+    },
+    {
+      name: "cdr_register_derivative",
+      description:
+        "Register a derivative IP asset — child inherits parents' PIL terms. Pass parentIpIds + licenseTermsIds for the parent-terms mode, OR add licenseTokenIds for the token-mode (mint-and-register).",
+      inputSchema: registerDerivativeSchema,
+      invoke: async (raw) => {
+        const p = registerDerivativeSchema.parse(raw);
+        const res = await agent.registerDerivative({
+          childIpId: p.childIpId as `0x${string}`,
+          parentIpIds: p.parentIpIds as `0x${string}`[],
+          licenseTermsIds: p.licenseTermsIds.map((id) => BigInt(id)),
+          licenseTokenIds: p.licenseTokenIds?.map((id) => BigInt(id)),
+          maxMintingFee: BigInt(p.maxMintingFee),
+          maxRevenueShare: p.maxRevenueShare,
+        });
+        return { txHash: res.txHash };
+      },
+    },
+    {
+      name: "cdr_register_pil_terms",
+      description:
+        "Register standalone PIL license terms (returns licenseTermsId without attaching to a specific IP). Useful when the same terms apply to multiple IPs.",
+      inputSchema: registerPilTermsSchema,
+      invoke: async (raw) => {
+        const p = registerPilTermsSchema.parse(raw);
+        const res = await agent.registerPilTerms({ terms: JSON.parse(p.pilTermsJson) });
+        return { licenseTermsId: res.licenseTermsId.toString(), txHash: res.txHash };
+      },
+    },
+    {
+      name: "cdr_wrap_ip",
+      description:
+        "Wrap native IP into WIP (Wrapped IP ERC-20). Required before paying royalties through the Story RoyaltyModule.",
+      inputSchema: wrapIpSchema,
+      invoke: async (raw) => {
+        const p = wrapIpSchema.parse(raw);
+        const res = await agent.wrapIp({ amountWei: BigInt(p.amountWei) });
+        return { txHash: res.txHash };
+      },
+    },
+    {
+      name: "cdr_approve_wip",
+      description:
+        "Approve a spender (typically RoyaltyModule) to pull `amountWei` of WIP from the agent's wallet. Pair with cdr_wrap_ip before any royalty-paying operation.",
+      inputSchema: approveWipSchema,
+      invoke: async (raw) => {
+        const p = approveWipSchema.parse(raw);
+        const res = await agent.approveWip({
+          spender: p.spender as `0x${string}`,
+          amountWei: BigInt(p.amountWei),
+        });
+        return { txHash: res.txHash };
       },
     },
   ];
