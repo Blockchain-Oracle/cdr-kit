@@ -42,6 +42,10 @@ contract MultiSigCondition is ConditionBase {
     error NotCreator();
     error NotSigner();
     error AlreadyApproved();
+    /// @notice The epoch the signer believed they were approving against has been rotated past.
+    /// @dev Returned with `current` so the caller can re-sign / re-approve against the new epoch
+    ///      after confirming they still trust the post-rotation signer set + threshold.
+    error EpochChanged(uint64 expected, uint64 current);
 
     event SignersRotated(uint32 indexed uuid, uint64 epoch);
     event Approved(uint32 indexed uuid, address indexed signer, uint64 indexed epoch);
@@ -95,11 +99,16 @@ contract MultiSigCondition is ConditionBase {
     /// @notice On-chain approval path — Safe-style. Signer pays ~50k gas; dashboards then read
     ///         `approvalsCount(uuid, currentEpoch)` for O(1) "X of Y approved" truth.
     ///         Rotation auto-invalidates because the mapping is keyed on epoch.
-    function approve(uint32 uuid) external {
+    /// @param  expectedEpoch The epoch the signer is approving against — must match `c.epoch`. If a
+    ///         rotation happens between the signer's decision and tx mining, this reverts so the
+    ///         approval never silently binds to a signer set / threshold the signer didn't agree to.
+    ///         UIs should read `getConfig(uuid).epoch` immediately before constructing the tx.
+    function approve(uint32 uuid, uint64 expectedEpoch) external {
         Cfg storage c = _cfg[uuid];
         if (c.threshold == 0) revert NotConfigured();
-        if (!_isSigner(c.signers, msg.sender)) revert NotSigner();
         uint64 epoch = c.epoch;
+        if (epoch != expectedEpoch) revert EpochChanged(expectedEpoch, epoch);
+        if (!_isSigner(c.signers, msg.sender)) revert NotSigner();
         if (hasApproved[uuid][epoch][msg.sender]) revert AlreadyApproved();
         hasApproved[uuid][epoch][msg.sender] = true;
         approvalsCount[uuid][epoch] += 1;
@@ -148,9 +157,13 @@ contract MultiSigCondition is ConditionBase {
     ///      both `(r, s, v)` and `(r, n-s, v^1)` recover the same address — the second one fails
     ///      the strict-ascending dedupe.
     function evaluate(uint32 uuid, bytes calldata accessAuxData, address caller) external view returns (bool) {
+        Cfg storage c = _cfg[uuid];
+        // Defensive: `checkReadCondition` already guards unconfigured uuids via `_configured`, but
+        // `evaluate` is `external` so direct callers (test harnesses, ill-behaved integrations)
+        // could otherwise pass through `hits >= 0` and authorize on an unset config.
+        if (c.threshold == 0) return false;
         (uint64 deadline, bytes[] memory sigs) = abi.decode(accessAuxData, (uint64, bytes[]));
         if (block.timestamp > deadline) return false;
-        Cfg storage c = _cfg[uuid];
         if (sigs.length < c.threshold) return false;
 
         bytes32 digest = keccak256(

@@ -38,7 +38,7 @@ export const aeneid = {
   timeWindowCondition: "0x67911435F262e7e4EC4F7FEB4e868a67b9dd90b1",
   deadManSwitchCondition: "0x37226f97e184843aB0b8d4f08A55969801B97766",
   conditionalEscrowCondition: "0x7fcDe02DB7c14fD3587aB2fED064a1D8355b7584",
-  multiSigCondition: "0x61061CCb8BD4C9E0AfF67ed4d2226f0Fc140FB87",
+  multiSigCondition: "0x3A0Cf72f167A2c1f5a7A5025eb36219f28C20FCd",
   defaultLicenseTermsId: 2536,
 } as const;
 

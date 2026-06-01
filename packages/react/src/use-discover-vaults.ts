@@ -39,8 +39,12 @@ export function useDiscoverVaults(opts: { fromBlock?: bigint; enabled?: boolean 
             toBlock: to,
           });
           for (const l of logs) {
-            const a = (l as { args: { tokenId: bigint; uuid: number; ipId: Hex; creator: Hex } }).args;
-            out.push({ tokenId: a.tokenId, uuid: Number(a.uuid), ipId: a.ipId, creator: a.creator });
+            const a = l.args;
+            // viem types every indexed arg as `T | undefined` (legal under the abi-typed Log shape
+            // even when the topic is always present). Skip any decode that came back partial rather
+            // than silently corrupting the row via `Number(undefined) === NaN`.
+            if (a.tokenId === undefined || a.uuid === undefined || a.ipId === undefined || a.creator === undefined) continue;
+            out.push({ tokenId: a.tokenId, uuid: a.uuid, ipId: a.ipId as Hex, creator: a.creator as Hex });
           }
         }
         if (active) setVaults(out);

@@ -340,6 +340,37 @@ export function useEscrowRefund(
   }, [walletClient, address, uuid, buyer]);
 }
 
+/** Signer-side: on-chain Safe-style `approve(uuid, expectedEpoch)`. The hook fetches the current
+ *  epoch from `getConfig` immediately before sending the tx so the signer's intent is bound to a
+ *  specific signer set/threshold. If a rotation lands between the read and the send, the contract
+ *  reverts with `EpochChanged(expected, current)` — the UI should re-prompt against the new state
+ *  rather than silently authorize against a config the signer didn't see. */
+export function useApproveMultiSig(
+  uuid: number,
+  address: Hex = aeneid.multiSigCondition as Hex,
+): () => Promise<Hex> {
+  const { data: walletClient } = useWalletClient();
+  const publicClient = usePublicClient();
+  return useCallback(async () => {
+    if (!walletClient) throw new Error("connect a wallet to approve");
+    if (!publicClient) throw new Error("public client unavailable");
+    const cfg = (await publicClient.readContract({
+      address,
+      abi: multiSigConditionAbi,
+      functionName: "getConfig",
+      args: [uuid],
+    })) as readonly [readonly Hex[], number, bigint];
+    return walletClient.writeContract({
+      address,
+      abi: multiSigConditionAbi,
+      functionName: "approve",
+      args: [uuid, cfg[2]],
+      chain: walletClient.chain ?? null,
+      account: walletClient.account!,
+    });
+  }, [walletClient, publicClient, address, uuid]);
+}
+
 /** Creator-side: swap multi-sig signer set / threshold; bumps epoch which invalidates BOTH
  *  in-flight off-chain sigs AND on-chain approvals from the previous epoch. Signers must be
  *  sorted strictly ascending; helper sorts before the writeContract call. */

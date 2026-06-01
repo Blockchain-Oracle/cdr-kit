@@ -4,9 +4,11 @@ pragma solidity 0.8.26;
 import {Script, console} from "forge-std/Script.sol";
 import {MultiSigCondition} from "../src/conditions/MultiSigCondition.sol";
 
-/// @notice Redeploys MultiSigCondition with the new on-chain `approve()` path added.
-///         Replaces the previous 0xb22EBF…fB78 deployment. Bound to the existing
-///         CdrKitVault factory at 0xac592f… (same factory; only the condition contract is new).
+/// @notice Redeploys MultiSigCondition (2026-06-01 round 2) — adds `expectedEpoch` arg on the
+///         on-chain `approve()` path + defensive `threshold==0` guard in `evaluate()`. Bound to
+///         the existing CdrKitVault factory at 0xac592f… (factory unchanged; only the condition
+///         contract is new). Previous deploys: 0xb22EBF…fB78 (off-chain only) →
+///         0x61061CCb…FB87 (dual-path, no epoch arg) → this one.
 ///
 /// Run (live):
 ///   source contracts/.env
@@ -24,6 +26,6 @@ contract RedeployMultiSig is Script {
         vm.stopBroadcast();
         console.log("ExistingCdrKitVault       ", EXISTING_VAULT);
         console.log("MultiSigCondition (new)   ", address(multiSig));
-        console.log("MultiSigCondition (old)    0xb22EBF0481950A3c0e528A5902C4c5C69184fB78");
+        console.log("MultiSigCondition (prior)  0x61061CCb8BD4C9E0AfF67ed4d2226f0Fc140FB87");
     }
 }

@@ -379,9 +379,12 @@ export class CdrAgent {
     return advanced.createMultiSigVault(this, p);
   }
   /** Safe-style on-chain approve for a multi-sig vault. Signer pays gas; dashboards read the
-   *  truth via `currentApprovalsCount(uuid)`. Parallel to the gas-free off-chain EIP-712 path. */
-  approveMultiSig(uuid: number): Promise<Hex> {
-    return advanced.approveMultiSig(this, uuid);
+   *  truth via `currentApprovalsCount(uuid)`. Parallel to the gas-free off-chain EIP-712 path.
+   *
+   *  Reads `getConfig(uuid).epoch` to bind the approval to the signer's intent — if a rotation
+   *  lands first the tx reverts with `EpochChanged`. Pass `expectedEpoch` to skip the lookup. */
+  approveMultiSig(uuid: number, expectedEpoch?: bigint): Promise<Hex> {
+    return advanced.approveMultiSig(this, uuid, expectedEpoch);
   }
   pokeDeadMan(uuid: number): Promise<Hex> {
     return advanced.pokeDeadMan(this, uuid);

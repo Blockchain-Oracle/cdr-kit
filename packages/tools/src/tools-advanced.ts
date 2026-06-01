@@ -10,6 +10,12 @@ import {
 
 const approveMultiSigSchema = z.object({
   uuid: z.number().int().describe("MultiSigCondition-gated vault uuid to approve."),
+  expectedEpoch: z
+    .union([z.bigint(), z.number(), z.string()])
+    .optional()
+    .describe(
+      "Optional epoch to bind the approval to. Omit and the agent reads the current epoch from getConfig immediately before sending — safe default. Pass explicitly to fail-fast if a rotation might be racing.",
+    ),
 });
 
 const uuidOnlySchema = z.object({
@@ -123,8 +129,9 @@ export function advancedConditionTools(agent: CdrAgent): CdrTool[] {
         "Safe-style on-chain approval for a multi-sig CDR vault. The agent's wallet must be one of the configured signers. Once `threshold`-many signers have called approve, anyone can read the vault — no off-chain sig collection needed.",
       inputSchema: approveMultiSigSchema,
       invoke: async (raw) => {
-        const { uuid } = approveMultiSigSchema.parse(raw);
-        const txHash = await agent.approveMultiSig(uuid);
+        const { uuid, expectedEpoch } = approveMultiSigSchema.parse(raw);
+        const epoch = expectedEpoch === undefined ? undefined : BigInt(expectedEpoch);
+        const txHash = await agent.approveMultiSig(uuid, epoch);
         return { txHash };
       },
     },

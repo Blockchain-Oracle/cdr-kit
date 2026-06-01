@@ -1322,7 +1322,10 @@ export const multiSigConditionAbi = [
   },
   {
     type: 'function',
-    inputs: [{ name: 'uuid', internalType: 'uint32', type: 'uint32' }],
+    inputs: [
+      { name: 'uuid', internalType: 'uint32', type: 'uint32' },
+      { name: 'expectedEpoch', internalType: 'uint64', type: 'uint64' },
+    ],
     name: 'approve',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -1483,6 +1486,14 @@ export const multiSigConditionAbi = [
   { type: 'error', inputs: [], name: 'AlreadyConfigured' },
   { type: 'error', inputs: [], name: 'AlreadyInitialized' },
   { type: 'error', inputs: [], name: 'BadThreshold' },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'expected', internalType: 'uint64', type: 'uint64' },
+      { name: 'current', internalType: 'uint64', type: 'uint64' },
+    ],
+    name: 'EpochChanged',
+  },
   { type: 'error', inputs: [], name: 'NoSigners' },
   { type: 'error', inputs: [], name: 'NotConfigured' },
   { type: 'error', inputs: [], name: 'NotCreator' },

@@ -97,17 +97,37 @@ export async function createMultiSigVault(
   });
 }
 
-/** On-chain `approve(uuid)` for the Safe-style multi-sig path. Signer pays gas; the approval
- *  is recorded against the current epoch and visible via `currentApprovalsCount(uuid)`. */
-export async function approveMultiSig(agent: CdrAgent, uuid: number): Promise<Hex> {
+/** On-chain `approve(uuid, expectedEpoch)` for the Safe-style multi-sig path. Signer pays gas;
+ *  the approval is recorded against the current epoch and visible via `currentApprovalsCount(uuid)`.
+ *
+ *  Reads the current epoch from `getConfig(uuid)` immediately before sending so the tx is bound to
+ *  the signer set the dashboard showed when they clicked approve. If a rotation lands first the tx
+ *  reverts with `EpochChanged(expected, current)` — the UI should re-prompt with the new signer
+ *  set rather than silently bind the approval. Pass an explicit `expectedEpoch` to skip the read
+ *  (advanced flows where the caller has already fetched epoch atomically with other state). */
+export async function approveMultiSig(
+  agent: CdrAgent,
+  uuid: number,
+  expectedEpoch?: bigint,
+): Promise<Hex> {
   const addrs = resolveAddresses(agent.network);
   const wc = agent.client.walletClient;
   if (!wc) throw new Error("agent has no wallet client");
+  let epoch = expectedEpoch;
+  if (epoch === undefined) {
+    const cfg = (await agent.client.publicClient.readContract({
+      address: addrs.multiSigCondition as Hex,
+      abi: multiSigConditionAbi,
+      functionName: "getConfig",
+      args: [uuid],
+    })) as readonly [readonly Hex[], number, bigint];
+    epoch = cfg[2];
+  }
   return wc.writeContract({
     address: addrs.multiSigCondition as Hex,
     abi: multiSigConditionAbi,
     functionName: "approve",
-    args: [uuid],
+    args: [uuid, epoch],
     chain: null,
     account: wc.account!,
   });

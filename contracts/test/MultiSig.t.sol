@@ -281,21 +281,21 @@ contract MultiSigTest is Test {
         vm.expectEmit(true, true, true, true, address(cond));
         emit MultiSigCondition.Approved(1, signerA, 0);
         vm.prank(signerA);
-        cond.approve(1);
+        cond.approve(1, 0);
         assertTrue(cond.hasApproved(1, 0, signerA));
         assertEq(cond.currentApprovalsCount(1), 1);
 
         vm.prank(signerB);
-        cond.approve(1);
+        cond.approve(1, 0);
         assertEq(cond.currentApprovalsCount(1), 2);
     }
 
     function test_onchain_threshold_met_allows_read_with_empty_aux() public {
         _configure(1, 2);
         vm.prank(signerA);
-        cond.approve(1);
+        cond.approve(1, 0);
         vm.prank(signerB);
-        cond.approve(1);
+        cond.approve(1, 0);
         // Empty aux — should still pass via on-chain path.
         assertTrue(cond.checkReadCondition(1, "", "", BUYER));
     }
@@ -303,7 +303,7 @@ contract MultiSigTest is Test {
     function test_onchain_below_threshold_returns_false() public {
         _configure(1, 2);
         vm.prank(signerA);
-        cond.approve(1);
+        cond.approve(1, 0);
         // Only 1 of 2 — empty aux + insufficient on-chain → false.
         assertFalse(cond.checkReadCondition(1, "", "", BUYER));
     }
@@ -312,30 +312,30 @@ contract MultiSigTest is Test {
         _configure(1, 2);
         vm.prank(BUYER);
         vm.expectRevert(MultiSigCondition.NotSigner.selector);
-        cond.approve(1);
+        cond.approve(1, 0);
     }
 
     function test_onchain_approve_rejects_unconfigured() public {
         vm.prank(signerA);
         vm.expectRevert(MultiSigCondition.NotConfigured.selector);
-        cond.approve(999);
+        cond.approve(999, 0);
     }
 
     function test_onchain_approve_rejects_double_approve() public {
         _configure(1, 2);
         vm.prank(signerA);
-        cond.approve(1);
+        cond.approve(1, 0);
         vm.prank(signerA);
         vm.expectRevert(MultiSigCondition.AlreadyApproved.selector);
-        cond.approve(1);
+        cond.approve(1, 0);
     }
 
     function test_onchain_rotation_invalidates_prior_approvals() public {
         _configure(1, 2);
         vm.prank(signerA);
-        cond.approve(1);
+        cond.approve(1, 0);
         vm.prank(signerB);
-        cond.approve(1);
+        cond.approve(1, 0);
         assertEq(cond.currentApprovalsCount(1), 2);
         // Rotation → epoch=1; old approvals at epoch=0 still recorded but no longer count.
         vm.prank(CREATOR);
@@ -349,9 +349,9 @@ contract MultiSigTest is Test {
         _configure(1, 2);
         // On-chain path:
         vm.prank(signerA);
-        cond.approve(1);
+        cond.approve(1, 0);
         vm.prank(signerB);
-        cond.approve(1);
+        cond.approve(1, 0);
         assertTrue(cond.checkReadCondition(1, "", "", BUYER));
 
         // Off-chain path on a separate vault:
@@ -360,5 +360,31 @@ contract MultiSigTest is Test {
         bytes32 digest = _digest(2, BUYER, 0, deadline);
         bytes[] memory sigs = _sigs2(PK_A, PK_B, digest);
         assertTrue(cond.checkReadCondition(2, _aux(deadline, sigs), "", BUYER));
+    }
+
+    function test_onchain_approve_rejects_stale_epoch() public {
+        // Signer decided/signed against epoch 0, but a rotation lands first — their tx must revert
+        // rather than silently bind their approval to the post-rotation signer set / threshold.
+        _configure(1, 2);
+        vm.prank(CREATOR);
+        cond.rotateSigners(1, _sortedSigners(), 2); // → epoch=1
+
+        vm.prank(signerA);
+        vm.expectRevert(abi.encodeWithSelector(MultiSigCondition.EpochChanged.selector, uint64(0), uint64(1)));
+        cond.approve(1, 0);
+
+        // Sanity: approving against the correct (new) epoch still works.
+        vm.prank(signerA);
+        cond.approve(1, 1);
+        assertEq(cond.currentApprovalsCount(1), 1);
+    }
+
+    function test_evaluate_returns_false_on_unconfigured_uuid() public view {
+        // `evaluate` is `external` — the precompile entry is `checkReadCondition` which guards via
+        // `_configured`, but direct callers must also be safe. With threshold==0 (unconfigured) the
+        // early guard short-circuits before the sig loop, so `hits >= 0` never authorizes a read.
+        uint64 deadline = uint64(block.timestamp + 1 hours);
+        bytes[] memory emptySigs = new bytes[](0);
+        assertFalse(cond.evaluate(42, _aux(deadline, emptySigs), BUYER));
     }
 }

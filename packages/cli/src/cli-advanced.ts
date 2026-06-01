@@ -120,9 +120,14 @@ export function registerAdvancedCommands(program: Command, buildAgent: (n?: stri
   const ms = program.command("multi-sig").description("MultiSigCondition operations");
   ms.command("approve <uuid>")
     .description("Safe-style on-chain approve — agent's wallet must be a configured signer")
-    .action(async (uuidArg: string) => {
+    .option(
+      "--expected-epoch <n>",
+      "bind approval to a specific epoch; omit and the CLI reads the current epoch first (safe default — guards against in-flight rotateSigners landing first)",
+    )
+    .action(async (uuidArg: string, opts: { expectedEpoch?: string }) => {
       const agent = buildAgent(network());
-      const txHash = await agent.approveMultiSig(Number(uuidArg));
+      const expected = opts.expectedEpoch === undefined ? undefined : BigInt(opts.expectedEpoch);
+      const txHash = await agent.approveMultiSig(Number(uuidArg), expected);
       ok({ txHash });
     });
   ms.command("sign <uuid>")

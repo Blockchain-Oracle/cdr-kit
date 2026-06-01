@@ -27,7 +27,7 @@ pnpm + Turborepo + tsdown + Foundry. 0.5 ships live on Aeneid with 4 advanced co
 - Every condition `view` returns `false` (never reverts) on an unconfigured uuid.
 - 2-step pattern everywhere: pay/subscribe (mutating tx) → then the `view` reads the result.
 - **New conditions slot in without redeploying the factory.** When adding a 5th-Nth condition contract, deploy the new condition + `initialize(EXISTING_VAULT)` — don't redeploy `CdrKitVault`. The factory accepts any `ICdrConfigurable` as `readConditionAddr`. The 4 new 0.5 conditions all bind to the existing 0xac592f… factory.
-- **MultiSig has TWO approval paths** (off-chain EIP-712 sigs OR on-chain `approve()`), both gated by the same `epoch`. `rotateSigners` bumps epoch — invalidates BOTH paths. `checkReadCondition` ORs the two; either reaching threshold passes the read.
+- **MultiSig has TWO approval paths** (off-chain EIP-712 sigs OR on-chain `approve(uuid, expectedEpoch)`), both gated by the same `epoch`. `rotateSigners` bumps epoch — invalidates BOTH paths. `checkReadCondition` ORs the two; either reaching threshold passes the read. On-chain approve **requires** signer to pass the epoch they intend to bind to; mismatch reverts `EpochChanged(expected, current)`.
 - **Storage adapters lazy-load their SDKs.** `createS3Storage`, `createStorachaStorage`, `createHeliaStorage` use `new Function("specifier", "return import(specifier)")` indirection so Vite/Rollup don't try to statically resolve the optional peer deps at build time. Pattern reused 3x; document in any new ecosystem adapter.
 
 ## Gotchas (burned on these — see `context/research/cdr-protocol-truth.md`)
@@ -47,7 +47,7 @@ pnpm + Turborepo + tsdown + Foundry. 0.5 ships live on Aeneid with 4 advanced co
 - `TimeWindowCondition`: `0x67911435F262e7e4EC4F7FEB4e868a67b9dd90b1`
 - `DeadManSwitchCondition`: `0x37226f97e184843aB0b8d4f08A55969801B97766`
 - `ConditionalEscrowCondition`: `0x7fcDe02DB7c14fD3587aB2fED064a1D8355b7584`
-- `MultiSigCondition`: `0x61061CCb8BD4C9E0AfF67ed4d2226f0Fc140FB87` (redeployed for on-chain `approve()` path; prior `0xb22EBF…` retired)
+- `MultiSigCondition`: `0x3A0Cf72f167A2c1f5a7A5025eb36219f28C20FCd` (2026-06-01 r2 — `approve(uuid, expectedEpoch)` arg + defensive `threshold==0` guard in `evaluate()`; prior `0x61061CCb…`, `0xb22EBF…` retired)
 
 ## Building the dashboard (E7)
 - Spec: `docs/ux-spec.md` + `docs/stories/story-e7-dashboard.md`. Build on `@cdr-kit/react` (dogfood).
