@@ -1,6 +1,9 @@
 import { Badge } from "@/components/primitives/badge";
 import { DocPage, PropsTable } from "@/components/docs/doc-page";
 import { CodePanel } from "@/components/docs/code-panel";
+import { Demo } from "@/components/docs/demo";
+import { MultiSigSignerDemo } from "@/components/docs/demos/multi-sig-signer-demo";
+import "../components.css";
 
 const SIGN_CODE = `import { MultiSigSigner } from "@cdr-kit/react";
 
@@ -59,9 +62,9 @@ export default function Page() {
         importLine: 'import { MultiSigSigner } from "@cdr-kit/react"',
         sections: [
           {
-            id: "usage",
-            title: "Usage",
-            content: <CodePanel title="tsx" language="tsx" code={SIGN_CODE} />,
+            id: "preview",
+            title: "Live preview",
+            content: <Demo preview={<MultiSigSignerDemo />} code={SIGN_CODE} badge={<Badge>mock</Badge>} />,
           },
           {
             id: "props",
