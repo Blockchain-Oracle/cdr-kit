@@ -42,17 +42,17 @@ importers:
   apps/site:
     dependencies:
       '@cdr-kit/contracts':
-        specifier: npm:@cdr-kit/contracts@^0.4.0
-        version: 0.4.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))
+        specifier: npm:@cdr-kit/contracts@^0.5.0
+        version: 0.5.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))
       '@cdr-kit/core':
-        specifier: npm:@cdr-kit/core@^0.4.0
-        version: 0.4.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))
+        specifier: npm:@cdr-kit/core@^0.5.0
+        version: 0.5.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))
       '@cdr-kit/react':
-        specifier: npm:@cdr-kit/react@^0.4.0
-        version: 0.4.0(@helia/unixfs@5.1.0(encoding@0.1.13))(@tanstack/react-query@5.100.14(react@19.2.4))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(react@19.2.4)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))(wagmi@2.19.5(@tanstack/query-core@5.100.14)(@tanstack/react-query@5.100.14(react@19.2.4))(@types/react@19.2.15)(bufferutil@4.1.0)(encoding@0.1.13)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(react@19.2.4)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))(zod@4.4.3))
+        specifier: npm:@cdr-kit/react@^0.5.0
+        version: 0.5.0(fe6219abba1ce2fd38b5b8d62dc518fa)
       '@cdr-kit/react-ui':
-        specifier: npm:@cdr-kit/react-ui@^0.4.0
-        version: 0.4.0(b0bac4a1396d347a45bf7c1188a19e56)
+        specifier: npm:@cdr-kit/react-ui@^0.5.0
+        version: 0.5.0(@cdr-kit/core@0.5.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3)))(@cdr-kit/react@0.5.0(fe6219abba1ce2fd38b5b8d62dc518fa))(@radix-ui/react-popover@1.1.15(@types/react-dom@19.2.3(@types/react@19.2.15))(@types/react@19.2.15)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@radix-ui/react-popover':
         specifier: ^1.1.15
         version: 1.1.15(@types/react-dom@19.2.3(@types/react@19.2.15))(@types/react@19.2.15)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -94,17 +94,17 @@ importers:
         specifier: ^2.0.0
         version: 2.0.80(zod@4.4.3)
       '@cdr-kit/agent':
-        specifier: npm:@cdr-kit/agent@^0.4.0
-        version: 0.4.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+        specifier: npm:@cdr-kit/agent@^0.5.0
+        version: 0.5.0(@cdr-kit/story@0.5.0(@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)))(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
       '@cdr-kit/contracts':
-        specifier: npm:@cdr-kit/contracts@^0.4.0
-        version: 0.4.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+        specifier: npm:@cdr-kit/contracts@^0.5.0
+        version: 0.5.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
       '@cdr-kit/core':
-        specifier: npm:@cdr-kit/core@^0.4.0
-        version: 0.4.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+        specifier: npm:@cdr-kit/core@^0.5.0
+        version: 0.5.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
       '@cdr-kit/vercel-ai':
-        specifier: npm:@cdr-kit/vercel-ai@^0.4.0
-        version: 0.4.0(@helia/unixfs@5.1.0(encoding@0.1.13))(ai@6.0.191(zod@4.4.3))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+        specifier: npm:@cdr-kit/vercel-ai@^0.5.0
+        version: 0.5.0(@cdr-kit/story@0.5.0(@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)))(@helia/unixfs@5.1.0(encoding@0.1.13))(ai@6.0.191(zod@4.4.3))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
       ai:
         specifier: ^6.0.191
         version: 6.0.191(zod@4.4.3)
@@ -833,26 +833,43 @@ packages:
   '@base-org/account@2.4.0':
     resolution: {integrity: sha512-A4Umpi8B9/pqR78D1Yoze4xHyQaujioVRqqO3d6xuDFw9VRtjg6tK3bPlwE0aW+nVH/ntllCpPa2PbI8Rnjcug==}
 
-  '@cdr-kit/agent@0.4.0':
-    resolution: {integrity: sha512-uiQtDE+qj4vWxzApXWvhKnQkuKZjZDtbioi8MLVXps7IEimoSK58Z+7bO9DsiugsEgJz6AKffOuPAG41q6Ze3A==}
+  '@cdr-kit/agent@0.5.0':
+    resolution: {integrity: sha512-2/nCqC8tHGjifKT8CEPmKlLqnB7etZP/QZNkL10liD8QnA6tApf6llOnfiubRHKuqf2HYkhc2Xi2tvZPtS2LCg==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      '@cdr-kit/story': '>=0.4.0'
+      viem: ^2
+    peerDependenciesMeta:
+      '@cdr-kit/story':
+        optional: true
+
+  '@cdr-kit/contracts@0.5.0':
+    resolution: {integrity: sha512-T5h4kAKb1zkEKNd4H2lGEmNXU/ebYKwjGth/HRClEBAS1xRCfvrJXPUE9GBX5IgmMLibYCgdzqybX+qX/Zu5Qg==}
     engines: {node: '>=20'}
     peerDependencies:
       viem: ^2
 
-  '@cdr-kit/contracts@0.4.0':
-    resolution: {integrity: sha512-wwYpHPPxTmE3lVew7OeGXB4w7qDJNfgO6JFtolL5YSI0RDrho5EKN5JqGKbQ3RXuF/zCBSkD7TNjwKdhTui6Sw==}
+  '@cdr-kit/core@0.5.0':
+    resolution: {integrity: sha512-YJTfWEB6X+mcPcPatoEIjC6btpxWUc56lVbd3fSUuoAahe56jgtoKL5/BMyK7ZdBMLqsNVeY3S8vn5Yg8L7RUg==}
     engines: {node: '>=20'}
     peerDependencies:
+      '@aws-sdk/client-s3': '*'
+      '@helia/unixfs': '*'
+      '@storacha/client': '*'
+      helia: '*'
       viem: ^2
+    peerDependenciesMeta:
+      '@aws-sdk/client-s3':
+        optional: true
+      '@helia/unixfs':
+        optional: true
+      '@storacha/client':
+        optional: true
+      helia:
+        optional: true
 
-  '@cdr-kit/core@0.4.0':
-    resolution: {integrity: sha512-dJ7l74GCL2BCMSQcFzmq0UN1B3Wnkdqqc5oWJtg/GuO1695U3mnC9iOnlq5v7ynvwV4Fdf66reIakVTXDfyVbQ==}
-    engines: {node: '>=20'}
-    peerDependencies:
-      viem: ^2
-
-  '@cdr-kit/react-ui@0.4.0':
-    resolution: {integrity: sha512-w2lacQD2gXSSoEU9x6aQ48/O7zo2xLmOiE1a/U3V4PGpxFRPiZC/cgUFqz8/ryU26lUYgMf5jBfX2HusdJAzkA==}
+  '@cdr-kit/react-ui@0.5.0':
+    resolution: {integrity: sha512-dqXVAqLAwGDo1gYh93UscXbOL0ySLO3xghQk5uYwIVqGuNEQ3d9OLdJlnIWpmN6WAPDkd25tW7yd1OwkeBw7Bw==}
     engines: {node: '>=20'}
     peerDependencies:
       '@cdr-kit/core': '>=0.4.0'
@@ -861,21 +878,40 @@ packages:
       react: '>=18'
       react-dom: '>=18'
 
-  '@cdr-kit/react@0.4.0':
-    resolution: {integrity: sha512-rNYR7wJZmzKQe3AtI+5nARWF4FVXRLZXpLqA0VkIijf/8XHsyVcpdH2pUqlVBBJ0T6WCo/gD9a6tS2CXAHFkHA==}
+  '@cdr-kit/react@0.5.0':
+    resolution: {integrity: sha512-NE0yPMBmnamrBUgXzbtat84tagrB9aQkJrpiBYmsgLqQO7qdhKzZn4qMqedIzVjlDwcoJrfxTY04aaLyWaS+5Q==}
     engines: {node: '>=20'}
     peerDependencies:
+      '@cdr-kit/agent': '>=0.4.0'
+      '@cdr-kit/story': '>=0.4.0'
       '@tanstack/react-query': '>=5'
       react: '>=18'
       viem: ^2
       wagmi: '>=2'
+    peerDependenciesMeta:
+      '@cdr-kit/agent':
+        optional: true
+      '@cdr-kit/story':
+        optional: true
 
-  '@cdr-kit/tools@0.4.0':
-    resolution: {integrity: sha512-3qfimBrYK4mZqorajmtf83kNVAJkby5oUph9gdJCvG9YZttp0QL4Jetkm7iCWtH9pegJ+JA2xvEpXfRSwLw/zw==}
+  '@cdr-kit/story@0.5.0':
+    resolution: {integrity: sha512-6v2qxKeyOKZIuuw8Yk24wZMr5ENBXy27P+LN6gH90RbaW9znZUSFYvA/yxAHaOeCQ8y62mLDB7LvTfzSx5uNzw==}
     engines: {node: '>=20'}
+    peerDependencies:
+      '@story-protocol/core-sdk': ^1.4
+      viem: ^2
 
-  '@cdr-kit/vercel-ai@0.4.0':
-    resolution: {integrity: sha512-WxIuo1e3DzBFHZG9AXEO3kAYtyluRpsiYwDsaX6/FlAvqIAOYvfP9CEbJNRfFeR/+wZ6e4FuOVZbkDNi2TCN/Q==}
+  '@cdr-kit/tools@0.5.0':
+    resolution: {integrity: sha512-NlSqgyiNTPEM5cz4+AVq9g68ZqpW94WIa0DJLN8PQi7erjciFl0UOBlVvfiFdep/bvFbJijvsA7RTEVqioqI0g==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      '@cdr-kit/story': '>=0.4.0'
+    peerDependenciesMeta:
+      '@cdr-kit/story':
+        optional: true
+
+  '@cdr-kit/vercel-ai@0.5.0':
+    resolution: {integrity: sha512-H0ZpWfaA4VVTAL7ezVmi+DAJ98VebJapr5Oo1iYqdB9CIaIXb2OGQsKGhFZ3X5jySaBGH43AujsVE/bzFx/zVw==}
     engines: {node: '>=20'}
     peerDependencies:
       ai: '>=6'
@@ -8986,95 +9022,137 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@cdr-kit/agent@0.4.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))':
+  '@cdr-kit/agent@0.5.0(@cdr-kit/story@0.5.0(@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3)))(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))':
     dependencies:
-      '@cdr-kit/contracts': 0.4.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
-      '@cdr-kit/core': 0.4.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+      '@cdr-kit/contracts': 0.5.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))
+      '@cdr-kit/core': 0.5.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))
+      pino: 9.14.0
+      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3)
+    optionalDependencies:
+      '@cdr-kit/story': 0.5.0(@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))
+    transitivePeerDependencies:
+      - '@aws-sdk/client-s3'
+      - '@filoz/synapse-sdk'
+      - '@helia/unixfs'
+      - '@storacha/client'
+      - helia
+    optional: true
+
+  '@cdr-kit/agent@0.5.0(@cdr-kit/story@0.5.0(@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)))(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))':
+    dependencies:
+      '@cdr-kit/contracts': 0.5.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+      '@cdr-kit/core': 0.5.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
       pino: 9.14.0
       viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)
+    optionalDependencies:
+      '@cdr-kit/story': 0.5.0(@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
     transitivePeerDependencies:
+      - '@aws-sdk/client-s3'
       - '@filoz/synapse-sdk'
       - '@helia/unixfs'
       - '@storacha/client'
       - helia
 
-  '@cdr-kit/contracts@0.4.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))':
+  '@cdr-kit/contracts@0.5.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))':
     dependencies:
       viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3)
 
-  '@cdr-kit/contracts@0.4.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))':
+  '@cdr-kit/contracts@0.5.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))':
     dependencies:
       viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)
 
-  '@cdr-kit/core@0.4.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))':
+  '@cdr-kit/core@0.5.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))':
     dependencies:
-      '@cdr-kit/contracts': 0.4.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))
+      '@cdr-kit/contracts': 0.5.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))
       '@piplabs/cdr-crypto': 0.2.1
       '@piplabs/cdr-sdk': 0.2.1(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(multiformats@13.4.2)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))
       multiformats: 13.4.2
       viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3)
       zod: 3.25.76
+    optionalDependencies:
+      '@helia/unixfs': 5.1.0(encoding@0.1.13)
+      helia: 5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10)
     transitivePeerDependencies:
       - '@filoz/synapse-sdk'
-      - '@helia/unixfs'
-      - '@storacha/client'
-      - helia
 
-  '@cdr-kit/core@0.4.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))':
+  '@cdr-kit/core@0.5.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))':
     dependencies:
-      '@cdr-kit/contracts': 0.4.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+      '@cdr-kit/contracts': 0.5.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
       '@piplabs/cdr-crypto': 0.2.1
       '@piplabs/cdr-sdk': 0.2.1(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(multiformats@13.4.2)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
       multiformats: 13.4.2
       viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)
       zod: 3.25.76
+    optionalDependencies:
+      '@helia/unixfs': 5.1.0(encoding@0.1.13)
+      helia: 5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6)
     transitivePeerDependencies:
       - '@filoz/synapse-sdk'
-      - '@helia/unixfs'
-      - '@storacha/client'
-      - helia
 
-  '@cdr-kit/react-ui@0.4.0(b0bac4a1396d347a45bf7c1188a19e56)':
+  '@cdr-kit/react-ui@0.5.0(@cdr-kit/core@0.5.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3)))(@cdr-kit/react@0.5.0(fe6219abba1ce2fd38b5b8d62dc518fa))(@radix-ui/react-popover@1.1.15(@types/react-dom@19.2.3(@types/react@19.2.15))(@types/react@19.2.15)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
     dependencies:
-      '@cdr-kit/core': 0.4.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))
-      '@cdr-kit/react': 0.4.0(@helia/unixfs@5.1.0(encoding@0.1.13))(@tanstack/react-query@5.100.14(react@19.2.4))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(react@19.2.4)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))(wagmi@2.19.5(@tanstack/query-core@5.100.14)(@tanstack/react-query@5.100.14(react@19.2.4))(@types/react@19.2.15)(bufferutil@4.1.0)(encoding@0.1.13)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(react@19.2.4)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))(zod@4.4.3))
+      '@cdr-kit/core': 0.5.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))
+      '@cdr-kit/react': 0.5.0(fe6219abba1ce2fd38b5b8d62dc518fa)
       '@radix-ui/react-popover': 1.1.15(@types/react-dom@19.2.3(@types/react@19.2.15))(@types/react@19.2.15)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       react: 19.2.4
       react-dom: 19.2.4(react@19.2.4)
 
-  '@cdr-kit/react@0.4.0(@helia/unixfs@5.1.0(encoding@0.1.13))(@tanstack/react-query@5.100.14(react@19.2.4))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(react@19.2.4)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))(wagmi@2.19.5(@tanstack/query-core@5.100.14)(@tanstack/react-query@5.100.14(react@19.2.4))(@types/react@19.2.15)(bufferutil@4.1.0)(encoding@0.1.13)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(react@19.2.4)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))(zod@4.4.3))':
+  '@cdr-kit/react@0.5.0(fe6219abba1ce2fd38b5b8d62dc518fa)':
     dependencies:
-      '@cdr-kit/contracts': 0.4.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))
-      '@cdr-kit/core': 0.4.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))
+      '@cdr-kit/contracts': 0.5.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))
+      '@cdr-kit/core': 0.5.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))
       '@tanstack/react-query': 5.100.14(react@19.2.4)
       react: 19.2.4
       viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3)
       wagmi: 2.19.5(@tanstack/query-core@5.100.14)(@tanstack/react-query@5.100.14(react@19.2.4))(@types/react@19.2.15)(bufferutil@4.1.0)(encoding@0.1.13)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(react@19.2.4)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))(zod@4.4.3)
+    optionalDependencies:
+      '@cdr-kit/agent': 0.5.0(@cdr-kit/story@0.5.0(@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3)))(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))
+      '@cdr-kit/story': 0.5.0(@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))
     transitivePeerDependencies:
+      - '@aws-sdk/client-s3'
       - '@filoz/synapse-sdk'
       - '@helia/unixfs'
       - '@storacha/client'
       - helia
 
-  '@cdr-kit/tools@0.4.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))':
+  '@cdr-kit/story@0.5.0(@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))':
     dependencies:
-      '@cdr-kit/agent': 0.4.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
-      '@cdr-kit/core': 0.4.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+      '@cdr-kit/contracts': 0.5.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3))
+      '@story-protocol/core-sdk': 1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3)
+      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3)
+    optional: true
+
+  '@cdr-kit/story@0.5.0(@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))':
+    dependencies:
+      '@cdr-kit/contracts': 0.5.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+      '@story-protocol/core-sdk': 1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)
+      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)
+    optional: true
+
+  '@cdr-kit/tools@0.5.0(@cdr-kit/story@0.5.0(@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)))(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))':
+    dependencies:
+      '@cdr-kit/agent': 0.5.0(@cdr-kit/story@0.5.0(@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)))(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+      '@cdr-kit/core': 0.5.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
       zod: 3.25.76
       zod-to-json-schema: 3.25.2(zod@3.25.76)
+    optionalDependencies:
+      '@cdr-kit/story': 0.5.0(@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
     transitivePeerDependencies:
+      - '@aws-sdk/client-s3'
       - '@filoz/synapse-sdk'
       - '@helia/unixfs'
       - '@storacha/client'
       - helia
       - viem
 
-  '@cdr-kit/vercel-ai@0.4.0(@helia/unixfs@5.1.0(encoding@0.1.13))(ai@6.0.191(zod@4.4.3))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))':
+  '@cdr-kit/vercel-ai@0.5.0(@cdr-kit/story@0.5.0(@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)))(@helia/unixfs@5.1.0(encoding@0.1.13))(ai@6.0.191(zod@4.4.3))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))':
     dependencies:
-      '@cdr-kit/agent': 0.4.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
-      '@cdr-kit/tools': 0.4.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+      '@cdr-kit/agent': 0.5.0(@cdr-kit/story@0.5.0(@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)))(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+      '@cdr-kit/tools': 0.5.0(@cdr-kit/story@0.5.0(@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)))(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
       ai: 6.0.191(zod@4.4.3)
     transitivePeerDependencies:
+      - '@aws-sdk/client-s3'
+      - '@cdr-kit/story'
       - '@filoz/synapse-sdk'
       - '@helia/unixfs'
       - '@storacha/client'
@@ -12034,7 +12112,7 @@ snapshots:
       debug: 4.4.3
       invariant: 2.2.4
       metro: 0.84.4(bufferutil@4.1.0)(utf-8-validate@5.0.10)
-      metro-config: 0.84.4(bufferutil@4.1.0)(utf-8-validate@6.0.6)
+      metro-config: 0.84.4(bufferutil@4.1.0)(utf-8-validate@5.0.10)
       metro-core: 0.84.4
       semver: 7.8.1
     transitivePeerDependencies:
@@ -12048,7 +12126,7 @@ snapshots:
       debug: 4.4.3
       invariant: 2.2.4
       metro: 0.84.4(bufferutil@4.1.0)(utf-8-validate@6.0.6)
-      metro-config: 0.84.4(bufferutil@4.1.0)(utf-8-validate@6.0.6)
+      metro-config: 0.84.4(bufferutil@4.1.0)(utf-8-validate@5.0.10)
       metro-core: 0.84.4
       semver: 7.8.1
     transitivePeerDependencies:
@@ -14228,6 +14306,21 @@ snapshots:
 
   '@standard-schema/spec@1.1.0': {}
 
+  '@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3)':
+    dependencies:
+      '@scure/bip32': 1.7.0
+      abitype: 0.10.3(typescript@5.9.3)(zod@4.4.3)
+      bs58: 6.0.0
+      dotenv: 16.6.1
+      multiformats: 9.9.0
+      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3)
+    transitivePeerDependencies:
+      - bufferutil
+      - typescript
+      - utf-8-validate
+      - zod
+    optional: true
+
   '@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76)':
     dependencies:
       '@scure/bip32': 1.7.0
@@ -14241,6 +14334,21 @@ snapshots:
       - typescript
       - utf-8-validate
       - zod
+
+  '@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)':
+    dependencies:
+      '@scure/bip32': 1.7.0
+      abitype: 0.10.3(typescript@5.9.3)(zod@4.4.3)
+      bs58: 6.0.0
+      dotenv: 16.6.1
+      multiformats: 9.9.0
+      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)
+    transitivePeerDependencies:
+      - bufferutil
+      - typescript
+      - utf-8-validate
+      - zod
+    optional: true
 
   '@swc/helpers@0.5.15':
     dependencies:
@@ -16203,6 +16311,12 @@ snapshots:
     optionalDependencies:
       typescript: 5.9.3
       zod: 3.25.76
+
+  abitype@0.10.3(typescript@5.9.3)(zod@4.4.3):
+    optionalDependencies:
+      typescript: 5.9.3
+      zod: 4.4.3
+    optional: true
 
   abitype@1.0.6(typescript@5.9.3)(zod@3.25.76):
     optionalDependencies:
@@ -18634,12 +18748,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  metro-config@0.84.4(bufferutil@4.1.0)(utf-8-validate@6.0.6):
+  metro-config@0.84.4(bufferutil@4.1.0)(utf-8-validate@5.0.10):
     dependencies:
       connect: 3.7.0
       flow-enums-runtime: 0.0.6
       jest-validate: 29.7.0
-      metro: 0.84.4(bufferutil@4.1.0)(utf-8-validate@6.0.6)
+      metro: 0.84.4(bufferutil@4.1.0)(utf-8-validate@5.0.10)
       metro-cache: 0.84.4
       metro-core: 0.84.4
       metro-runtime: 0.84.4
@@ -18758,6 +18872,7 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
+    optional: true
 
   metro@0.84.4(bufferutil@4.1.0)(utf-8-validate@5.0.10):
     dependencies:
@@ -18784,7 +18899,7 @@ snapshots:
       metro-babel-transformer: 0.84.4
       metro-cache: 0.84.4
       metro-cache-key: 0.84.4
-      metro-config: 0.84.4(bufferutil@4.1.0)(utf-8-validate@6.0.6)
+      metro-config: 0.84.4(bufferutil@4.1.0)(utf-8-validate@5.0.10)
       metro-core: 0.84.4
       metro-file-map: 0.84.4
       metro-resolver: 0.84.4
@@ -18830,7 +18945,7 @@ snapshots:
       metro-babel-transformer: 0.84.4
       metro-cache: 0.84.4
       metro-cache-key: 0.84.4
-      metro-config: 0.84.4(bufferutil@4.1.0)(utf-8-validate@6.0.6)
+      metro-config: 0.84.4(bufferutil@4.1.0)(utf-8-validate@5.0.10)
       metro-core: 0.84.4
       metro-file-map: 0.84.4
       metro-resolver: 0.84.4
@@ -18850,6 +18965,7 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
+    optional: true
 
   micro-ftch@0.3.1: {}
 

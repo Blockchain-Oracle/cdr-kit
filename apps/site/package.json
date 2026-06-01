@@ -10,10 +10,10 @@
     "typecheck": "next typegen && tsc --noEmit"
   },
   "dependencies": {
-    "@cdr-kit/contracts": "npm:@cdr-kit/contracts@^0.4.0",
-    "@cdr-kit/core": "npm:@cdr-kit/core@^0.4.0",
-    "@cdr-kit/react": "npm:@cdr-kit/react@^0.4.0",
-    "@cdr-kit/react-ui": "npm:@cdr-kit/react-ui@^0.4.0",
+    "@cdr-kit/contracts": "npm:@cdr-kit/contracts@^0.5.0",
+    "@cdr-kit/core": "npm:@cdr-kit/core@^0.5.0",
+    "@cdr-kit/react": "npm:@cdr-kit/react@^0.5.0",
+    "@cdr-kit/react-ui": "npm:@cdr-kit/react-ui@^0.5.0",
     "@radix-ui/react-popover": "^1.1.15",
     "@tanstack/react-query": "^5.62.0",
     "next": "16.2.6",
