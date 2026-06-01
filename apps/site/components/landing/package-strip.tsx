@@ -1,9 +1,12 @@
 const PACKAGES = [
   "@cdr-kit/react",
+  "@cdr-kit/react-ui",
   "@cdr-kit/core",
   "@cdr-kit/agent",
+  "@cdr-kit/story",
   "@cdr-kit/tools",
   "@cdr-kit/mcp",
+  "@cdr-kit/cli",
   "@cdr-kit/contracts",
   "@cdr-kit/vercel-ai",
   "@cdr-kit/openai",
@@ -17,7 +20,7 @@ export function PackageStrip() {
   return (
     <section className="strip">
       <div className="container strip-inner">
-        <span className="strip-label">@cdr-kit · 12 packages, all v0.1.0</span>
+        <span className="strip-label">@cdr-kit · 15 packages, v0.5</span>
         <div className="strip-pkgs">
           {PACKAGES.map((pkg) => (
             <a
