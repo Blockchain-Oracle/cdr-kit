@@ -1,0 +1,16 @@
+{
+  "name": "cdr-kit",
+  "owner": {
+    "name": "Blockchain-Oracle",
+    "url": "https://github.com/Blockchain-Oracle"
+  },
+  "description": "Drop-in agent kit for Story Confidential Data Rails — CLI + MCP server + multi-skill plugin.",
+  "plugins": [
+    {
+      "name": "cdr-kit",
+      "description": "Skills for designing, wiring, debugging, auditing, and explaining errors on Story CDR vaults.",
+      "source": "git-subdir",
+      "subdir": "packages/plugin/cdr-kit"
+    }
+  ]
+}

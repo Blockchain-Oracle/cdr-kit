@@ -10,6 +10,10 @@ export type CdrErrorCode =
   | "READ_TIMEOUT"
   | "KEEPER_UNAVAILABLE"
   | "RATE_LIMITED"
+  /// New in 0.4.0 — map every @piplabs/cdr-sdk SDK error code into our taxonomy.
+  | "LABEL_MISMATCH"
+  | "CID_INTEGRITY"
+  | "INVALID_CONDITION_CONTRACT"
   | "UNKNOWN";
 
 export interface CdrErrorOptions {
@@ -97,6 +101,74 @@ export const CdrErrors = {
       recoverable: true,
       suggestedAction: retryAfterMs ? `retry after ${retryAfterMs}ms` : "retry with backoff",
     }),
+  labelMismatch: (cause?: unknown) =>
+    new CdrError("LABEL_MISMATCH", "ciphertext label does not match the vault uuid", {
+      suggestedAction:
+        "regenerate the ciphertext with the correct uuidToLabel(uuid) — labels bind ciphertext to its vault",
+      cause,
+    }),
+  cidIntegrity: (cause?: unknown) =>
+    new CdrError("CID_INTEGRITY", "downloaded encrypted file does not match the vault's CID", {
+      suggestedAction:
+        "the IPFS gateway may have served a tampered or stale blob — retry against a different gateway",
+      cause,
+    }),
+  invalidConditionContract: (address?: string, cause?: unknown) =>
+    new CdrError(
+      "INVALID_CONDITION_CONTRACT",
+      address
+        ? `condition contract ${address} does not implement checkReadCondition/checkWriteCondition`
+        : "condition address does not implement the required interface",
+      {
+        suggestedAction:
+          "verify the address points at a deployed condition contract (not an EOA — for owner-only use allocate() with skipConditionValidation: true)",
+        cause,
+      },
+    ),
   unknown: (message: string, cause?: unknown) =>
     new CdrError("UNKNOWN", message, { cause }),
 } as const;
+
+/**
+ * Translate a thrown error from `@piplabs/cdr-sdk` into a CdrError. The SDK throws typed classes
+ * (`LabelMismatchError`, `CidIntegrityError`, `ContentSizeExceededError`, `PartialCollectionTimeoutError`,
+ * `EmptyVaultError`, `WalletClientRequiredError`, `InvalidConditionContractError`, `InvalidParamsError`)
+ * which expose a `.code` string. We branch on `.code` and re-wrap so consumers get our stable taxonomy.
+ *
+ * Pass any unknown thrown value — it returns the original `CdrError` if already typed, otherwise the
+ * closest matching CdrError, or `CdrErrors.unknown(...)` as a last resort.
+ */
+export function mapSdkError(e: unknown): CdrError {
+  if (CdrError.is(e)) return e;
+  const err = e as { code?: string; message?: string; name?: string };
+  const code = err?.code ?? err?.name;
+  const message = err?.message ?? String(e);
+  switch (code) {
+    case "LABEL_MISMATCH":
+    case "LabelMismatchError":
+      return CdrErrors.labelMismatch(e);
+    case "CID_INTEGRITY":
+    case "CidIntegrityError":
+      return CdrErrors.cidIntegrity(e);
+    case "INVALID_CONDITION_CONTRACT":
+    case "InvalidConditionContractError":
+      return CdrErrors.invalidConditionContract(undefined, e);
+    case "CONTENT_SIZE_EXCEEDED":
+    case "ContentSizeExceededError":
+      return CdrErrors.payloadTooLarge(0, 1024);
+    case "WALLET_CLIENT_REQUIRED":
+    case "WalletClientRequiredError":
+      return CdrErrors.walletRequired();
+    case "EMPTY_VAULT":
+    case "EmptyVaultError":
+      return CdrErrors.vaultNotFound(-1);
+    case "PARTIAL_COLLECTION_TIMEOUT":
+    case "PartialCollectionTimeoutError":
+      return CdrErrors.readTimeout(120_000, e);
+    case "INVALID_PARAMS":
+    case "InvalidParamsError":
+      return CdrErrors.unknown(`invalid parameters: ${message}`, e);
+    default:
+      return CdrErrors.unknown(message, e);
+  }
+}

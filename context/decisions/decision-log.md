@@ -128,3 +128,15 @@ Append new decisions; don't rewrite history. Each: context → decision → why 
 - **Quality bar:** premium-ui skill for components, layout research + a visual screenshot→anchor→vision-review loop wired day-0, browser-verified before any screen is called done (never from `tsc`). ≤400 lines/file holds in apps too (split screens/components).
 - **Why:** Abu's correction (home = landing) + chosen stack (Fumadocs, Privy) + the "best of the best, deadline isn't a constraint" bar. Collapsing landing+app into one deployable app is the pragmatic Stripe-tier shape for the hackathon (marketing front door at `/`, app one click away). Supersedes the earlier "three separate apps (web/dashboard/docs)" sketch and the ux-spec's implicit "Browse = home".
 - **Status:** Locked (Abu, 2026-05-28). Full design: `../../docs/superpowers/specs/2026-05-28-cdr-kit-frontend-design.md`.
+
+
+## D20 — `@story-protocol/core-sdk` is an opt-in peer (via `@cdr-kit/{story,a2a}` in 0.5+)
+- **Decision:** Story-IP wrappers (`registerIpAsset`, `mintLicenseTokens`, PILFlavors, derivative registration, WIP wrap/approve, royalty pay/claim) ship in a NEW `@cdr-kit/story` package (0.5) and the A2A helpers ship in `@cdr-kit/a2a` (0.6). Both peer-dep `@story-protocol/core-sdk`. `@cdr-kit/{core,react,react-ui,agent,tools,cli,mcp}` never import the Story SDK directly — keeps the consumer-side bundle small for apps that only consume CDR vaults.
+- **Why:** Audit found 12 important gaps around the Story-IP flow (license-mint, royalties, derivatives). Wrapping them is high-value but the dep is heavy (multiple chain ABIs, viem-heavy). Splitting into a separate package lets consumers opt in.
+- **Status:** Locked (Abu, 2026-06-01).
+
+## D21 — `timeoutMs` default = 120_000 (was 600_000), aligned to Story CDR SDK docs
+- **Decision:** `accessVault`, `downloadFile`, and every consumer of `consumer.accessCDR` default to `timeoutMs: 120_000` (the value the official docs use in every example). The server-side partial-collection cap is 200 blocks ≈ 7 minutes; the kit document this as the worst case but does not block on it by default.
+- **Why:** Pre-0.4 default `600_000` was longer than Story expects you to wait; the docs explicitly use `120_000` everywhere and the UX expectation is "tens of seconds typical". Holding the read promise for 10 minutes by default produces a worse UI loop than failing fast + retrying.
+- **Status:** Locked (Abu, 2026-06-01). Implemented in `packages/core/src/{flows.ts:40, files.ts:125}`.
+

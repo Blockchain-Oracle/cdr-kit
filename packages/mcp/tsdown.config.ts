@@ -5,7 +5,14 @@ export default defineConfig({
   format: ["esm"],
   dts: false,
   treeshake: true,
-  external: ["@cdr-kit/agent", "@cdr-kit/tools", "@modelcontextprotocol/sdk", "viem"],
+  external: [
+    "@cdr-kit/agent",
+    "@cdr-kit/cli",
+    "@cdr-kit/tools",
+    "@modelcontextprotocol/sdk",
+    "@modelcontextprotocol/sdk/server/stdio.js",
+    "viem",
+  ],
   // Preserve the CLI shebang on the built binary.
   outputOptions: { banner: "#!/usr/bin/env node" },
 });

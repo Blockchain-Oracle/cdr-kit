@@ -1,6 +1,6 @@
 # cdr-kit — UX Spec (dashboard + templates)
 
-Stack: Next.js App Router, Tailwind, Privy or RainbowKit wallet. Built entirely on `@cdr-kit/react`. The defining UX constraint is the **~7-min read latency** — every access flow is async with visible progress; nothing blocks pretending to be instant.
+Stack: Next.js App Router, Tailwind, Privy or RainbowKit wallet. Built entirely on `@cdr-kit/react`. The defining UX constraint is **read latency — tens of seconds typical, default `timeoutMs: 120_000` (≈2 min), server-side cap 200 blocks ≈ 7 min**. Every access flow is async with visible progress; nothing blocks pretending to be instant. UI design target: show progress within 2 s, complete in 30–60 s on the happy path, time out cleanly at 2 min with a retry CTA.
 
 ## Global
 - `<CdrProvider>` at root: wagmi + react-query + `initWasm()` (show a one-time "initializing secure module" state) + CDR `apiUrl`/network from env.
@@ -19,7 +19,7 @@ Stack: Next.js App Router, Tailwind, Privy or RainbowKit wallet. Built entirely 
   - not connected → Connect.
   - connected, not satisfied → Subscribe / Mint license / (locked until date).
   - satisfied → Access data.
-- **Access flow (the critical UX):** clicking Access shows a stepper — `Paying ▸ Waiting for validators (~7 min) ▸ Decrypting ▸ Done`. A live progress indicator during partial collection; the page stays usable; result either renders (text/JSON) or downloads (file). Never a spinner with no explanation.
+- **Access flow (the critical UX):** clicking Access shows a stepper — `Paying ▸ Collecting validator partials (typically 30–60s, max 2 min) ▸ Decrypting ▸ Done`. A live progress indicator with `collected / threshold` count during partial collection; the page stays usable; result either renders (text/JSON) or downloads (file). On timeout at 2 min: show a clear "Validators didn't respond in time" error with a Retry CTA (cheap; first attempts often fail). Never a spinner with no explanation.
 
 ### 3. Create vault (seller)
 - Step 1 data: upload file or paste text/JSON. Show the **1KB inline vs file** decision automatically ("large file → stored on IPFS, key secured by CDR").

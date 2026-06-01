@@ -122,7 +122,8 @@ export async function downloadFile(
   params: { uuid: number; storage: CdrStorageProvider; accessAuxData?: Hex; timeoutMs?: number },
 ): Promise<{ content: Uint8Array; cid: string }> {
   await ensureWasm();
-  const timeoutMs = params.timeoutMs ?? 600_000;
+  // Default aligned to Story CDR SDK docs (`downloadFile` example uses 120_000ms). Was 600_000.
+  const timeoutMs = params.timeoutMs ?? 120_000;
   try {
     const res = await client.cdr.consumer.downloadFile({
       uuid: params.uuid,

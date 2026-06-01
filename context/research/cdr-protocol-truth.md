@@ -94,3 +94,42 @@ Ran real txs from a funded wallet (`0xc183…96E2`) with our deployed `OpenCondi
 4. There's also a fee event (topic0 `0x93a1…`) emitted before `VaultAllocated`; don't assume logs[0] is VaultAllocated.
 6. **✅✅✅ OQ8 CLOSED — full encrypt→write→read→decrypt round-trip works on real Aeneid.** Via `@piplabs/cdr-sdk` `uploader.uploadCDR` (allocate uuid=4058 + encrypt + write) → `consumer.accessCDR` (read + collect partials + threshold-decrypt) → recovered the exact secret (MATCH). Two surprises vs assumptions: (a) **the SDK's internal `allocate` did NOT OOG** — the gas issue is cast-specific (cast's `eth_estimateGas`), the SDK/viem path is fine, so the dashboard/agent using the SDK don't need the manual gas-limit workaround (only raw cast/low-level calls do). (b) **the read took ~18s, not ~7 min** — the keeper API (`172.192.41.96:1317`) is live and fast; treat 7-min as a worst-case ceiling, design UX for "tens of seconds typical, minutes worst-case." Requires `initWasm()` (from `@piplabs/cdr-crypto`, NOT re-exported by cdr-sdk) before any encrypt/decrypt.
 5. **✅✅ The 4-param interface is PROVEN by real precompile invocation (not just the bytecode scan).** `write(4056, "0x", 0xdeadbeef)` succeeded; the `cast run` trace shows the CDR precompile staticcall our `OpenCondition` with selector **`0x5645dbbf` = `checkWriteCondition(uint32,bytes,bytes,address)`**, passing `(uuid=4056, accessAuxData, conditionData, caller=0xc183…96E2)`, and our contract `← [Return] 0x…01` (true) → the write proceeded + emitted `VaultWritten` (topic0 `0x68b7452742f8d8707af90ddff5ef1a7f8850f5724b804e72b4df1a37050a6355`). So: the precompile calls conditions with `(uuid, accessAuxData, conditionData, caller)`, at write/read time, and respects the returned bool. Read-cond selector is `0x8db3eb17`. **D3 closed end-to-end.** Remaining (OQ8): the encrypt→read→partial-collect→decrypt flow (~7 min, needs the SDK to produce a real TDH2 ciphertext) — that's the E4 TS e2e.
+
+## Observer methods + fees (added 2026-06-01 post-audit)
+
+The `@piplabs/cdr-sdk` `CDRClient` exposes an `observer` sub-client with view-only methods for fees + DKG state. The kit now wraps them in `CdrAgent`:
+
+| SDK call | Agent wrapper | What it returns |
+|---|---|---|
+| `observer.getAllocateFee()` | `agent.getFees().allocateWei` | wei to allocate one vault (Aeneid: 0 today) |
+| `observer.getWriteFee()` | `agent.getFees().writeWei` | wei per write |
+| `observer.getReadFee()` | `agent.getFees().readWei` | wei per read request |
+| `observer.getOperationalThreshold()` | `agent.getFees().threshold` | min validator partials needed |
+| `observer.getGlobalPubKey()` | `agent.getGlobalPubKey()` | DKG public key (encryption pubkey) |
+| `observer.getVault(uuid)` | `agent.getVaultRecord(uuid)` | raw `{updatable, writeCond, readCond, ...encryptedData}` |
+
+These are also exposed as the MCP tool `cdr_get_fees` and the CLI `cdr fees`. None requires a wallet client.
+
+## `minThresholdRatio` (advanced security tuning — added 2026-06-01)
+
+`CDRClient` accepts an optional `minThresholdRatio: number ∈ [0, 1]`. The effective decryption threshold becomes `max(network.threshold, ceil(participants * minThresholdRatio))`. The kit does NOT default this — users opt in via `createCdrKitClient({ minThresholdRatio: 0.67, ... })`. Lands in `@cdr-kit/core` in 0.5 (per the audit phasing).
+
+Values > 1 produce reads that can never complete (more partials than there are participants) and the SDK rejects them — but the kit doesn't pre-validate; rely on the SDK's runtime guard.
+
+## Additional addresses now exported (added 2026-06-01)
+
+`@cdr-kit/contracts.aeneid` gained 5 addresses the older table missed:
+
+| Address | Value | Used by |
+|---|---|---|
+| `royaltyWorkflows` | `0x9515faE61E0c0447C6AC6dEe5628A2097aFE1890` | `payRoyaltyOnBehalf` + `claimAllRevenue` (0.6) |
+| `registrationWorkflows` | `0xbe39E1C756e921BD25DF86e7AAa31106d1eb0424` | `mintAndRegisterIp` SPG one-shot (0.5) |
+| `merc20` | `0xF2104833d386a2734a4eB3B8ad6FC6812F29E38E` | Mock ERC20 for royalty payment tests; whitelisted Story revenue token |
+| `royaltyPolicyLap` | `0xBe54FB168b3c982b7AaE60dB6CF75Bd8447b390E` | Default royalty policy for PILFlavors.commercialRemix |
+| `dkg` | `0xCcCcCC0000000000000000000000000000000004` | DKG precompile (the SDK already knows it; exported for raw cast use) |
+
+Also added `mainnet` placeholder (all addresses `null`, chainId `null`) and `resolveAddresses(network)` helper that throws cleanly on `mainnet` until Story mainnet deploys.
+
+## Default `timeoutMs` corrected to 120_000 (added 2026-06-01)
+
+Pre-0.4 the kit defaulted `accessVault` / `downloadFile` to `timeoutMs: 600_000` (10 min). Official Story docs use `120_000` (2 min) in every example. Default is now `120_000` in both `packages/core/src/flows.ts:40` and `packages/core/src/files.ts:125`. The server-side cap is unchanged (200 blocks ≈ 7 min); the kit just doesn't wait that long by default. Callers can still override per-call.

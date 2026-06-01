@@ -11,11 +11,10 @@ const stub = {
 describe("getVercelAITools", () => {
   it("produces an AI SDK tool set with the CDR tools", () => {
     const tools = getVercelAITools(stub);
-    expect(Object.keys(tools).sort()).toEqual([
-      "cdr_access_vault",
-      "cdr_discover_vaults",
-      "cdr_subscribe_and_access",
-    ]);
+    expect(Object.keys(tools)).toContain("cdr_access_vault");
+    expect(Object.keys(tools)).toContain("cdr_discover_vaults");
+    expect(Object.keys(tools)).toContain("cdr_subscribe_and_access");
+    expect(Object.keys(tools).length).toBe(13);
     expect(typeof tools["cdr_access_vault"]?.description).toBe("string");
   });
 

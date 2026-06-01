@@ -37,7 +37,9 @@ export async function accessVault(
   params: { uuid: number; accessAuxData?: Hex; timeoutMs?: number; onProgress?: ProgressFn },
 ): Promise<Uint8Array> {
   await ensureWasm();
-  const timeoutMs = params.timeoutMs ?? 600_000;
+  // Default aligned to Story CDR SDK docs (`accessCDR` example uses 120_000ms; server-side
+  // partial-collection cap is ~7 minutes / 200 blocks). Was 600_000.
+  const timeoutMs = params.timeoutMs ?? 120_000;
   params.onProgress?.("collecting-partials");
   try {
     const { dataKey } = await client.cdr.consumer.accessCDR({

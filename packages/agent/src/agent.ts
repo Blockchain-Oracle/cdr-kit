@@ -1,15 +1,40 @@
-import { parseAbiItem, type Hex } from "viem";
-import { createCdrKitClient, accessVault, subscribeAndAccess, type CdrKitClient } from "@cdr-kit/core";
-import { aeneid } from "@cdr-kit/contracts";
-import { consola } from "consola";
+import { parseAbiItem, encodeAbiParameters, type Hex } from "viem";
+import pino, { type Logger } from "pino";
+import {
+  createCdrKitClient,
+  accessVault,
+  subscribeAndAccess,
+  createVault,
+  writeVaultData,
+  uploadFile,
+  createIpfsStorage,
+  prefetchVault,
+  type CdrKitClient,
+  type CdrStorageProvider,
+} from "@cdr-kit/core";
+import {
+  resolveAddresses,
+  cdrKitVaultAbi,
+  subscriptionConditionAbi,
+  type Network,
+} from "@cdr-kit/contracts";
+
+/** Pino logger pinned to stderr — MCP stdio framing requires stdout to be JSON-RPC only. */
+const log: Logger = pino(
+  { name: "cdr-agent", level: process.env.LOG_LEVEL ?? "info" },
+  process.stderr, // SonicBoom-compatible WritableStream
+);
 
 export interface CdrAgentOptions {
   /** Agent's own wallet key (testnet). */
   privateKey: Hex;
+  /** Override the network's canonical RPC URL. */
   rpcUrl?: string;
-  /** Story-API REST base URL. */
-  apiUrl: string;
-  /** Factory to discover vaults from (defaults to the deployed CdrKitVault). */
+  /** Story-API REST base URL — default: network's canonical apiUrl. */
+  apiUrl?: string;
+  /** Target network. Default "aeneid". "mainnet" throws today (not yet deployed). */
+  network?: Network;
+  /** Override the CdrKitVault factory address used for discovery. */
   vault?: Hex;
 }
 
@@ -20,30 +45,97 @@ export interface DiscoveredVault {
   creator: Hex;
 }
 
+export interface VaultInfo {
+  uuid: number;
+  tokenId: bigint;
+  ipId: Hex;
+  creator: Hex;
+  licenseTermsId: bigint;
+}
+
+export interface SubscriptionPlan {
+  uuid: number;
+  pricePerPeriodWei: bigint;
+  periodSeconds: bigint;
+  payee: Hex;
+  /** 0 = native IP, 1 = WIP (wrapped IP ERC20). */
+  mode: number;
+  licensorIpId: Hex;
+}
+
+export interface Entitlement {
+  uuid: number;
+  paidUntilUnix: number;
+  isEntitled: boolean;
+}
+
+export interface MySubscription extends Entitlement {
+  ipId: Hex;
+  creator: Hex;
+  expiresInSeconds: number;
+}
+
+export interface CreateVaultParams {
+  readConditionAddr: Hex;
+  readConfig: Hex;
+  /** Optional child conditions (e.g. nested gates for ComposableCondition). */
+  childConditions?: Hex[];
+  childConfigs?: Hex[];
+  licenseTermsId?: bigint;
+  /** Native value to send (e.g. mint fee). Defaults to 0. */
+  valueWei?: bigint;
+}
+
+export interface UploadFileParams {
+  content: Uint8Array;
+  readConditionAddr?: Hex;
+  readConditionData?: Hex;
+  /** IPFS pinning endpoint (POSTs multipart, expects JSON with Hash/cid/IpfsHash). */
+  addUrl: string;
+  /** IPFS gateway (read side, e.g. https://w3s.link). */
+  gatewayUrl: string;
+  /** Optional Authorization header for the pinning service. */
+  authHeader?: string;
+}
+
+export interface Fees {
+  allocateWei: bigint;
+  writeWei: bigint;
+  readWei: bigint;
+  threshold: number;
+}
+
 const VAULT_CREATED = parseAbiItem(
   "event VaultCreated(uint256 indexed tokenId, uint32 indexed uuid, address indexed ipId, address creator, uint256 licenseTermsId)",
 );
 
-/** An autonomous agent that discovers, pays for, and reads CDR vaults from its own wallet. */
+/** An autonomous agent that publishes, discovers, pays for, and reads CDR vaults from its own wallet. */
 export class CdrAgent {
   readonly client: CdrKitClient;
+  readonly network: Network;
   private readonly vault: Hex;
-  private readonly log = consola.withTag("cdr-agent");
 
   constructor(opts: CdrAgentOptions) {
-    this.client = createCdrKitClient({ privateKey: opts.privateKey, rpcUrl: opts.rpcUrl, apiUrl: opts.apiUrl });
-    this.vault = opts.vault ?? (aeneid.cdrKitVault as Hex);
+    this.network = opts.network ?? "aeneid";
+    const addrs = resolveAddresses(this.network);
+    this.client = createCdrKitClient({
+      privateKey: opts.privateKey,
+      rpcUrl: opts.rpcUrl,
+      apiUrl: opts.apiUrl,
+      network: this.network,
+    });
+    this.vault = opts.vault ?? (addrs.cdrKitVault as Hex);
   }
 
   get address(): Hex | undefined {
     return this.client.address;
   }
 
-  /**
-   * Discover vaults by scanning the factory's VaultCreated events. Defaults to a bounded recent
-   * window to stay within public-RPC eth_getLogs limits; pass `fromBlock` for a wider scan or use
-   * an indexer in production.
-   */
+  /* ============================================================ */
+  /* Discovery + read                                              */
+  /* ============================================================ */
+
+  /** Scan factory's VaultCreated events. Default scan = ~9000 recent blocks to fit public RPC limits. */
   async discover(opts?: { fromBlock?: bigint }): Promise<DiscoveredVault[]> {
     const latest = await this.client.publicClient.getBlockNumber();
     const fromBlock = opts?.fromBlock ?? (latest > 9000n ? latest - 9000n : 0n);
@@ -61,7 +153,6 @@ export class CdrAgent {
     }));
   }
 
-  /** Subscribe (pay) then access — fully autonomous, no human in the loop. */
   async subscribeAndAccess(p: {
     uuid: number;
     periods: bigint;
@@ -69,19 +160,199 @@ export class CdrAgent {
     value: bigint;
     subscriptionCondition?: Hex;
   }): Promise<Uint8Array> {
-    this.log.info(`subscribing to vault ${p.uuid} from ${this.address}`);
+    log.info({ uuid: p.uuid, from: this.address }, "subscribe + access");
+    const addrs = resolveAddresses(this.network);
     return subscribeAndAccess(this.client, {
-      subscriptionCondition: p.subscriptionCondition ?? (aeneid.subscriptionCondition as Hex),
+      subscriptionCondition: p.subscriptionCondition ?? (addrs.subscriptionCondition as Hex),
       uuid: p.uuid,
       periods: p.periods,
       maxPricePerPeriod: p.maxPricePerPeriod,
       value: p.value,
-      onProgress: (s) => this.log.info(`  ${s}`),
+      onProgress: (s) => log.info({ step: s }, "progress"),
     });
   }
 
-  /** Read + decrypt a vault the agent is already entitled to. */
   async access(uuid: number, accessAuxData?: Hex): Promise<Uint8Array> {
     return accessVault(this.client, { uuid, accessAuxData });
+  }
+
+  /**
+   * Read + decrypt a license-gated vault by presenting a Story license token ID. Encodes
+   * `abi.encode(uint256[] licenseTokenIds)` as `accessAuxData` — the format the
+   * deployed LicenseReadCondition expects.
+   */
+  async accessLicenseGated(p: { uuid: number; licenseTokenId: bigint | number }): Promise<Uint8Array> {
+    const accessAuxData = encodeAbiParameters([{ type: "uint256[]" }], [[BigInt(p.licenseTokenId)]]);
+    return this.access(p.uuid, accessAuxData);
+  }
+
+  /** Warm validator/keeper caches before a read. Cheap; safe to call before any access. */
+  async prefetchVault(): Promise<void> {
+    return prefetchVault(this.client);
+  }
+
+  /* ============================================================ */
+  /* Author / publish                                              */
+  /* ============================================================ */
+
+  /** Mint NFT + register IP + allocate CDR slot + configure read condition — one tx. Returns the tx hash. */
+  async createVault(p: CreateVaultParams): Promise<Hex> {
+    log.info({ from: this.address }, "create vault");
+    return createVault(this.client, {
+      vault: this.vault,
+      readConditionAddr: p.readConditionAddr,
+      readConfig: p.readConfig,
+      childConditions: p.childConditions,
+      childConfigs: p.childConfigs,
+      licenseTermsId: p.licenseTermsId,
+      value: p.valueWei,
+    });
+  }
+
+  /** Encrypt + write a small (<1KB) data key into an existing vault. */
+  async writeVaultData(p: { uuid: number; dataKey: Uint8Array }): Promise<Hex> {
+    log.info({ uuid: p.uuid, bytes: p.dataKey.length }, "write vault data");
+    return writeVaultData(this.client, p);
+  }
+
+  /** Encrypt + IPFS-pin + allocate vault for a >1KB payload. Returns uuid + CID + tx hashes. */
+  async uploadFile(p: UploadFileParams): Promise<{ uuid: number; cid: string; txHashes: { allocate: Hex; write: Hex } }> {
+    const storage: CdrStorageProvider = createIpfsStorage({
+      addUrl: p.addUrl,
+      gatewayUrl: p.gatewayUrl,
+      headers: p.authHeader ? { Authorization: p.authHeader } : undefined,
+    });
+    log.info({ bytes: p.content.length }, "upload file");
+    return uploadFile(this.client, {
+      content: p.content,
+      storage,
+      readConditionAddr: p.readConditionAddr,
+      readConditionData: p.readConditionData,
+    });
+  }
+
+  /* ============================================================ */
+  /* Introspection (view-only, no gas)                             */
+  /* ============================================================ */
+
+  /** Resolve uuid → full vault metadata via the factory. */
+  async getVaultInfo(uuid: number): Promise<VaultInfo | null> {
+    const tokenId = (await this.client.publicClient.readContract({
+      address: this.vault,
+      abi: cdrKitVaultAbi,
+      functionName: "vaultToToken",
+      args: [uuid],
+    })) as bigint;
+    if (tokenId === 0n) return null;
+    const info = (await this.client.publicClient.readContract({
+      address: this.vault,
+      abi: cdrKitVaultAbi,
+      functionName: "getVaultInfo",
+      args: [tokenId],
+    })) as readonly [number, Hex, Hex, bigint];
+    return { uuid, tokenId, ipId: info[1], creator: info[2], licenseTermsId: info[3] };
+  }
+
+  /** List vaults a given creator has minted. Resolves each tokenId to a full VaultInfo. */
+  async getCreatorVaults(creator: Hex): Promise<VaultInfo[]> {
+    const tokenIds = (await this.client.publicClient.readContract({
+      address: this.vault,
+      abi: cdrKitVaultAbi,
+      functionName: "getCreatorVaults",
+      args: [creator],
+    })) as readonly bigint[];
+    const out: VaultInfo[] = [];
+    for (const tokenId of tokenIds) {
+      const info = (await this.client.publicClient.readContract({
+        address: this.vault,
+        abi: cdrKitVaultAbi,
+        functionName: "getVaultInfo",
+        args: [tokenId],
+      })) as readonly [number, Hex, Hex, bigint];
+      out.push({ uuid: info[0], tokenId, ipId: info[1], creator: info[2], licenseTermsId: info[3] });
+    }
+    return out;
+  }
+
+  /** Check whether the agent (or any address) is currently subscribed to a vault. View-only. */
+  async getEntitlement(uuid: number, opts?: { subscriber?: Hex; subscriptionCondition?: Hex }): Promise<Entitlement> {
+    const subscriber = opts?.subscriber ?? (this.address as Hex);
+    const addrs = resolveAddresses(this.network);
+    const condition = opts?.subscriptionCondition ?? (addrs.subscriptionCondition as Hex);
+    const paidUntil = (await this.client.publicClient.readContract({
+      address: condition,
+      abi: subscriptionConditionAbi,
+      functionName: "paidUntil",
+      args: [uuid, subscriber],
+    })) as bigint;
+    const paidUntilUnix = Number(paidUntil);
+    return { uuid, paidUntilUnix, isEntitled: paidUntilUnix > Math.floor(Date.now() / 1000) };
+  }
+
+  /** Get a vault's subscription plan (price + period + payee). View-only. */
+  async getSubscriptionPlan(uuid: number, opts?: { subscriptionCondition?: Hex }): Promise<SubscriptionPlan> {
+    const addrs = resolveAddresses(this.network);
+    const condition = opts?.subscriptionCondition ?? (addrs.subscriptionCondition as Hex);
+    const plan = (await this.client.publicClient.readContract({
+      address: condition,
+      abi: subscriptionConditionAbi,
+      functionName: "plan",
+      args: [uuid],
+    })) as readonly [bigint, bigint, Hex, number, Hex];
+    return {
+      uuid,
+      pricePerPeriodWei: plan[0],
+      periodSeconds: plan[1],
+      payee: plan[2],
+      mode: plan[3],
+      licensorIpId: plan[4],
+    };
+  }
+
+  /** List the agent's active subscriptions (scans recent VaultCreated events, then filters by paidUntil). */
+  async listMySubscriptions(opts?: { fromBlock?: bigint; subscriptionCondition?: Hex }): Promise<MySubscription[]> {
+    if (!this.address) throw new Error("agent has no wallet address — set PRIVATE_KEY");
+    const vaults = await this.discover({ fromBlock: opts?.fromBlock });
+    const now = Math.floor(Date.now() / 1000);
+    const out: MySubscription[] = [];
+    for (const v of vaults) {
+      const ent = await this.getEntitlement(v.uuid, {
+        subscriber: this.address,
+        subscriptionCondition: opts?.subscriptionCondition,
+      });
+      if (!ent.isEntitled) continue;
+      out.push({ ...ent, ipId: v.ipId, creator: v.creator, expiresInSeconds: ent.paidUntilUnix - now });
+    }
+    return out;
+  }
+
+  /* ============================================================ */
+  /* Fees + DKG (observer)                                         */
+  /* ============================================================ */
+
+  /** Fetch the operation fees + operational threshold from the CDR contract / DKG. View-only. */
+  async getFees(): Promise<Fees> {
+    const [allocateWei, writeWei, readWei, threshold] = await Promise.all([
+      this.client.cdr.observer.getAllocateFee(),
+      this.client.cdr.observer.getWriteFee(),
+      this.client.cdr.observer.getReadFee(),
+      this.client.cdr.observer.getOperationalThreshold(),
+    ]);
+    return {
+      allocateWei: allocateWei as bigint,
+      writeWei: writeWei as bigint,
+      readWei: readWei as bigint,
+      threshold: Number(threshold),
+    };
+  }
+
+  /** DKG global public key (used as encryption pubkey by uploader.encryptDataKey). */
+  async getGlobalPubKey(): Promise<unknown> {
+    return this.client.cdr.observer.getGlobalPubKey();
+  }
+
+  /** Raw vault record from the CDR contract (encryptedData hex, write tx, etc.). */
+  async getVaultRecord(uuid: number): Promise<unknown> {
+    return this.client.cdr.observer.getVault(uuid);
   }
 }

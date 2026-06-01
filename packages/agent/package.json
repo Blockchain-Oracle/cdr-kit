@@ -1,6 +1,6 @@
 {
   "name": "@cdr-kit/agent",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Autonomous agent client for Story CDR: discover -> subscribe -> access vaults from its own wallet.",
   "type": "module",
   "sideEffects": false,
@@ -33,7 +33,7 @@
   "dependencies": {
     "@cdr-kit/contracts": "workspace:*",
     "@cdr-kit/core": "workspace:*",
-    "consola": "^3.2.3"
+    "pino": "^9.5.0"
   },
   "peerDependencies": {
     "viem": "^2"

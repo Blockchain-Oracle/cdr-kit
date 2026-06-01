@@ -12,11 +12,7 @@ const stub = {
 describe("getOpenAITools", () => {
   it("produces valid OpenAI function tools with JSON-Schema params", () => {
     const { tools } = getOpenAITools(stub);
-    expect(tools.map((t) => t.function.name).sort()).toEqual([
-      "cdr_access_vault",
-      "cdr_discover_vaults",
-      "cdr_subscribe_and_access",
-    ]);
+    expect(tools.map((t) => t.function.name).sort()).toEqual(["cdr_access_license_gated","cdr_access_vault","cdr_check_entitlement","cdr_create_vault","cdr_creator_vaults","cdr_discover_vaults","cdr_estimate_cost","cdr_get_fees","cdr_get_vault_info","cdr_list_subscriptions","cdr_subscribe_and_access","cdr_upload_file","cdr_write_vault_data"]);
     for (const t of tools) {
       expect(t.type).toBe("function");
       expect(t.function.parameters).toMatchObject({ type: "object" });

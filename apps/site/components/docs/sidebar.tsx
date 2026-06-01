@@ -94,8 +94,16 @@ export const SIDEBAR: SideGroup[] = [
     links: [{ href: "/docs/scaffolder", label: "npm create cdr-kit" }],
   },
   {
+    heading: "CLI",
+    links: [{ href: "/docs/cli", label: "cdr command", tag: "new" }],
+  },
+  {
+    heading: "Plugin / Skill",
+    links: [{ href: "/docs/skill", label: "Claude Code plugin", tag: "new" }],
+  },
+  {
     heading: "Showcase",
-    links: [{ href: "/showcase/blog", label: "Pay-to-unlock blog", tag: "new" }],
+    links: [{ href: "/showcase/blog", label: "Pay-to-unlock blog" }],
   },
 ];
 

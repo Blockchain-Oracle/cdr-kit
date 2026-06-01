@@ -1,0 +1,18 @@
+{
+  "name": "cdr-kit",
+  "version": "0.4.0",
+  "description": "Story Confidential Data Rails (CDR) developer kit — design conditions, wire allocate/pay/read, debug the precompile, audit vault configs, explain CDR errors.",
+  "author": {
+    "name": "Blockchain-Oracle",
+    "url": "https://github.com/Blockchain-Oracle/cdr-kit"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/Blockchain-Oracle/cdr-kit",
+  "skills": [
+    "./skills/design-condition",
+    "./skills/wire-allocate-pay-read",
+    "./skills/debug-cdr-precompile",
+    "./skills/audit-vault-config",
+    "./skills/explain-cdr-error"
+  ]
+}
