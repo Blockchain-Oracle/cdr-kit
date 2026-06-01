@@ -287,6 +287,85 @@ export function useEscrowState(
 }
 
 /* ============================================================ */
+/* Seller / arbiter / creator-rotation actions (write-only)      */
+/*                                                               */
+/* These complete the role-coverage for the new 0.5 conditions   */
+/* so a dashboard can show seller-side escrow claim, arbiter      */
+/* refund, and multi-sig signer rotation alongside the existing   */
+/* buyer-side hooks. Each returns an async callback ready to wire */
+/* to a button onClick.                                          */
+/* ============================================================ */
+
+/** Seller-side: claim escrow funds + grant buyer read after listing timeout lapsed.
+ *  Caller must be the configured seller for the listing. */
+export function useEscrowClaimTimeout(
+  uuid: number,
+  buyer: Hex | undefined,
+  address: Hex = aeneid.conditionalEscrowCondition as Hex,
+): () => Promise<Hex> {
+  const { data: walletClient } = useWalletClient();
+  return useCallback(async () => {
+    if (!walletClient) throw new Error("connect a wallet to claim escrow timeout");
+    if (!buyer) throw new Error("buyer address required");
+    return walletClient.writeContract({
+      address,
+      abi: conditionalEscrowConditionAbi,
+      functionName: "claimAfterTimeout",
+      args: [uuid, buyer],
+      chain: walletClient.chain ?? null,
+      account: walletClient.account!,
+    });
+  }, [walletClient, address, uuid, buyer]);
+}
+
+/** Arbiter-side: refund a buyer who paid but disputes delivery. Resets paidAt to 0
+ *  (buyer can re-pay). Caller must be the configured arbiter; `address(0)` arbiter = throws. */
+export function useEscrowRefund(
+  uuid: number,
+  buyer: Hex | undefined,
+  address: Hex = aeneid.conditionalEscrowCondition as Hex,
+): () => Promise<Hex> {
+  const { data: walletClient } = useWalletClient();
+  return useCallback(async () => {
+    if (!walletClient) throw new Error("connect a wallet to refund");
+    if (!buyer) throw new Error("buyer address required");
+    return walletClient.writeContract({
+      address,
+      abi: conditionalEscrowConditionAbi,
+      functionName: "arbiterRefund",
+      args: [uuid, buyer],
+      chain: walletClient.chain ?? null,
+      account: walletClient.account!,
+    });
+  }, [walletClient, address, uuid, buyer]);
+}
+
+/** Creator-side: swap multi-sig signer set / threshold; bumps epoch which invalidates BOTH
+ *  in-flight off-chain sigs AND on-chain approvals from the previous epoch. Signers must be
+ *  sorted strictly ascending; helper sorts before the writeContract call. */
+export function useRotateMultiSigSigners(
+  uuid: number,
+  address: Hex = aeneid.multiSigCondition as Hex,
+): (params: { signers: Hex[]; threshold: number }) => Promise<Hex> {
+  const { data: walletClient } = useWalletClient();
+  return useCallback(
+    async (params) => {
+      if (!walletClient) throw new Error("connect a wallet to rotate signers");
+      const sorted = [...params.signers].sort((a, b) => (BigInt(a) < BigInt(b) ? -1 : 1));
+      return walletClient.writeContract({
+        address,
+        abi: multiSigConditionAbi,
+        functionName: "rotateSigners",
+        args: [uuid, sorted, params.threshold],
+        chain: walletClient.chain ?? null,
+        account: walletClient.account!,
+      });
+    },
+    [walletClient, address, uuid],
+  );
+}
+
+/* ============================================================ */
 /* useStorageBackend                                             */
 /* ============================================================ */
 

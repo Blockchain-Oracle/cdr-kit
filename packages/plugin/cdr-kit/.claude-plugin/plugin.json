@@ -1,7 +1,7 @@
 {
   "name": "cdr-kit",
   "version": "0.4.0",
-  "description": "Story Confidential Data Rails (CDR) developer kit — design conditions, wire allocate/pay/read, debug the precompile, audit vault configs, explain CDR errors, design storage adapters, design multi-sig vaults, design dead-man-switch vaults.",
+  "description": "Story Confidential Data Rails (CDR) developer kit — design conditions, wire allocate/pay/read, debug the precompile, audit vault configs, explain CDR errors, design storage adapters, design multi-sig vaults, design dead-man-switch vaults, design escrow vaults, design time-window vaults, design publish-with-Story flows.",
   "author": {
     "name": "Blockchain-Oracle",
     "url": "https://github.com/Blockchain-Oracle/cdr-kit"
@@ -16,6 +16,9 @@
     "./skills/explain-cdr-error",
     "./skills/design-storage-adapter",
     "./skills/design-multisig-condition",
-    "./skills/design-deadman-switch"
+    "./skills/design-deadman-switch",
+    "./skills/design-escrow",
+    "./skills/design-time-window",
+    "./skills/design-publish-with-story"
   ]
 }

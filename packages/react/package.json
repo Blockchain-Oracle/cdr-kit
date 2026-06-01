@@ -38,12 +38,20 @@
     "@cdr-kit/core": "workspace:*"
   },
   "peerDependencies": {
+    "@cdr-kit/agent": "workspace:*",
+    "@cdr-kit/story": "workspace:*",
     "@tanstack/react-query": ">=5",
     "react": ">=18",
     "viem": "^2",
     "wagmi": ">=2"
   },
+  "peerDependenciesMeta": {
+    "@cdr-kit/agent": { "optional": true },
+    "@cdr-kit/story": { "optional": true }
+  },
   "devDependencies": {
+    "@cdr-kit/agent": "workspace:*",
+    "@cdr-kit/story": "workspace:*",
     "@tanstack/react-query": "^5.62.0",
     "@testing-library/react": "^16.1.0",
     "@types/react": "^19.2.0",

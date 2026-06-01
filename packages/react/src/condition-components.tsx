@@ -86,7 +86,13 @@ export interface MultiSigApprovalTrackerProps {
   /** Off-chain set of signers who have signed for THIS read attempt (driven by the consumer's
    *  signature-collection UI — the contract doesn't store approvals). */
   signedBy?: readonly Hex[];
-  children?: (state: ReturnType<typeof useMultiSigStatus> & { signedCount: number; isReady: boolean }) => ReactNode;
+  children?: (
+    state: ReturnType<typeof useMultiSigStatus> & {
+      onChainCount: number;
+      offChainCount: number;
+      isReady: boolean;
+    },
+  ) => ReactNode;
 }
 
 export function MultiSigApprovalTracker({ uuid, signedBy = [], children }: MultiSigApprovalTrackerProps) {

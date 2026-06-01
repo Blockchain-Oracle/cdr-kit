@@ -1,6 +1,6 @@
 ---
 name: design-storage-adapter
-description: Pick the right cdr-kit storage backend for a CDR file vault (Pinata / Supabase / IPFS-Kubo / read-only gateway / Helia / Storacha / Synapse). Use this skill whenever the user mentions storage, IPFS, pinning, Pinata, Supabase, S3, R2, web3.storage, Storacha, Helia, gateways, or asks "where does the file body go" / "how does cdr-kit store the encrypted payload" / "how do I upload a >1KB file to a CDR vault".
+description: Pick the right cdr-kit storage backend for a CDR file vault (Pinata / Supabase / IPFS-Kubo / read-only gateway / Helia / Storacha / Synapse / S3). Use this skill whenever the user mentions storage, IPFS, pinning, Pinata, Supabase, S3, R2, web3.storage, Storacha, Helia, gateways, or asks where the file body goes, how cdr-kit stores the encrypted payload, or how to upload a payload over 1KB to a CDR vault.
 license: MIT
 ---
 
