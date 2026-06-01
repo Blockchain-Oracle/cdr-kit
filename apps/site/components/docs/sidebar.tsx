@@ -81,6 +81,10 @@ export const SIDEBAR: SideGroup[] = [
     links: [{ href: "/docs/storage", label: "Adapters", tag: "0.5" }],
   },
   {
+    heading: "Story IP",
+    links: [{ href: "/docs/story", label: "@cdr-kit/story", tag: "0.5" }],
+  },
+  {
     heading: "Agent kit",
     links: [
       { href: "/docs/agent-kit", label: "CdrAgent" },
