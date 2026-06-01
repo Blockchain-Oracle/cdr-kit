@@ -8,10 +8,10 @@
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^2.0.0",
-    "@cdr-kit/agent": "npm:@cdr-kit/agent@^0.3.0",
-    "@cdr-kit/contracts": "npm:@cdr-kit/contracts@^0.3.0",
-    "@cdr-kit/core": "npm:@cdr-kit/core@^0.3.0",
-    "@cdr-kit/vercel-ai": "npm:@cdr-kit/vercel-ai@^0.3.0",
+    "@cdr-kit/agent": "npm:@cdr-kit/agent@^0.4.0",
+    "@cdr-kit/contracts": "npm:@cdr-kit/contracts@^0.4.0",
+    "@cdr-kit/core": "npm:@cdr-kit/core@^0.4.0",
+    "@cdr-kit/vercel-ai": "npm:@cdr-kit/vercel-ai@^0.4.0",
     "ai": "^6.0.191",
     "consola": "^3.2.3",
     "viem": "^2.51.3"

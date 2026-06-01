@@ -308,12 +308,13 @@ export function createCli(): Command {
       const { join, dirname } = await import("node:path");
       const { mkdirSync, cpSync, existsSync } = await import("node:fs");
       const { fileURLToPath } = await import("node:url");
-      // dist/index.mjs → ../../plugin/cdr-kit (when published) OR ../../../plugin/cdr-kit (workspace src)
+      // dist/index.mjs lives at <pkg>/dist/index.mjs.
+      // Published: bundled at <pkg>/plugin/cdr-kit  → ../plugin/cdr-kit
+      // Workspace dev fallback: ../../plugin/cdr-kit (= packages/plugin/cdr-kit)
       const here = dirname(fileURLToPath(import.meta.url));
       const candidates = [
+        join(here, "..", "plugin", "cdr-kit"),
         join(here, "..", "..", "plugin", "cdr-kit"),
-        join(here, "..", "..", "..", "plugin", "cdr-kit"),
-        join(here, "..", "..", "..", "..", "packages", "plugin", "cdr-kit"),
       ];
       const source = candidates.find((c) => existsSync(c));
       if (!source) return err(`cdr-kit plugin not found bundled with this CLI install. Looked: ${candidates.join(", ")}`);

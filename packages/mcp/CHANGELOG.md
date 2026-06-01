@@ -1,5 +1,22 @@
 # @cdr-kit/mcp
 
+## 0.4.1
+
+### Patch Changes
+
+- **0.4.1 — fix `cdr skill install` from npm installs**
+
+  The 0.4.0 release shipped `cdr skill install` looking for the cdr-kit plugin at workspace-relative paths that don't exist in a published install. Two fixes:
+  1. The plugin (`packages/plugin/cdr-kit/`) is now copied into `@cdr-kit/cli`'s `plugin/cdr-kit/` directory at build time (new `scripts/copy-plugin.mjs`) and shipped inside the published tarball.
+  2. The runtime lookup in `cli.ts` now correctly resolves to `<pkg>/plugin/cdr-kit` (was `<workspace>/plugin/cdr-kit` — wrong path-math from `dist/index.mjs`).
+
+  `@cdr-kit/mcp` gets a patch only to repin its `@cdr-kit/cli` dep to `^0.4.1`.
+
+  No behavior change to any other tool or command.
+
+- Updated dependencies
+  - @cdr-kit/cli@0.4.1
+
 ## 0.4.0
 
 ### Minor Changes
