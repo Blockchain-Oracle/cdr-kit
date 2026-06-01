@@ -8,3 +8,4 @@ export * from "./files";
 export * from "./retry";
 export * from "./wasm";
 export * from "./low-level";
+export * from "./storage-ecosystem";
