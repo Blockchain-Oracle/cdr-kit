@@ -1,0 +1,84 @@
+import { Badge } from "@/components/primitives/badge";
+import { DocPage } from "@/components/docs/doc-page";
+import { CodePanel } from "@/components/docs/code-panel";
+
+const SIG = `function useAttachLicenseTerms(client: StoryClient | undefined): {
+  attach: (params: {
+    ipId: Hex;
+    licenseTermsId: bigint;
+    licenseTemplate?: Hex;   // defaults to the canonical PIL template
+  }) => Promise<{ txHash: Hex }>;
+  isLoading: boolean;
+  error?: Error;
+};`;
+
+const EXAMPLE = `import { useStoryClient, useAttachLicenseTerms } from "@cdr-kit/react";
+
+function AttachTerms({ ipId, licenseTermsId }) {
+  const client = useStoryClient();
+  const { attach, isLoading, error } = useAttachLicenseTerms(client);
+  return (
+    <>
+      <button
+        disabled={!client || isLoading}
+        onClick={() => attach({ ipId, licenseTermsId })}
+      >
+        {isLoading ? "attaching…" : "attach PIL terms"}
+      </button>
+      {error && <span>{error.message}</span>}
+    </>
+  );
+}`;
+
+export default function Page() {
+  return (
+    <DocPage
+      data={{
+        breadcrumb: ["@cdr-kit/react", "Hooks", "useAttachLicenseTerms"],
+        title: "useAttachLicenseTerms",
+        badges: (
+          <>
+            <Badge tone="primary">hook</Badge>
+            <Badge>new in 0.5</Badge>
+            <Badge>Story IP</Badge>
+          </>
+        ),
+        lede: (
+          <>
+            Attach an existing PIL <code>licenseTermsId</code> to an IP asset — required before any
+            buyer can <code>mintLicenseTokens</code> against it. Idempotent: calling twice with the
+            same args is a no-op tx (still costs gas, so check first if you can).
+          </>
+        ),
+        importLine: 'import { useAttachLicenseTerms } from "@cdr-kit/react"',
+        sections: [
+          { id: "signature", title: "Signature", content: <CodePanel title="type" language="ts" code={SIG} /> },
+          { id: "example", title: "Example", content: <CodePanel title="tsx" language="tsx" code={EXAMPLE} /> },
+          {
+            id: "ordering",
+            title: "Call ordering",
+            content: (
+              <p>
+                The flow is: (1) <code>registerIpAsset</code> → ipId, (2) <code>registerPilTerms</code>{" "}
+                → licenseTermsId (or use a previously registered set), (3) <code>attachLicenseTerms</code>{" "}
+                links the two. Only then can buyers mint license tokens against your IP.
+              </p>
+            ),
+          },
+          {
+            id: "template",
+            title: "License template",
+            content: (
+              <p>
+                <code>licenseTemplate</code> defaults to the canonical Story PIL template. Override
+                only if you&apos;ve registered a custom template at the protocol level — rare.
+              </p>
+            ),
+          },
+        ],
+        prev: { href: "/docs/hooks/use-mint-license-token", label: "useMintLicenseToken" },
+        next: { href: "/docs/hooks/use-publish", label: "usePublish" },
+      }}
+    />
+  );
+}

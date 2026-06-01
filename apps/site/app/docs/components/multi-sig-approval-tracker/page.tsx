@@ -46,7 +46,7 @@ export default function Page() {
           },
         ],
         prev: { href: "/docs/components/time-window-badge", label: "TimeWindowBadge" },
-        next: { href: "/docs/components/escrow-delivery-confirm", label: "EscrowDeliveryConfirm" },
+        next: { href: "/docs/components/multi-sig-signer", label: "MultiSigSigner" },
       }}
     />
   );

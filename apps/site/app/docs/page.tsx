@@ -8,7 +8,7 @@ export default function IntroductionPage() {
       data={{
         breadcrumb: ["@cdr-kit", "Getting started", "Introduction"],
         title: "Introduction",
-        badges: <Badge tone="live">v0.1.0</Badge>,
+        badges: <Badge tone="live">v0.5.0</Badge>,
         lede: (
           <>
             <b>cdr-kit</b> is the developer toolkit for Story Protocol&apos;s Confidential Data Rails — the{" "}
@@ -24,39 +24,48 @@ export default function IntroductionPage() {
             content: (
               <>
                 <p>
-                  12 packages, MIT-licensed, all published to{" "}
+                  15 packages, MIT-licensed, all published to{" "}
                   <a href="https://www.npmjs.com/org/cdr-kit" target="_blank" rel="noopener noreferrer">
                     npmjs.com/org/cdr-kit
                   </a>{" "}
-                  at v0.1.0:
+                  at v0.5.0:
                 </p>
                 <ul>
                   <li>
                     <Link href="/docs/components/vault-gate">
                       <code>@cdr-kit/react</code>
                     </Link>{" "}
-                    — components + hooks + theming
+                    — components + hooks + theming (5 new 0.5 components, 7 new hooks)
+                  </li>
+                  <li>
+                    <code>@cdr-kit/react-ui</code> — styled drop-ins built on the headless layer
                   </li>
                   <li>
                     <Link href="/docs/components/cdr-provider">
                       <code>@cdr-kit/core</code>
                     </Link>{" "}
-                    — typed SDK (condition encoders, 2-step flows, mock kit, WASM init)
+                    — typed SDK (condition encoders, 2-step flows, 8 storage adapters, mock kit, WASM init)
                   </li>
                   <li>
                     <Link href="/docs/contracts">
                       <code>@cdr-kit/contracts</code>
                     </Link>{" "}
-                    — Solidity ABIs + the deployed-address registry
+                    — Solidity ABIs + deployed addresses for 9 conditions (5 base + 4 advanced in 0.5)
                   </li>
                   <li>
                     <Link href="/docs/agent-kit">
                       <code>@cdr-kit/agent</code>
                     </Link>{" "}
-                    — autonomous-agent client (discover → subscribe → access)
+                    — autonomous-agent client (discover → subscribe → access; +12 advanced helpers in 0.5)
                   </li>
                   <li>
-                    <code>@cdr-kit/tools</code> — framework-agnostic tool definitions
+                    <Link href="/docs/story">
+                      <code>@cdr-kit/story</code>
+                    </Link>{" "}
+                    — Story IP creator surface (NEW in 0.5): registerIpAsset / PIL flavors / mintLicenseTokens
+                  </li>
+                  <li>
+                    <code>@cdr-kit/tools</code> — framework-agnostic tool definitions (34 tools)
                   </li>
                   <li>
                     Framework adapters:{" "}
@@ -85,6 +94,12 @@ export default function IntroductionPage() {
                       <code>@cdr-kit/mcp</code>
                     </Link>{" "}
                     — the MCP server (Claude Desktop / Cursor / Windsurf / OpenClaw)
+                  </li>
+                  <li>
+                    <Link href="/docs/cli">
+                      <code>@cdr-kit/cli</code>
+                    </Link>{" "}
+                    — the <span className="mono">cdr</span> binary (25 commands across vault / multi-sig / escrow / IP)
                   </li>
                   <li>
                     <Link href="/docs/scaffolder">

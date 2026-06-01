@@ -6,5 +6,6 @@ export * from "./vault-gate";
 export * from "./components";
 export * from "./unlockable";
 export * from "./condition-hooks";
+export * from "./multi-sig-hooks";
 export * from "./condition-components";
 export * from "./story-hooks";

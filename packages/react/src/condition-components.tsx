@@ -1,12 +1,13 @@
 "use client";
 import { useState, type ReactNode } from "react";
 import type { Hex } from "viem";
+import { useDeadManTimer, useEscrowState, useTimeWindowState } from "./condition-hooks.js";
 import {
-  useDeadManTimer,
-  useEscrowState,
   useMultiSigStatus,
-  useTimeWindowState,
-} from "./condition-hooks.js";
+  useSignMultiSigApproval,
+  type SignMultiSigApprovalParams,
+  type UseSignMultiSigApprovalResult,
+} from "./multi-sig-hooks.js";
 
 /**
  * The components here are deliberately HEADLESS — they wire data and actions but leave styling
@@ -115,6 +116,89 @@ export function MultiSigApprovalTracker({ uuid, signedBy = [], children }: Multi
     <span data-cdr-multisig={isReady ? "ready" : "pending"}>
       on-chain {status.onChainApprovals}/{status.threshold} · off-chain {offChainCount}/{status.threshold}
       {" · "}epoch {String(status.epoch)}
+    </span>
+  );
+}
+
+/* ============================================================ */
+/* MultiSigSigner                                                */
+/* ============================================================ */
+
+export interface MultiSigSignerProps {
+  uuid: number;
+  /** Optional caller override — defaults to the connected wallet. The sig is bound to this
+   *  address; only this caller can use it as `accessAuxData` later (anyone else fails ecrecover
+   *  against the bound `caller` field). */
+  caller?: Hex;
+  /** Optional fixed deadline (unix seconds). Default: 1 hour from when the user clicks Sign. */
+  deadline?: bigint;
+  children?: (
+    state: UseSignMultiSigApprovalResult & {
+      /** Bound onClick that calls `sign(...)` with the component's caller/deadline. */
+      onSign: () => void;
+    },
+  ) => ReactNode;
+}
+
+/**
+ * Signer-side multi-sig UI: a button that produces an EIP-712 approval signature for the given
+ * vault, then surfaces the resulting 65-byte hex sig for the signer to share with the buyer.
+ * Pair with `agent.accessMultiSig({ uuid, deadline, sigs[] })` on the buyer side to submit
+ * threshold-many sigs as `accessAuxData`.
+ *
+ * This is the producer half of the off-chain dual-path MultiSig flow. The complementary
+ * `<MultiSigApprovalTracker>` is the buyer-side aggregator that watches both paths. For the
+ * on-chain path use `useApproveMultiSig` directly (signers pay gas; dashboards read chain truth).
+ *
+ * Default render: a "Sign approval" button. Once the sig lands the button is replaced by the
+ * hex string + a copy-to-clipboard control. Pass a `children` render-prop for full custom UI.
+ */
+export function MultiSigSigner({ uuid, caller, deadline, children }: MultiSigSignerProps) {
+  const result = useSignMultiSigApproval(uuid);
+  const [copied, setCopied] = useState(false);
+  const onSign = () => {
+    const params: SignMultiSigApprovalParams = {};
+    if (caller !== undefined) params.caller = caller;
+    if (deadline !== undefined) params.deadline = deadline;
+    result.sign(params).catch(() => {
+      // error already captured in `result.error`; swallow to avoid unhandled-rejection warning
+    });
+  };
+
+  if (children) return <>{children({ ...result, onSign })}</>;
+
+  if (result.signature) {
+    const sig = result.signature;
+    const short = `${sig.slice(0, 10)}…${sig.slice(-8)}`;
+    return (
+      <span data-cdr-multisig-signer="signed">
+        sig: <span className="mono">{short}</span>
+        <button
+          type="button"
+          onClick={() => {
+            void navigator.clipboard.writeText(sig).then(() => {
+              setCopied(true);
+              setTimeout(() => setCopied(false), 1500);
+            });
+          }}
+        >
+          {copied ? "copied" : "copy"}
+        </button>
+        <button type="button" onClick={onSign} data-cdr-multisig-signer-action="resign">
+          re-sign
+        </button>
+      </span>
+    );
+  }
+
+  return (
+    <span data-cdr-multisig-signer={result.isLoading ? "signing" : "idle"}>
+      <button type="button" disabled={result.isLoading} onClick={onSign}>
+        {result.isLoading ? "signing…" : "sign approval"}
+      </button>
+      {result.error && (
+        <span data-cdr-multisig-signer-error>{result.error.message}</span>
+      )}
     </span>
   );
 }

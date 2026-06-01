@@ -2,13 +2,17 @@ import { describe, it, expect } from "vitest";
 import {
   useDeadManTimer,
   useTimeWindowState,
-  useMultiSigStatus,
   useEscrowState,
   useStorageBackend,
   useEscrowClaimTimeout,
   useEscrowRefund,
-  useRotateMultiSigSigners,
 } from "../src/condition-hooks";
+import {
+  useMultiSigStatus,
+  useApproveMultiSig,
+  useSignMultiSigApproval,
+  useRotateMultiSigSigners,
+} from "../src/multi-sig-hooks";
 import { useStoryClient, usePublish, useRegisterIp, useMintLicenseToken, useAttachLicenseTerms } from "../src/story-hooks";
 
 describe("0.5 condition + Story IP hooks — exports are present", () => {
@@ -24,6 +28,8 @@ describe("0.5 condition + Story IP hooks — exports are present", () => {
       useStorageBackend,
       useEscrowClaimTimeout,
       useEscrowRefund,
+      useApproveMultiSig,
+      useSignMultiSigApproval,
       useRotateMultiSigSigners,
     ]) {
       expect(typeof fn).toBe("function");

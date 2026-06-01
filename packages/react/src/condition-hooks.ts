@@ -5,7 +5,6 @@ import type { Hex } from "viem";
 import {
   aeneid,
   deadManSwitchConditionAbi,
-  multiSigConditionAbi,
   conditionalEscrowConditionAbi,
   timeWindowConditionAbi,
 } from "@cdr-kit/contracts";
@@ -127,49 +126,9 @@ export function useDeadManTimer(uuid: number, address: Hex = aeneid.deadManSwitc
 }
 
 /* ============================================================ */
-/* MultiSigCondition                                             */
+/* MultiSigCondition surface lives in ./multi-sig-hooks.ts       */
+/* (extracted to keep condition-hooks.ts under the 400-line cap) */
 /* ============================================================ */
-
-export interface MultiSigStatus {
-  signers: readonly Hex[];
-  threshold: number;
-  epoch: bigint;
-  /** On-chain `approve()` count for the current epoch. Truth source when signers used the
-   *  Safe-style path. Off-chain EIP-712 sigs are NOT counted here (they're submitted at read
-   *  time, not stored) — combine with the dashboard's own sig-collection state if needed. */
-  onChainApprovals: number;
-  isLoading: boolean;
-}
-
-/** Read the current multi-sig config + on-chain approval count for a uuid. Both the off-chain
- *  EIP-712 path and the on-chain `approve()` path are valid — `onChainApprovals >= threshold`
- *  means the vault can be read without submitting any sigs in accessAuxData. */
-export function useMultiSigStatus(uuid: number, address: Hex = aeneid.multiSigCondition as Hex): MultiSigStatus {
-  const read = useReadContract({
-    address,
-    abi: multiSigConditionAbi,
-    functionName: "getConfig",
-    args: [uuid],
-  });
-  const countRead = useReadContract({
-    address,
-    abi: multiSigConditionAbi,
-    functionName: "currentApprovalsCount",
-    args: [uuid],
-    // Polls every 4s so a signer pressing approve() in another tab shows up in the dashboard
-    // within the next refresh window — without paying for a websocket subscription. Consumers
-    // who want lower latency can wire `useWatchContractEvent` on `Approved` themselves.
-    query: { refetchInterval: 4000 },
-  });
-  const d = read.data as readonly [readonly Hex[], number, bigint] | undefined;
-  return {
-    signers: d?.[0] ?? [],
-    threshold: d?.[1] ?? 0,
-    epoch: d?.[2] ?? 0n,
-    onChainApprovals: Number((countRead.data as bigint | undefined) ?? 0n),
-    isLoading: read.isLoading || countRead.isLoading,
-  };
-}
 
 /* ============================================================ */
 /* ConditionalEscrowCondition                                    */
@@ -338,62 +297,6 @@ export function useEscrowRefund(
       account: walletClient.account!,
     });
   }, [walletClient, address, uuid, buyer]);
-}
-
-/** Signer-side: on-chain Safe-style `approve(uuid, expectedEpoch)`. The hook fetches the current
- *  epoch from `getConfig` immediately before sending the tx so the signer's intent is bound to a
- *  specific signer set/threshold. If a rotation lands between the read and the send, the contract
- *  reverts with `EpochChanged(expected, current)` — the UI should re-prompt against the new state
- *  rather than silently authorize against a config the signer didn't see. */
-export function useApproveMultiSig(
-  uuid: number,
-  address: Hex = aeneid.multiSigCondition as Hex,
-): () => Promise<Hex> {
-  const { data: walletClient } = useWalletClient();
-  const publicClient = usePublicClient();
-  return useCallback(async () => {
-    if (!walletClient) throw new Error("connect a wallet to approve");
-    if (!publicClient) throw new Error("public client unavailable");
-    const cfg = (await publicClient.readContract({
-      address,
-      abi: multiSigConditionAbi,
-      functionName: "getConfig",
-      args: [uuid],
-    })) as readonly [readonly Hex[], number, bigint];
-    return walletClient.writeContract({
-      address,
-      abi: multiSigConditionAbi,
-      functionName: "approve",
-      args: [uuid, cfg[2]],
-      chain: walletClient.chain ?? null,
-      account: walletClient.account!,
-    });
-  }, [walletClient, publicClient, address, uuid]);
-}
-
-/** Creator-side: swap multi-sig signer set / threshold; bumps epoch which invalidates BOTH
- *  in-flight off-chain sigs AND on-chain approvals from the previous epoch. Signers must be
- *  sorted strictly ascending; helper sorts before the writeContract call. */
-export function useRotateMultiSigSigners(
-  uuid: number,
-  address: Hex = aeneid.multiSigCondition as Hex,
-): (params: { signers: Hex[]; threshold: number }) => Promise<Hex> {
-  const { data: walletClient } = useWalletClient();
-  return useCallback(
-    async (params) => {
-      if (!walletClient) throw new Error("connect a wallet to rotate signers");
-      const sorted = [...params.signers].sort((a, b) => (BigInt(a) < BigInt(b) ? -1 : 1));
-      return walletClient.writeContract({
-        address,
-        abi: multiSigConditionAbi,
-        functionName: "rotateSigners",
-        args: [uuid, sorted, params.threshold],
-        chain: walletClient.chain ?? null,
-        account: walletClient.account!,
-      });
-    },
-    [walletClient, address, uuid],
-  );
 }
 
 /* ============================================================ */

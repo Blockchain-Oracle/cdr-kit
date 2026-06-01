@@ -43,6 +43,7 @@ export const SIDEBAR: SideGroup[] = [
       { href: "/docs/components/heartbeat-timer", label: "HeartbeatTimer", tag: "0.5" },
       { href: "/docs/components/time-window-badge", label: "TimeWindowBadge", tag: "0.5" },
       { href: "/docs/components/multi-sig-approval-tracker", label: "MultiSigApprovalTracker", tag: "0.5" },
+      { href: "/docs/components/multi-sig-signer", label: "MultiSigSigner", tag: "0.5" },
       { href: "/docs/components/escrow-delivery-confirm", label: "EscrowDeliveryConfirm", tag: "0.5" },
     ],
   },
@@ -89,7 +90,14 @@ export const SIDEBAR: SideGroup[] = [
   },
   {
     heading: "Story IP",
-    links: [{ href: "/docs/story", label: "@cdr-kit/story", tag: "0.5" }],
+    links: [
+      { href: "/docs/story", label: "@cdr-kit/story", tag: "0.5" },
+      { href: "/docs/hooks/use-story-client", label: "useStoryClient", tag: "0.5" },
+      { href: "/docs/hooks/use-register-ip", label: "useRegisterIp", tag: "0.5" },
+      { href: "/docs/hooks/use-mint-license-token", label: "useMintLicenseToken", tag: "0.5" },
+      { href: "/docs/hooks/use-attach-license-terms", label: "useAttachLicenseTerms", tag: "0.5" },
+      { href: "/docs/hooks/use-publish", label: "usePublish", tag: "0.5" },
+    ],
   },
   {
     heading: "Agent kit",

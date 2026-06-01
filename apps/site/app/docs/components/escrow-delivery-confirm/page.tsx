@@ -51,7 +51,7 @@ export default function Page() {
             content: <p>Once a buyer pays + confirms + reads, they hold plaintext forever. The dispute path (arbiter refund) can revoke future access but cannot &quot;un-read.&quot; Document this in your buyer UX.</p>,
           },
         ],
-        prev: { href: "/docs/components/multi-sig-approval-tracker", label: "MultiSigApprovalTracker" },
+        prev: { href: "/docs/components/multi-sig-signer", label: "MultiSigSigner" },
         next: { href: "/docs/components/condition-badge", label: "ConditionBadge" },
       }}
     />

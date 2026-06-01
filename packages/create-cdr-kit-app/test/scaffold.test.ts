@@ -64,8 +64,8 @@ describe("create-cdr-kit-app scaffold", () => {
       dependencies: Record<string, string>;
       scripts: Record<string, string>;
     };
-    expect(pkg.dependencies["@cdr-kit/react-ui"]).toBe("^0.3.0");
-    expect(pkg.dependencies["@cdr-kit/core"]).toBe("^0.3.0");
+    expect(pkg.dependencies["@cdr-kit/react-ui"]).toBe("^0.5.0");
+    expect(pkg.dependencies["@cdr-kit/core"]).toBe("^0.5.0");
     expect(pkg.dependencies.next).toBeDefined();
     expect(pkg.scripts.dev).toContain("next");
 

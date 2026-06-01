@@ -24,4 +24,4 @@ export interface Template {
 }
 
 /** The `@cdr-kit/*` peer-dep version templates ship with. Bumped per release. */
-export const CDR_VERSION = "^0.3.0";
+export const CDR_VERSION = "^0.5.0";
