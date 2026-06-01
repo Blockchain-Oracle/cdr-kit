@@ -13,12 +13,17 @@ function makeAgent() {
 const byName = (tools: CdrTool[], name: string) => tools.find((t) => t.name === name)!;
 
 describe("createCdrTools", () => {
-  it("exposes the full 13-tool CDR surface (read + introspect + author)", () => {
+  it("exposes the full 21-tool CDR surface (read + introspect + author + 0.5 advanced conditions + Story IP)", () => {
     const { agent } = makeAgent();
     expect(createCdrTools(agent).map((t) => t.name).sort()).toEqual([
       "cdr_access_license_gated",
       "cdr_access_vault",
+      "cdr_attach_license_terms",
       "cdr_check_entitlement",
+      "cdr_create_dead_man_vault",
+      "cdr_create_escrow_vault",
+      "cdr_create_multi_sig_vault",
+      "cdr_create_time_window_vault",
       "cdr_create_vault",
       "cdr_creator_vaults",
       "cdr_discover_vaults",
@@ -26,6 +31,9 @@ describe("createCdrTools", () => {
       "cdr_get_fees",
       "cdr_get_vault_info",
       "cdr_list_subscriptions",
+      "cdr_mint_license_token",
+      "cdr_publish_data",
+      "cdr_register_ip",
       "cdr_subscribe_and_access",
       "cdr_upload_file",
       "cdr_write_vault_data",

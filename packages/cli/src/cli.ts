@@ -3,9 +3,10 @@ import { CdrAgent } from "@cdr-kit/agent";
 import { createCdrTools } from "@cdr-kit/tools";
 import { loadOrCreateWallet, walletPath } from "./lib/wallet.js";
 import { resolveNetwork } from "./lib/network.js";
-import { ok, err, setJsonMode } from "./lib/output.js";
+import { ok, err, note, setJsonMode } from "./lib/output.js";
 
-const PKG_VERSION = "0.4.0";
+declare const __PKG_VERSION__: string;
+const PKG_VERSION = __PKG_VERSION__;
 const FAUCET_URL = "https://aeneid.faucet.story.foundation/";
 
 /** Build a fresh agent against the resolved network + wallet. */
@@ -168,9 +169,14 @@ export function createCli(): Command {
       ok(
         vaults.map((v) => ({ uuid: v.uuid, ipId: v.ipId, creator: v.creator, tokenId: v.tokenId.toString() })),
       );
+      if (vaults.length === 0 && !opts.fromBlock) {
+        note(
+          "hint: default scan covers ~9000 recent blocks (~3h). Use `cdr discover --from-block 0` to scan all history.",
+        );
+      }
     });
 
-  const vault = program.command("vault").description("vault info, list, create, upload");
+  const vault = program.command("vault").description("vault info, list, create");
   vault
     .command("info <uuid>")
     .description("uuid → tokenId + ipId + creator + licenseTermsId + plan + your entitlement")

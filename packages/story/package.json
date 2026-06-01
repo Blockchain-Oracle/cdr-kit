@@ -1,7 +1,7 @@
 {
-  "name": "@cdr-kit/tools",
+  "name": "@cdr-kit/story",
   "version": "0.4.0",
-  "description": "Framework-agnostic CDR agent tools ({name, description, Zod schema, invoke}) — the single source mapped to MCP + every agent framework.",
+  "description": "Thin TypeScript wrappers over @story-protocol/core-sdk: register IP, mint license tokens, attach PIL terms, register derivatives, wrap IP. The agent-as-publisher surface for cdr-kit.",
   "type": "module",
   "sideEffects": false,
   "exports": {
@@ -27,26 +27,21 @@
     "build": "tsdown",
     "lint": "eslint src",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@cdr-kit/agent": "workspace:*",
-    "@cdr-kit/core": "workspace:*",
-    "zod": "^3.24.1",
-    "zod-to-json-schema": "^3.24.1"
+    "@cdr-kit/contracts": "workspace:*"
   },
   "peerDependencies": {
-    "@cdr-kit/story": "workspace:*"
-  },
-  "peerDependenciesMeta": {
-    "@cdr-kit/story": {
-      "optional": true
-    }
+    "@story-protocol/core-sdk": "^1.4",
+    "viem": "^2"
   },
   "devDependencies": {
-    "@cdr-kit/story": "workspace:*",
+    "@story-protocol/core-sdk": "^1.4.4",
+    "@types/node": "^20",
     "tsdown": "^0.22.0",
     "typescript": "^5.7.2",
+    "viem": "^2.51.3",
     "vitest": "^2.1.8"
   },
   "engines": {

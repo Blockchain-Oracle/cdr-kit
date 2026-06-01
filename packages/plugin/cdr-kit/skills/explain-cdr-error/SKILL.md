@@ -1,8 +1,7 @@
 ---
 name: explain-cdr-error
-description: Translate a raw CDR error (SDK class name, error code, viem revert string, or stack trace) into the root cause + the fix. Use when an LLM or developer hits any CDR-related exception.
+description: Translate a raw CDR error (SDK class name, error code, viem revert string, or stack trace) into the root cause + the fix. Use when an LLM or developer hits any CDR-related exception, OR whenever the user pastes any error blob involving cdr-kit, @piplabs/cdr-sdk, the CDR precompile (0xC...05), or the DKG precompile (0xC...04).
 license: MIT
-disable-model-invocation: false
 ---
 
 # Explain a CDR error

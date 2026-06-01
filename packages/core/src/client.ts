@@ -30,6 +30,13 @@ export interface CdrKitClientOptions {
   apiUrl?: string;
   /** Target network. Default "aeneid". "mainnet" throws today (not yet deployed). */
   network?: Network;
+  /**
+   * Override the CDR threshold-decryption ratio (0–1). Effective threshold is
+   * `max(source threshold, ceil(participants * minThresholdRatio))`. Higher = safer (more
+   * partials required) but slower; lower = faster but tolerates fewer participating validators.
+   * Story default is the source threshold; set this to e.g. `0.6` to be more conservative.
+   */
+  minThresholdRatio?: number;
 }
 
 export interface CdrKitClient {
@@ -74,6 +81,12 @@ export function createCdrKitClient(opts: CdrKitClientOptions = {}): CdrKitClient
     walletClient = createWalletClient({ account, chain, transport: http(rpcUrl) });
   }
 
-  const cdr = new CDRClient({ network: "testnet", publicClient, walletClient, apiUrl });
+  const cdr = new CDRClient({
+    network: "testnet",
+    publicClient,
+    walletClient,
+    apiUrl,
+    minThresholdRatio: opts.minThresholdRatio,
+  });
   return { cdr, publicClient, walletClient, address, network };
 }

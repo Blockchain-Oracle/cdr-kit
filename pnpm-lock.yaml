@@ -137,6 +137,9 @@ importers:
         specifier: ^9.5.0
         version: 9.14.0
     devDependencies:
+      '@cdr-kit/story':
+        specifier: workspace:*
+        version: link:../story
       tsdown:
         specifier: ^0.22.0
         version: 0.22.0(publint@0.3.21)(tsx@4.22.3)(typescript@5.9.3)
@@ -455,6 +458,31 @@ importers:
         specifier: ^2.1.8
         version: 2.1.9(@types/node@25.9.1)(happy-dom@15.11.7)(lightningcss@1.32.0)(msw@2.14.6(@types/node@25.9.1)(typescript@5.9.3))
 
+  packages/story:
+    dependencies:
+      '@cdr-kit/contracts':
+        specifier: workspace:*
+        version: link:../contracts
+    devDependencies:
+      '@story-protocol/core-sdk':
+        specifier: ^1.4.4
+        version: 1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76)
+      '@types/node':
+        specifier: ^20
+        version: 20.19.41
+      tsdown:
+        specifier: ^0.22.0
+        version: 0.22.0(publint@0.3.21)(tsx@4.22.3)(typescript@5.9.3)
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+      viem:
+        specifier: ^2.51.3
+        version: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76)
+      vitest:
+        specifier: ^2.1.8
+        version: 2.1.9(@types/node@20.19.41)(happy-dom@15.11.7)(lightningcss@1.32.0)(msw@2.14.6(@types/node@20.19.41)(typescript@5.9.3))
+
   packages/tools:
     dependencies:
       '@cdr-kit/agent':
@@ -470,6 +498,9 @@ importers:
         specifier: ^3.24.1
         version: 3.25.2(zod@3.25.76)
     devDependencies:
+      '@cdr-kit/story':
+        specifier: workspace:*
+        version: link:../story
       tsdown:
         specifier: ^0.22.0
         version: 0.22.0(publint@0.3.21)(tsx@4.22.3)(typescript@5.9.3)
@@ -3183,6 +3214,9 @@ packages:
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
 
+  '@story-protocol/core-sdk@1.4.4':
+    resolution: {integrity: sha512-YZlNcbVydVnESuAseaBV74/vi8S9/DiYjo18XBQGLoOsrV2tSoaWL1f/zQBscwnK8PFyi5bmS29kTysKwjVfJA==}
+
   '@swc/helpers@0.5.15':
     resolution: {integrity: sha512-JQ5TuMi45Owi4/BIMAJBoSQoOJu12oOk/gADqlcUL9JEdHB8vyjUSsxqeNXnmXHjYKMi2WcYtezGEEhqUI/E2g==}
 
@@ -3603,6 +3637,17 @@ packages:
 
   '@zoralabs/protocol-deployments@0.6.1':
     resolution: {integrity: sha512-iDO5EhLrqDw0keudRq9omuSdvHG852de5/apY2p7QLBDxitQuJ/6/jOaq2WB4B6GPVUh2fTd5+CdoSsbJhJv5g==}
+
+  abitype@0.10.3:
+    resolution: {integrity: sha512-tRN+7XIa7J9xugdbRzFv/95ka5ivR/sRe01eiWvM0HWWjHuigSZEACgKa0sj4wGuekTDtghCx+5Izk/cOi78pQ==}
+    peerDependencies:
+      typescript: '>=5.0.4'
+      zod: ^3 >=3.22.0
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+      zod:
+        optional: true
 
   abitype@1.0.6:
     resolution: {integrity: sha512-MMSqYh4+C/aVqI2RQaWqbvI4Kxo5cQV40WQ4QFtDnNzCkqChm8MuENhElmynZlO0qUy/ObkEUaXtKqYnx1Kp3A==}
@@ -11121,6 +11166,20 @@ snapshots:
 
   '@standard-schema/spec@1.1.0': {}
 
+  '@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76)':
+    dependencies:
+      '@scure/bip32': 1.7.0
+      abitype: 0.10.3(typescript@5.9.3)(zod@3.25.76)
+      bs58: 6.0.0
+      dotenv: 16.6.1
+      multiformats: 9.9.0
+      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76)
+    transitivePeerDependencies:
+      - bufferutil
+      - typescript
+      - utf-8-validate
+      - zod
+
   '@swc/helpers@0.5.15':
     dependencies:
       tslib: 2.8.1
@@ -13044,6 +13103,11 @@ snapshots:
       viem: 2.38.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76)
 
   '@zoralabs/protocol-deployments@0.6.1': {}
+
+  abitype@0.10.3(typescript@5.9.3)(zod@3.25.76):
+    optionalDependencies:
+      typescript: 5.9.3
+      zod: 3.25.76
 
   abitype@1.0.6(typescript@5.9.3)(zod@3.25.76):
     optionalDependencies:

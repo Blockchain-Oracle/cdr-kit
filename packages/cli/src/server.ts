@@ -3,7 +3,8 @@ import { CdrAgent } from "@cdr-kit/agent";
 import { createCdrTools, type CdrTool } from "@cdr-kit/tools";
 import { log } from "./lib/logger.js";
 
-const PKG_VERSION = "0.4.0";
+declare const __PKG_VERSION__: string;
+const PKG_VERSION = __PKG_VERSION__;
 
 export interface CreateMcpServerOptions {
   agent: CdrAgent;

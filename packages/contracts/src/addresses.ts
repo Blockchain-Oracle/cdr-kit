@@ -33,6 +33,12 @@ export const aeneid = {
   subscriptionCondition: "0xB75Cc6571ac7E0ee30A519192740fc471e187458",
   tierGateCondition: "0xdA704Faf61b2FFB37205d7Eb8C1D26BD3090455f",
   composableCondition: "0x74F2f94e7867b07ECDFbcc667050CBec1dE2800B",
+  // cdr-kit 0.5.0 advanced conditions (deployed + factory-bound to Aeneid 2026-06-01;
+  // verified via `cast call factory()` returning 0xac592f… for all four).
+  timeWindowCondition: "0x67911435F262e7e4EC4F7FEB4e868a67b9dd90b1",
+  deadManSwitchCondition: "0x37226f97e184843aB0b8d4f08A55969801B97766",
+  conditionalEscrowCondition: "0x7fcDe02DB7c14fD3587aB2fED064a1D8355b7584",
+  multiSigCondition: "0xb22EBF0481950A3c0e528A5902C4c5C69184fB78",
   defaultLicenseTermsId: 2536,
 } as const;
 
@@ -64,6 +70,10 @@ export const mainnet = {
   subscriptionCondition: null,
   tierGateCondition: null,
   composableCondition: null,
+  timeWindowCondition: null,
+  deadManSwitchCondition: null,
+  conditionalEscrowCondition: null,
+  multiSigCondition: null,
   defaultLicenseTermsId: null,
 } as const;
 

@@ -36,9 +36,16 @@
     "pino": "^9.5.0"
   },
   "peerDependencies": {
+    "@cdr-kit/story": "workspace:*",
     "viem": "^2"
   },
+  "peerDependenciesMeta": {
+    "@cdr-kit/story": {
+      "optional": true
+    }
+  },
   "devDependencies": {
+    "@cdr-kit/story": "workspace:*",
     "tsdown": "^0.22.0",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",

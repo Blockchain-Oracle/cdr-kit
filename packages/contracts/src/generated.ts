@@ -601,6 +601,232 @@ export const composableConditionAbi = [
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ConditionalEscrowCondition
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const conditionalEscrowConditionAbi = [
+  {
+    type: 'function',
+    inputs: [
+      { name: 'uuid', internalType: 'uint32', type: 'uint32' },
+      { name: 'buyer', internalType: 'address', type: 'address' },
+    ],
+    name: 'arbiterRefund',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'uuid', internalType: 'uint32', type: 'uint32' },
+      { name: '', internalType: 'bytes', type: 'bytes' },
+      { name: '', internalType: 'bytes', type: 'bytes' },
+      { name: 'caller', internalType: 'address', type: 'address' },
+    ],
+    name: 'checkReadCondition',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'uuid', internalType: 'uint32', type: 'uint32' },
+      { name: '', internalType: 'bytes', type: 'bytes' },
+      { name: '', internalType: 'bytes', type: 'bytes' },
+      { name: 'caller', internalType: 'address', type: 'address' },
+    ],
+    name: 'checkWriteCondition',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'uuid', internalType: 'uint32', type: 'uint32' },
+      { name: 'buyer', internalType: 'address', type: 'address' },
+    ],
+    name: 'claimAfterTimeout',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'uuid', internalType: 'uint32', type: 'uint32' }],
+    name: 'confirmDelivery',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '', internalType: 'uint32', type: 'uint32' }],
+    name: 'creator',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '', internalType: 'uint32', type: 'uint32' },
+      { name: '', internalType: 'address', type: 'address' },
+    ],
+    name: 'delivered',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'deployer',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'factory',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'factory_', internalType: 'address', type: 'address' }],
+    name: 'initialize',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '', internalType: 'uint32', type: 'uint32' }],
+    name: 'listing',
+    outputs: [
+      { name: 'seller', internalType: 'address', type: 'address' },
+      { name: 'price', internalType: 'uint128', type: 'uint128' },
+      { name: 'timeoutSecs', internalType: 'uint64', type: 'uint64' },
+      { name: 'arbiter', internalType: 'address', type: 'address' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '', internalType: 'uint32', type: 'uint32' },
+      { name: '', internalType: 'address', type: 'address' },
+    ],
+    name: 'paidAt',
+    outputs: [{ name: '', internalType: 'uint64', type: 'uint64' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'uuid', internalType: 'uint32', type: 'uint32' }],
+    name: 'pay',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'uuid', internalType: 'uint32', type: 'uint32' },
+      { name: 'creator_', internalType: 'address', type: 'address' },
+      { name: 'config', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'setConfigFromFactory',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'uuid', internalType: 'uint32', type: 'uint32', indexed: true },
+      {
+        name: 'creator',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+    ],
+    name: 'Configured',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'uuid', internalType: 'uint32', type: 'uint32', indexed: true },
+      {
+        name: 'buyer',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+    ],
+    name: 'Delivered',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'uuid', internalType: 'uint32', type: 'uint32', indexed: true },
+      {
+        name: 'buyer',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'amount',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'Paid',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'uuid', internalType: 'uint32', type: 'uint32', indexed: true },
+      {
+        name: 'buyer',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+    ],
+    name: 'Refunded',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'uuid', internalType: 'uint32', type: 'uint32', indexed: true },
+      {
+        name: 'buyer',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+    ],
+    name: 'TimedOut',
+  },
+  { type: 'error', inputs: [], name: 'AlreadyConfigured' },
+  { type: 'error', inputs: [], name: 'AlreadyInitialized' },
+  { type: 'error', inputs: [], name: 'AlreadyPaid' },
+  { type: 'error', inputs: [], name: 'NoArbiter' },
+  { type: 'error', inputs: [], name: 'NotArbiter' },
+  { type: 'error', inputs: [], name: 'NotConfigured' },
+  { type: 'error', inputs: [], name: 'NotDeployer' },
+  { type: 'error', inputs: [], name: 'NotPaid' },
+  { type: 'error', inputs: [], name: 'NotSeller' },
+  { type: 'error', inputs: [], name: 'NotVault' },
+  { type: 'error', inputs: [], name: 'Reentrancy' },
+  { type: 'error', inputs: [], name: 'TooEarly' },
+  { type: 'error', inputs: [], name: 'TransferFailed' },
+  { type: 'error', inputs: [], name: 'Underpaid' },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // CreatorWriteCondition
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -687,6 +913,148 @@ export const creatorWriteConditionAbi = [
   { type: 'error', inputs: [], name: 'NonEmptyConfig' },
   { type: 'error', inputs: [], name: 'NotDeployer' },
   { type: 'error', inputs: [], name: 'NotVault' },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// DeadManSwitchCondition
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const deadManSwitchConditionAbi = [
+  {
+    type: 'function',
+    inputs: [{ name: '', internalType: 'uint32', type: 'uint32' }],
+    name: 'cfg',
+    outputs: [
+      { name: 'unlockAt', internalType: 'uint64', type: 'uint64' },
+      { name: 'duration', internalType: 'uint64', type: 'uint64' },
+      { name: 'blockBased', internalType: 'bool', type: 'bool' },
+      { name: 'creatorCanReadWhileLocked', internalType: 'bool', type: 'bool' },
+      { name: 'publicAfterUnlock', internalType: 'bool', type: 'bool' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'uuid', internalType: 'uint32', type: 'uint32' },
+      { name: '', internalType: 'bytes', type: 'bytes' },
+      { name: '', internalType: 'bytes', type: 'bytes' },
+      { name: 'caller', internalType: 'address', type: 'address' },
+    ],
+    name: 'checkReadCondition',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'uuid', internalType: 'uint32', type: 'uint32' },
+      { name: '', internalType: 'bytes', type: 'bytes' },
+      { name: '', internalType: 'bytes', type: 'bytes' },
+      { name: 'caller', internalType: 'address', type: 'address' },
+    ],
+    name: 'checkWriteCondition',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '', internalType: 'uint32', type: 'uint32' }],
+    name: 'creator',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'deployer',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'factory',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'uuid', internalType: 'uint32', type: 'uint32' }],
+    name: 'getRemainingTime',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '', internalType: 'uint32', type: 'uint32' },
+      { name: '', internalType: 'address', type: 'address' },
+    ],
+    name: 'heir',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'factory_', internalType: 'address', type: 'address' }],
+    name: 'initialize',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'uuid', internalType: 'uint32', type: 'uint32' }],
+    name: 'poke',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'uuid', internalType: 'uint32', type: 'uint32' },
+      { name: 'creator_', internalType: 'address', type: 'address' },
+      { name: 'config', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'setConfigFromFactory',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'uuid', internalType: 'uint32', type: 'uint32', indexed: true },
+      {
+        name: 'creator',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+    ],
+    name: 'Configured',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'uuid', internalType: 'uint32', type: 'uint32', indexed: true },
+      {
+        name: 'newUnlockAt',
+        internalType: 'uint64',
+        type: 'uint64',
+        indexed: false,
+      },
+    ],
+    name: 'Poked',
+  },
+  { type: 'error', inputs: [], name: 'AlreadyConfigured' },
+  { type: 'error', inputs: [], name: 'AlreadyInitialized' },
+  { type: 'error', inputs: [], name: 'AlreadyUnlocked' },
+  { type: 'error', inputs: [], name: 'NotCreator' },
+  { type: 'error', inputs: [], name: 'NotDeployer' },
+  { type: 'error', inputs: [], name: 'NotVault' },
+  { type: 'error', inputs: [], name: 'ZeroDuration' },
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -927,6 +1295,148 @@ export const iRoyaltyModuleMinAbi = [
     outputs: [],
     stateMutability: 'nonpayable',
   },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MultiSigCondition
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const multiSigConditionAbi = [
+  { type: 'constructor', inputs: [], stateMutability: 'nonpayable' },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'DOMAIN_SEPARATOR',
+    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'uuid', internalType: 'uint32', type: 'uint32' },
+      { name: 'accessAuxData', internalType: 'bytes', type: 'bytes' },
+      { name: '', internalType: 'bytes', type: 'bytes' },
+      { name: 'caller', internalType: 'address', type: 'address' },
+    ],
+    name: 'checkReadCondition',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'uuid', internalType: 'uint32', type: 'uint32' },
+      { name: '', internalType: 'bytes', type: 'bytes' },
+      { name: '', internalType: 'bytes', type: 'bytes' },
+      { name: 'caller', internalType: 'address', type: 'address' },
+    ],
+    name: 'checkWriteCondition',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '', internalType: 'uint32', type: 'uint32' }],
+    name: 'creator',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'deployer',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'uuid', internalType: 'uint32', type: 'uint32' },
+      { name: 'accessAuxData', internalType: 'bytes', type: 'bytes' },
+      { name: 'caller', internalType: 'address', type: 'address' },
+    ],
+    name: 'evaluate',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'factory',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'uuid', internalType: 'uint32', type: 'uint32' }],
+    name: 'getConfig',
+    outputs: [
+      { name: 'signers', internalType: 'address[]', type: 'address[]' },
+      { name: 'threshold', internalType: 'uint16', type: 'uint16' },
+      { name: 'epoch', internalType: 'uint64', type: 'uint64' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'factory_', internalType: 'address', type: 'address' }],
+    name: 'initialize',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'uuid', internalType: 'uint32', type: 'uint32' },
+      { name: 'newSigners', internalType: 'address[]', type: 'address[]' },
+      { name: 'newThreshold', internalType: 'uint16', type: 'uint16' },
+    ],
+    name: 'rotateSigners',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'uuid', internalType: 'uint32', type: 'uint32' },
+      { name: 'creator_', internalType: 'address', type: 'address' },
+      { name: 'config', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'setConfigFromFactory',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'uuid', internalType: 'uint32', type: 'uint32', indexed: true },
+      {
+        name: 'creator',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+    ],
+    name: 'Configured',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'uuid', internalType: 'uint32', type: 'uint32', indexed: true },
+      { name: 'epoch', internalType: 'uint64', type: 'uint64', indexed: false },
+    ],
+    name: 'SignersRotated',
+  },
+  { type: 'error', inputs: [], name: 'AlreadyConfigured' },
+  { type: 'error', inputs: [], name: 'AlreadyInitialized' },
+  { type: 'error', inputs: [], name: 'BadThreshold' },
+  { type: 'error', inputs: [], name: 'NoSigners' },
+  { type: 'error', inputs: [], name: 'NotCreator' },
+  { type: 'error', inputs: [], name: 'NotDeployer' },
+  { type: 'error', inputs: [], name: 'NotVault' },
+  { type: 'error', inputs: [], name: 'SignersNotSorted' },
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1284,6 +1794,106 @@ export const tierGateConditionAbi = [
   },
   { type: 'error', inputs: [], name: 'AlreadyConfigured' },
   { type: 'error', inputs: [], name: 'AlreadyInitialized' },
+  { type: 'error', inputs: [], name: 'NotDeployer' },
+  { type: 'error', inputs: [], name: 'NotVault' },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// TimeWindowCondition
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const timeWindowConditionAbi = [
+  {
+    type: 'function',
+    inputs: [
+      { name: 'uuid', internalType: 'uint32', type: 'uint32' },
+      { name: '', internalType: 'bytes', type: 'bytes' },
+      { name: '', internalType: 'bytes', type: 'bytes' },
+      { name: '', internalType: 'address', type: 'address' },
+    ],
+    name: 'checkReadCondition',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '', internalType: 'uint32', type: 'uint32' },
+      { name: '', internalType: 'bytes', type: 'bytes' },
+      { name: '', internalType: 'bytes', type: 'bytes' },
+      { name: '', internalType: 'address', type: 'address' },
+    ],
+    name: 'checkWriteCondition',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'pure',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '', internalType: 'uint32', type: 'uint32' }],
+    name: 'creator',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'deployer',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'factory',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'factory_', internalType: 'address', type: 'address' }],
+    name: 'initialize',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'uuid', internalType: 'uint32', type: 'uint32' },
+      { name: 'creator_', internalType: 'address', type: 'address' },
+      { name: 'config', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'setConfigFromFactory',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '', internalType: 'uint32', type: 'uint32' }],
+    name: 'window',
+    outputs: [
+      { name: 'startTs', internalType: 'uint64', type: 'uint64' },
+      { name: 'endTs', internalType: 'uint64', type: 'uint64' },
+      { name: 'blockBased', internalType: 'bool', type: 'bool' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'uuid', internalType: 'uint32', type: 'uint32', indexed: true },
+      {
+        name: 'creator',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+    ],
+    name: 'Configured',
+  },
+  { type: 'error', inputs: [], name: 'AlreadyConfigured' },
+  { type: 'error', inputs: [], name: 'AlreadyInitialized' },
+  { type: 'error', inputs: [], name: 'BadWindow' },
   { type: 'error', inputs: [], name: 'NotDeployer' },
   { type: 'error', inputs: [], name: 'NotVault' },
 ] as const
