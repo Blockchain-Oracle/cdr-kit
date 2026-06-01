@@ -26,35 +26,42 @@ export const SIDEBAR: SideGroup[] = [
     ],
   },
   {
-    heading: "Components",
+    heading: "Components · headless",
     links: [
       { href: "/docs/components", label: "Overview" },
-      // headless — @cdr-kit/react
       { href: "/docs/components/cdr-provider", label: "CdrProvider" },
       { href: "/docs/components/vault-gate", label: "VaultGate" },
       { href: "/docs/components/vault", label: "Vault", tag: "compound" },
       { href: "/docs/components/cdr-inspector", label: "CdrInspector" },
       { href: "/docs/components/cdr-skeleton", label: "CdrSkeleton" },
       { href: "/docs/components/empty-vaults", label: "EmptyVaults" },
-      // 0.5 — advanced-condition components
+    ],
+  },
+  {
+    heading: "Components · 0.5 advanced",
+    links: [
       { href: "/docs/components/heartbeat-timer", label: "HeartbeatTimer", tag: "0.5" },
       { href: "/docs/components/time-window-badge", label: "TimeWindowBadge", tag: "0.5" },
       { href: "/docs/components/multi-sig-approval-tracker", label: "MultiSigApprovalTracker", tag: "0.5" },
       { href: "/docs/components/escrow-delivery-confirm", label: "EscrowDeliveryConfirm", tag: "0.5" },
-      // styled — @cdr-kit/react-ui
-      { href: "/docs/components/condition-badge", label: "ConditionBadge", tag: "styled" },
-      { href: "/docs/components/access-stepper", label: "AccessStepper", tag: "styled" },
-      { href: "/docs/components/subscribe-button", label: "SubscribeButton", tag: "styled" },
+    ],
+  },
+  {
+    heading: "Components · styled",
+    links: [
+      { href: "/docs/components/condition-badge", label: "ConditionBadge" },
+      { href: "/docs/components/access-stepper", label: "AccessStepper" },
+      { href: "/docs/components/subscribe-button", label: "SubscribeButton" },
       { href: "/docs/components/unlockable", label: "UnlockablePill", tag: "see demo →", tagHref: "/showcase/blog" },
-      { href: "/docs/components/vault-card", label: "VaultCard", tag: "styled" },
-      { href: "/docs/components/copy-button", label: "CopyButton", tag: "styled" },
-      { href: "/docs/components/short-address", label: "ShortAddress", tag: "styled" },
-      { href: "/docs/components/explorer-link", label: "ExplorerLink", tag: "styled" },
-      { href: "/docs/components/ip-price", label: "IpPrice", tag: "styled" },
-      { href: "/docs/components/cdr-network-chip", label: "CdrNetworkChip", tag: "styled" },
-      { href: "/docs/components/cdr-spinner", label: "CdrSpinner", tag: "styled" },
-      { href: "/docs/components/cdr-progress", label: "CdrProgress", tag: "styled" },
-      { href: "/docs/components/cdr-error", label: "CdrError", tag: "styled" },
+      { href: "/docs/components/vault-card", label: "VaultCard" },
+      { href: "/docs/components/copy-button", label: "CopyButton" },
+      { href: "/docs/components/short-address", label: "ShortAddress" },
+      { href: "/docs/components/explorer-link", label: "ExplorerLink" },
+      { href: "/docs/components/ip-price", label: "IpPrice" },
+      { href: "/docs/components/cdr-network-chip", label: "CdrNetworkChip" },
+      { href: "/docs/components/cdr-spinner", label: "CdrSpinner" },
+      { href: "/docs/components/cdr-progress", label: "CdrProgress" },
+      { href: "/docs/components/cdr-error", label: "CdrError" },
     ],
   },
   {
