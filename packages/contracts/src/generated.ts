@@ -1313,6 +1313,23 @@ export const multiSigConditionAbi = [
   {
     type: 'function',
     inputs: [
+      { name: '', internalType: 'uint32', type: 'uint32' },
+      { name: '', internalType: 'uint64', type: 'uint64' },
+    ],
+    name: 'approvalsCount',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'uuid', internalType: 'uint32', type: 'uint32' }],
+    name: 'approve',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
       { name: 'uuid', internalType: 'uint32', type: 'uint32' },
       { name: 'accessAuxData', internalType: 'bytes', type: 'bytes' },
       { name: '', internalType: 'bytes', type: 'bytes' },
@@ -1339,6 +1356,13 @@ export const multiSigConditionAbi = [
     inputs: [{ name: '', internalType: 'uint32', type: 'uint32' }],
     name: 'creator',
     outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'uuid', internalType: 'uint32', type: 'uint32' }],
+    name: 'currentApprovalsCount',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'view',
   },
   {
@@ -1379,6 +1403,17 @@ export const multiSigConditionAbi = [
   },
   {
     type: 'function',
+    inputs: [
+      { name: '', internalType: 'uint32', type: 'uint32' },
+      { name: '', internalType: 'uint64', type: 'uint64' },
+      { name: '', internalType: 'address', type: 'address' },
+    ],
+    name: 'hasApproved',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     inputs: [{ name: 'factory_', internalType: 'address', type: 'address' }],
     name: 'initialize',
     outputs: [],
@@ -1412,6 +1447,21 @@ export const multiSigConditionAbi = [
     inputs: [
       { name: 'uuid', internalType: 'uint32', type: 'uint32', indexed: true },
       {
+        name: 'signer',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      { name: 'epoch', internalType: 'uint64', type: 'uint64', indexed: true },
+    ],
+    name: 'Approved',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'uuid', internalType: 'uint32', type: 'uint32', indexed: true },
+      {
         name: 'creator',
         internalType: 'address',
         type: 'address',
@@ -1429,12 +1479,15 @@ export const multiSigConditionAbi = [
     ],
     name: 'SignersRotated',
   },
+  { type: 'error', inputs: [], name: 'AlreadyApproved' },
   { type: 'error', inputs: [], name: 'AlreadyConfigured' },
   { type: 'error', inputs: [], name: 'AlreadyInitialized' },
   { type: 'error', inputs: [], name: 'BadThreshold' },
   { type: 'error', inputs: [], name: 'NoSigners' },
+  { type: 'error', inputs: [], name: 'NotConfigured' },
   { type: 'error', inputs: [], name: 'NotCreator' },
   { type: 'error', inputs: [], name: 'NotDeployer' },
+  { type: 'error', inputs: [], name: 'NotSigner' },
   { type: 'error', inputs: [], name: 'NotVault' },
   { type: 'error', inputs: [], name: 'SignersNotSorted' },
 ] as const

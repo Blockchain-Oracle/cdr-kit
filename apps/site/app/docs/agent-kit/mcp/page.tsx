@@ -41,7 +41,8 @@ const TOOLS_TABLE: { name: string; group: string; description: string }[] = [
   { name: "cdr_create_time_window_vault", group: "Advanced conditions (0.5)", description: "Create a Story CDR vault gated by an absolute time (or block) window." },
   { name: "cdr_create_dead_man_vault", group: "Advanced conditions (0.5)", description: "Create a dead-man-switch vault — auto-unlocks to heirs if the creator stops poke()-ing." },
   { name: "cdr_create_escrow_vault", group: "Advanced conditions (0.5)", description: "Create a buyer-pays-then-confirms-delivery escrow vault with optional arbiter." },
-  { name: "cdr_create_multi_sig_vault", group: "Advanced conditions (0.5)", description: "Create an N-of-M EIP-712 multi-sig vault — first-of-kind in the CDR ecosystem." },
+  { name: "cdr_create_multi_sig_vault", group: "Advanced conditions (0.5)", description: "Create an N-of-M multi-sig vault — both off-chain EIP-712 sigs AND on-chain approve() paths supported. First-of-kind in the CDR ecosystem." },
+  { name: "cdr_approve_multi_sig", group: "Advanced conditions (0.5)", description: "Safe-style on-chain approval — agent calls approve(uuid). Dashboards read currentApprovalsCount(uuid)." },
   // 0.5 Story IP integration
   { name: "cdr_register_ip", group: "Story IP (0.5)", description: "Register an NFT as a Story IP asset (fresh-mint via SPG)." },
   { name: "cdr_attach_license_terms", group: "Story IP (0.5)", description: "Attach PIL license terms to a Story IP asset (required before minting license tokens)." },
@@ -55,7 +56,7 @@ export default function Page() {
       data={{
         breadcrumb: ["@cdr-kit", "Agent kit", "MCP server"],
         title: "MCP server",
-        badges: <><Badge tone="primary">@cdr-kit/mcp</Badge><Badge>21 tools · v0.5</Badge></>,
+        badges: <><Badge tone="primary">@cdr-kit/mcp</Badge><Badge>22 tools · v0.5</Badge></>,
         lede: <>One stdio binary that plugs into Claude Desktop, Cursor, Windsurf, and any MCP host. Exposes the full CDR surface — discover, subscribe, access, audit, publish, plus 4 advanced-condition vault creators and 4 Story IP wrappers (including the <code>cdr_publish_data</code> one-shot) — as <b>21 tools</b> backed by the agent&apos;s own auto-generated wallet. Shares code with <code>@cdr-kit/cli</code>, so anything the MCP can do, <code>cdr &lt;cmd&gt;</code> can do at the terminal.</>,
         sections: [
           {

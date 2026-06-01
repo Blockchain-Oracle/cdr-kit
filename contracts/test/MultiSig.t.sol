@@ -269,4 +269,96 @@ contract MultiSigTest is Test {
         vm.expectRevert(ConditionBase.AlreadyConfigured.selector);
         cond.setConfigFromFactory(1, CREATOR, _cfg(_sortedSigners(), 2));
     }
+
+    // ============================================================
+    // On-chain approve() path (added 2026-06-01 alongside the
+    // existing off-chain EIP-712 path).
+    // ============================================================
+
+    function test_onchain_approve_records_state_and_emits() public {
+        _configure(1, 2);
+        // Two configured signers approve; threshold should now be met.
+        vm.expectEmit(true, true, true, true, address(cond));
+        emit MultiSigCondition.Approved(1, signerA, 0);
+        vm.prank(signerA);
+        cond.approve(1);
+        assertTrue(cond.hasApproved(1, 0, signerA));
+        assertEq(cond.currentApprovalsCount(1), 1);
+
+        vm.prank(signerB);
+        cond.approve(1);
+        assertEq(cond.currentApprovalsCount(1), 2);
+    }
+
+    function test_onchain_threshold_met_allows_read_with_empty_aux() public {
+        _configure(1, 2);
+        vm.prank(signerA);
+        cond.approve(1);
+        vm.prank(signerB);
+        cond.approve(1);
+        // Empty aux — should still pass via on-chain path.
+        assertTrue(cond.checkReadCondition(1, "", "", BUYER));
+    }
+
+    function test_onchain_below_threshold_returns_false() public {
+        _configure(1, 2);
+        vm.prank(signerA);
+        cond.approve(1);
+        // Only 1 of 2 — empty aux + insufficient on-chain → false.
+        assertFalse(cond.checkReadCondition(1, "", "", BUYER));
+    }
+
+    function test_onchain_approve_rejects_non_signer() public {
+        _configure(1, 2);
+        vm.prank(BUYER);
+        vm.expectRevert(MultiSigCondition.NotSigner.selector);
+        cond.approve(1);
+    }
+
+    function test_onchain_approve_rejects_unconfigured() public {
+        vm.prank(signerA);
+        vm.expectRevert(MultiSigCondition.NotConfigured.selector);
+        cond.approve(999);
+    }
+
+    function test_onchain_approve_rejects_double_approve() public {
+        _configure(1, 2);
+        vm.prank(signerA);
+        cond.approve(1);
+        vm.prank(signerA);
+        vm.expectRevert(MultiSigCondition.AlreadyApproved.selector);
+        cond.approve(1);
+    }
+
+    function test_onchain_rotation_invalidates_prior_approvals() public {
+        _configure(1, 2);
+        vm.prank(signerA);
+        cond.approve(1);
+        vm.prank(signerB);
+        cond.approve(1);
+        assertEq(cond.currentApprovalsCount(1), 2);
+        // Rotation → epoch=1; old approvals at epoch=0 still recorded but no longer count.
+        vm.prank(CREATOR);
+        cond.rotateSigners(1, _sortedSigners(), 2);
+        assertEq(cond.currentApprovalsCount(1), 0, "current epoch fresh");
+        assertTrue(cond.hasApproved(1, 0, signerA), "historical record preserved");
+        assertFalse(cond.checkReadCondition(1, "", "", BUYER), "empty-aux read no longer passes");
+    }
+
+    function test_onchain_AND_offchain_paths_both_work() public {
+        _configure(1, 2);
+        // On-chain path:
+        vm.prank(signerA);
+        cond.approve(1);
+        vm.prank(signerB);
+        cond.approve(1);
+        assertTrue(cond.checkReadCondition(1, "", "", BUYER));
+
+        // Off-chain path on a separate vault:
+        _configure(2, 2);
+        uint64 deadline = uint64(block.timestamp + 1 hours);
+        bytes32 digest = _digest(2, BUYER, 0, deadline);
+        bytes[] memory sigs = _sigs2(PK_A, PK_B, digest);
+        assertTrue(cond.checkReadCondition(2, _aux(deadline, sigs), "", BUYER));
+    }
 }

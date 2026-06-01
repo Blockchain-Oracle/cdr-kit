@@ -91,8 +91,11 @@ export interface MultiSigApprovalTrackerProps {
 
 export function MultiSigApprovalTracker({ uuid, signedBy = [], children }: MultiSigApprovalTrackerProps) {
   const status = useMultiSigStatus(uuid);
+  // Combine on-chain approve() count + any off-chain sig collection state the caller passed.
+  // Either path alone hitting threshold satisfies the read.
   const signedSet = new Set(signedBy.map((s) => s.toLowerCase()));
-  const signedCount = status.signers.filter((s) => signedSet.has(s.toLowerCase())).length;
+  const offChainCount = status.signers.filter((s) => signedSet.has(s.toLowerCase())).length;
+  const signedCount = Math.max(status.onChainApprovals, offChainCount);
   const isReady = signedCount >= status.threshold;
   const merged = { ...status, signedCount, isReady };
   if (children) return <>{children(merged)}</>;

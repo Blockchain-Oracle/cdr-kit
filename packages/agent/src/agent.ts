@@ -378,6 +378,11 @@ export class CdrAgent {
   createMultiSigVault(p: Parameters<typeof advanced.createMultiSigVault>[1]): Promise<Hex> {
     return advanced.createMultiSigVault(this, p);
   }
+  /** Safe-style on-chain approve for a multi-sig vault. Signer pays gas; dashboards read the
+   *  truth via `currentApprovalsCount(uuid)`. Parallel to the gas-free off-chain EIP-712 path. */
+  approveMultiSig(uuid: number): Promise<Hex> {
+    return advanced.approveMultiSig(this, uuid);
+  }
   pokeDeadMan(uuid: number): Promise<Hex> {
     return advanced.pokeDeadMan(this, uuid);
   }

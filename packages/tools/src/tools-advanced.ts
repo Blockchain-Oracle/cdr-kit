@@ -1,3 +1,4 @@
+import { z } from "zod";
 import type { CdrAgent } from "@cdr-kit/agent";
 import type { CdrTool } from "./types.js";
 import {
@@ -6,6 +7,10 @@ import {
   createMultiSigSchema,
   createTimeWindowSchema,
 } from "./schemas.js";
+
+const approveMultiSigSchema = z.object({
+  uuid: z.number().int().describe("MultiSigCondition-gated vault uuid to approve."),
+});
 
 /** 0.5.0 advanced-condition vault creators (TimeWindow / DeadMan / Escrow / MultiSig). */
 export function advancedConditionTools(agent: CdrAgent): CdrTool[] {
@@ -67,7 +72,7 @@ export function advancedConditionTools(agent: CdrAgent): CdrTool[] {
     {
       name: "cdr_create_multi_sig_vault",
       description:
-        "Create an N-of-M multi-sig Story CDR vault. Read access requires `threshold`-many EIP-712 signatures from configured signers, collected off-chain. First-of-kind in the CDR ecosystem — no on-chain approval txs per signer.",
+        "Create an N-of-M multi-sig Story CDR vault. Read access requires `threshold`-many approvals — either as off-chain EIP-712 sigs collected and submitted at read time (gas-free for signers), or as on-chain `approve()` txs (Safe-style; dashboards read chain). Both paths share the same signer set.",
       inputSchema: createMultiSigSchema,
       invoke: async (raw) => {
         const p = createMultiSigSchema.parse(raw);
@@ -77,6 +82,17 @@ export function advancedConditionTools(agent: CdrAgent): CdrTool[] {
           licenseTermsId: p.licenseTermsId ? BigInt(p.licenseTermsId) : undefined,
           valueWei: p.valueWei ? BigInt(p.valueWei) : undefined,
         });
+        return { txHash };
+      },
+    },
+    {
+      name: "cdr_approve_multi_sig",
+      description:
+        "Safe-style on-chain approval for a multi-sig CDR vault. The agent's wallet must be one of the configured signers. Once `threshold`-many signers have called approve, anyone can read the vault — no off-chain sig collection needed.",
+      inputSchema: approveMultiSigSchema,
+      invoke: async (raw) => {
+        const { uuid } = approveMultiSigSchema.parse(raw);
+        const txHash = await agent.approveMultiSig(uuid);
         return { txHash };
       },
     },

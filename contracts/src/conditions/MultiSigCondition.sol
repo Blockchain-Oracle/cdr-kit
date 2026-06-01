@@ -5,23 +5,28 @@ import {ConditionBase} from "../base/ConditionBase.sol";
 import {ICdrCondition} from "../interfaces/ICdrCondition.sol";
 
 /// @title MultiSigCondition
-/// @notice N-of-M EIP-712 multi-sig read condition. Signers approve off-chain; the buyer collects
-///         threshold-many signatures and submits them as `accessAuxData` when reading. No on-chain
-///         storage of approvals means no `approve()` tx per signer, lower friction for the buyer.
-///         An epoch counter invalidates all in-flight sigs on signer rotation.
-/// @dev    First-of-kind in the CDR ecosystem (verified 2026-06-01 — no Story-deployed multi-sig
-///         condition exists). Replay protection: the signed payload binds `(uuid, caller, epoch,
-///         deadline)` so a sig for vault A can't be reused against vault B, and rotating signers
-///         bumps `epoch` to invalidate stale sigs. EIP-1271 (contract signers like Safe) is NOT
-///         supported in this release — `ecrecover` is EOA-only.
+/// @notice N-of-M multi-sig read condition with TWO parallel approval paths:
+///           1. Off-chain EIP-712 sigs (gas-free, submitted as `accessAuxData` at read time).
+///           2. On-chain `approve(uuid)` (Safe-style — signers pay gas, dashboard reads truth from chain).
+///         A read passes if EITHER threshold is met. Both paths share the same signer set + threshold.
+/// @dev    Epoch invalidates BOTH paths on `rotateSigners` — on-chain approvals are stored at
+///         `hasApproved[uuid][epoch][signer]` so a rotation makes the old epoch's approvals
+///         logically dead without needing to clear them. `approvalsCount[uuid][epoch]` denormalizes
+///         the count for cheap O(1) view reads. EIP-1271 (contract signers like Safe) is NOT
+///         supported in this release — `ecrecover` is EOA-only for the off-chain path.
 contract MultiSigCondition is ConditionBase {
     struct Cfg {
         address[] signers; // sorted ascending, unique
         uint16 threshold;
-        uint64 epoch; // bumps on signer rotation → invalidates in-flight sigs
+        uint64 epoch; // bumps on signer rotation → invalidates BOTH off-chain sigs AND on-chain approvals
     }
 
     mapping(uint32 => Cfg) private _cfg;
+
+    /// @notice On-chain approvals — epoch-scoped so rotateSigners auto-invalidates stale ones.
+    mapping(uint32 => mapping(uint64 => mapping(address => bool))) public hasApproved;
+    /// @notice Denormalized count of on-chain approvals for the current epoch.
+    mapping(uint32 => mapping(uint64 => uint256)) public approvalsCount;
 
     /// @dev EIP-712 domain separator. Set once in constructor since `address(this)` is fixed and
     ///      `block.chainid` doesn't change. Cheaper than rebuilding the digest on every view call.
@@ -35,8 +40,11 @@ contract MultiSigCondition is ConditionBase {
     error NoSigners();
     error SignersNotSorted();
     error NotCreator();
+    error NotSigner();
+    error AlreadyApproved();
 
     event SignersRotated(uint32 indexed uuid, uint64 epoch);
+    event Approved(uint32 indexed uuid, address indexed signer, uint64 indexed epoch);
 
     constructor() {
         DOMAIN_SEPARATOR = keccak256(
@@ -84,10 +92,36 @@ contract MultiSigCondition is ConditionBase {
         return (c.signers, c.threshold, c.epoch);
     }
 
+    /// @notice On-chain approval path — Safe-style. Signer pays ~50k gas; dashboards then read
+    ///         `approvalsCount(uuid, currentEpoch)` for O(1) "X of Y approved" truth.
+    ///         Rotation auto-invalidates because the mapping is keyed on epoch.
+    function approve(uint32 uuid) external {
+        Cfg storage c = _cfg[uuid];
+        if (c.threshold == 0) revert NotConfigured();
+        if (!_isSigner(c.signers, msg.sender)) revert NotSigner();
+        uint64 epoch = c.epoch;
+        if (hasApproved[uuid][epoch][msg.sender]) revert AlreadyApproved();
+        hasApproved[uuid][epoch][msg.sender] = true;
+        approvalsCount[uuid][epoch] += 1;
+        emit Approved(uuid, msg.sender, epoch);
+    }
+
+    /// @notice Current on-chain approval count for the active epoch. Cheap O(1).
+    function currentApprovalsCount(uint32 uuid) external view returns (uint256) {
+        return approvalsCount[uuid][_cfg[uuid].epoch];
+    }
+
+    error NotConfigured();
+
     /// @inheritdoc ICdrCondition
-    /// @dev Wraps the eval in a try/catch via external `this.evaluate(...)` so malformed `aux`
-    ///      (any abi.decode failure) returns `false` instead of reverting the CDR precompile.
-    ///      Same defensive pattern as `TierGateCondition.sol:52-57`.
+    /// @dev Two parallel paths, ORed together:
+    ///       1. On-chain `approvalsCount[uuid][epoch] >= threshold` — when buyers prefer the
+    ///          Safe-style flow (dashboards read chain, signers each pay ~50k gas).
+    ///       2. Off-chain EIP-712 sigs in `accessAuxData` — gas-free for signers, buyer collects
+    ///          + submits at read time.
+    ///      The off-chain path is wrapped in a `try/catch` via external `this.evaluate(...)` so
+    ///      malformed `aux` returns `false` (never reverts the CDR precompile). When `aux` is
+    ///      empty (length 0), we skip evaluation and rely on the on-chain path alone.
     function checkReadCondition(uint32 uuid, bytes calldata accessAuxData, bytes calldata, address caller)
         external
         view
@@ -95,6 +129,11 @@ contract MultiSigCondition is ConditionBase {
         returns (bool)
     {
         if (!_configured(uuid)) return false;
+        Cfg storage c = _cfg[uuid];
+        // Path 1: on-chain approvals at current epoch.
+        if (approvalsCount[uuid][c.epoch] >= c.threshold) return true;
+        // Path 2: off-chain sigs in aux. Skip when aux is empty to avoid a doomed decode.
+        if (accessAuxData.length == 0) return false;
         try this.evaluate(uuid, accessAuxData, caller) returns (bool ok) {
             return ok;
         } catch {

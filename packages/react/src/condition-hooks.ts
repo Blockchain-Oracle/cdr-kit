@@ -134,12 +134,16 @@ export interface MultiSigStatus {
   signers: readonly Hex[];
   threshold: number;
   epoch: bigint;
+  /** On-chain `approve()` count for the current epoch. Truth source when signers used the
+   *  Safe-style path. Off-chain EIP-712 sigs are NOT counted here (they're submitted at read
+   *  time, not stored) — combine with the dashboard's own sig-collection state if needed. */
+  onChainApprovals: number;
   isLoading: boolean;
 }
 
-/** Read the current multi-sig config for a uuid. UIs combine this with off-chain sig collection
- *  state to render "X of Y approved". The contract itself does not store approvals — they live
- *  off-chain until submitted as `accessAuxData` at read time. */
+/** Read the current multi-sig config + on-chain approval count for a uuid. Both the off-chain
+ *  EIP-712 path and the on-chain `approve()` path are valid — `onChainApprovals >= threshold`
+ *  means the vault can be read without submitting any sigs in accessAuxData. */
 export function useMultiSigStatus(uuid: number, address: Hex = aeneid.multiSigCondition as Hex): MultiSigStatus {
   const read = useReadContract({
     address,
@@ -147,12 +151,19 @@ export function useMultiSigStatus(uuid: number, address: Hex = aeneid.multiSigCo
     functionName: "getConfig",
     args: [uuid],
   });
+  const countRead = useReadContract({
+    address,
+    abi: multiSigConditionAbi,
+    functionName: "currentApprovalsCount",
+    args: [uuid],
+  });
   const d = read.data as readonly [readonly Hex[], number, bigint] | undefined;
   return {
     signers: d?.[0] ?? [],
     threshold: d?.[1] ?? 0,
     epoch: d?.[2] ?? 0n,
-    isLoading: read.isLoading,
+    onChainApprovals: Number((countRead.data as bigint | undefined) ?? 0n),
+    isLoading: read.isLoading || countRead.isLoading,
   };
 }
 

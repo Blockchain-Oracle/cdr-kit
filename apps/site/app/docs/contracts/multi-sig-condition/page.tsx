@@ -2,7 +2,9 @@ import { Badge } from "@/components/primitives/badge";
 import { DocPage, PropsTable } from "@/components/docs/doc-page";
 
 // Hardcoded until @cdr-kit/contracts@0.5.0 publishes (apps/site consumes ^0.4.0 from npm).
-const MULTI_SIG_ADDRESS = "0xb22EBF0481950A3c0e528A5902C4c5C69184fB78";
+// 0x61061c… is the 0.5 redeploy with on-chain `approve()` path added; previous 0xb22EBF…
+// retired (off-chain-only — same epoch + sig logic but no on-chain approve fn).
+const MULTI_SIG_ADDRESS = "0x61061CCb8BD4C9E0AfF67ed4d2226f0Fc140FB87";
 
 export default function Page() {
   return (
@@ -11,7 +13,7 @@ export default function Page() {
         breadcrumb: ["@cdr-kit/contracts", "Conditions", "MultiSigCondition"],
         title: "MultiSigCondition",
         badges: <><Badge tone="live">deployed</Badge><Badge tone="primary">first-of-kind</Badge><Badge>new in 0.5</Badge></>,
-        lede: <>N-of-M EIP-712 read gate. Signers approve OFF-CHAIN — buyer collects <code>threshold</code>-many sigs and submits them as <code>accessAuxData = abi.encode(deadline, sigs[])</code>. No <code>approve()</code> tx per signer, no per-signer gas. First-of-kind in the CDR ecosystem.</>,
+        lede: <>N-of-M read gate with <b>two parallel approval paths</b>: off-chain EIP-712 sigs (gas-free; buyer collects + submits at read time) OR Safe-style on-chain <code>approve()</code> (signers pay gas; dashboards read chain truth). A read passes when EITHER path meets <code>threshold</code>. First-of-kind in the CDR ecosystem.</>,
         importLine: `address = ${MULTI_SIG_ADDRESS}`,
         sections: [
           {
@@ -36,9 +38,19 @@ export default function Page() {
             ),
           },
           {
+            id: "onchain-approve",
+            title: "On-chain approve() — the Safe-style path",
+            content: (
+              <>
+                <p>For dashboards that prefer chain-truth over off-chain sig collection, signers call <code>approve(uuid)</code> on-chain. Each approval costs ~50k gas. <code>currentApprovalsCount(uuid)</code> returns the count for the active epoch — read it directly in your UI via <code>useMultiSigStatus</code>.</p>
+                <p>Storage shape (epoch-scoped, so rotation auto-invalidates): <code>hasApproved[uuid][epoch][signer]</code> + <code>approvalsCount[uuid][epoch]</code>. Emits <code>Approved(uuid, signer, epoch)</code> for indexers.</p>
+              </>
+            ),
+          },
+          {
             id: "rotation",
             title: "rotateSigners()",
-            content: <p>Creator-only. Validates the new signer set + threshold, bumps <code>epoch</code> — all sigs against the previous epoch are now invalid. Use this to remove a compromised signer immediately.</p>,
+            content: <p>Creator-only. Validates the new signer set + threshold, bumps <code>epoch</code> — invalidates BOTH off-chain sigs (signed against the old epoch) AND on-chain approvals (the count under the old epoch key no longer matters since reads check the new epoch). Use this to remove a compromised signer immediately.</p>,
           },
           {
             id: "limitations",

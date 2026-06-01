@@ -97,6 +97,22 @@ export async function createMultiSigVault(
   });
 }
 
+/** On-chain `approve(uuid)` for the Safe-style multi-sig path. Signer pays gas; the approval
+ *  is recorded against the current epoch and visible via `currentApprovalsCount(uuid)`. */
+export async function approveMultiSig(agent: CdrAgent, uuid: number): Promise<Hex> {
+  const addrs = resolveAddresses(agent.network);
+  const wc = agent.client.walletClient;
+  if (!wc) throw new Error("agent has no wallet client");
+  return wc.writeContract({
+    address: addrs.multiSigCondition as Hex,
+    abi: multiSigConditionAbi,
+    functionName: "approve",
+    args: [uuid],
+    chain: null,
+    account: wc.account!,
+  });
+}
+
 /** Creator-side heartbeat for a dead-man-switch vault. Resets the unlock countdown. */
 export async function pokeDeadMan(agent: CdrAgent, uuid: number): Promise<Hex> {
   const addrs = resolveAddresses(agent.network);

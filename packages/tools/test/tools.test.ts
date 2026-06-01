@@ -13,11 +13,12 @@ function makeAgent() {
 const byName = (tools: CdrTool[], name: string) => tools.find((t) => t.name === name)!;
 
 describe("createCdrTools", () => {
-  it("exposes the full 21-tool CDR surface (read + introspect + author + 0.5 advanced conditions + Story IP)", () => {
+  it("exposes the full 22-tool CDR surface (read + introspect + author + 0.5 advanced conditions + Story IP + on-chain multi-sig approve)", () => {
     const { agent } = makeAgent();
     expect(createCdrTools(agent).map((t) => t.name).sort()).toEqual([
       "cdr_access_license_gated",
       "cdr_access_vault",
+      "cdr_approve_multi_sig",
       "cdr_attach_license_terms",
       "cdr_check_entitlement",
       "cdr_create_dead_man_vault",

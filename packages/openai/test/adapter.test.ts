@@ -12,7 +12,7 @@ const stub = {
 describe("getOpenAITools", () => {
   it("produces valid OpenAI function tools with JSON-Schema params", () => {
     const { tools } = getOpenAITools(stub);
-    expect(tools.map((t) => t.function.name).sort()).toEqual(["cdr_access_license_gated","cdr_access_vault","cdr_attach_license_terms","cdr_check_entitlement","cdr_create_dead_man_vault","cdr_create_escrow_vault","cdr_create_multi_sig_vault","cdr_create_time_window_vault","cdr_create_vault","cdr_creator_vaults","cdr_discover_vaults","cdr_estimate_cost","cdr_get_fees","cdr_get_vault_info","cdr_list_subscriptions","cdr_mint_license_token","cdr_publish_data","cdr_register_ip","cdr_subscribe_and_access","cdr_upload_file","cdr_write_vault_data"]);
+    expect(tools.map((t) => t.function.name).sort()).toEqual(["cdr_access_license_gated","cdr_access_vault","cdr_approve_multi_sig","cdr_attach_license_terms","cdr_check_entitlement","cdr_create_dead_man_vault","cdr_create_escrow_vault","cdr_create_multi_sig_vault","cdr_create_time_window_vault","cdr_create_vault","cdr_creator_vaults","cdr_discover_vaults","cdr_estimate_cost","cdr_get_fees","cdr_get_vault_info","cdr_list_subscriptions","cdr_mint_license_token","cdr_publish_data","cdr_register_ip","cdr_subscribe_and_access","cdr_upload_file","cdr_write_vault_data"]);
     for (const t of tools) {
       expect(t.type).toBe("function");
       expect(t.function.parameters).toMatchObject({ type: "object" });
