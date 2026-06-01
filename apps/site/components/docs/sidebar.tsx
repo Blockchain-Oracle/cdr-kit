@@ -158,8 +158,9 @@ export function Sidebar({ open = false, onClose }: SidebarProps = {}) {
                   href={l.href}
                   className={active ? "side-link active" : "side-link"}
                   onClick={onClose}
+                  title={l.label}
                 >
-                  {l.label}
+                  <span>{l.label}</span>
                   {l.tag && !l.tagHref && <span className="tag">{l.tag}</span>}
                 </Link>
                 {l.tag && l.tagHref && (
