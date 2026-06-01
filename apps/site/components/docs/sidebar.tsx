@@ -36,6 +36,11 @@ export const SIDEBAR: SideGroup[] = [
       { href: "/docs/components/cdr-inspector", label: "CdrInspector" },
       { href: "/docs/components/cdr-skeleton", label: "CdrSkeleton" },
       { href: "/docs/components/empty-vaults", label: "EmptyVaults" },
+      // 0.5 — advanced-condition components
+      { href: "/docs/components/heartbeat-timer", label: "HeartbeatTimer", tag: "0.5" },
+      { href: "/docs/components/time-window-badge", label: "TimeWindowBadge", tag: "0.5" },
+      { href: "/docs/components/multi-sig-approval-tracker", label: "MultiSigApprovalTracker", tag: "0.5" },
+      { href: "/docs/components/escrow-delivery-confirm", label: "EscrowDeliveryConfirm", tag: "0.5" },
       // styled — @cdr-kit/react-ui
       { href: "/docs/components/condition-badge", label: "ConditionBadge", tag: "styled" },
       { href: "/docs/components/access-stepper", label: "AccessStepper", tag: "styled" },
@@ -63,6 +68,12 @@ export const SIDEBAR: SideGroup[] = [
       { href: "/docs/hooks/use-vault-events", label: "useVaultEvents" },
       { href: "/docs/hooks/use-creator-vaults", label: "useCreatorVaults" },
       { href: "/docs/hooks/use-cdr-wallet", label: "useCdrWallet" },
+      // 0.5 — advanced-condition hooks
+      { href: "/docs/hooks/use-dead-man-timer", label: "useDeadManTimer", tag: "0.5" },
+      { href: "/docs/hooks/use-time-window-state", label: "useTimeWindowState", tag: "0.5" },
+      { href: "/docs/hooks/use-multi-sig-status", label: "useMultiSigStatus", tag: "0.5" },
+      { href: "/docs/hooks/use-escrow-state", label: "useEscrowState", tag: "0.5" },
+      { href: "/docs/hooks/use-storage-backend", label: "useStorageBackend", tag: "0.5" },
     ],
   },
   {
@@ -87,6 +98,11 @@ export const SIDEBAR: SideGroup[] = [
       { href: "/docs/contracts/open-condition", label: "OpenCondition" },
       { href: "/docs/contracts/creator-write-condition", label: "CreatorWriteCondition" },
       { href: "/docs/contracts/cdr-kit-vault", label: "CdrKitVault", tag: "factory" },
+      // 0.5 — advanced conditions
+      { href: "/docs/contracts/time-window-condition", label: "TimeWindowCondition", tag: "0.5" },
+      { href: "/docs/contracts/dead-man-switch-condition", label: "DeadManSwitchCondition", tag: "0.5" },
+      { href: "/docs/contracts/conditional-escrow-condition", label: "ConditionalEscrowCondition", tag: "0.5" },
+      { href: "/docs/contracts/multi-sig-condition", label: "MultiSigCondition", tag: "0.5" },
     ],
   },
   {

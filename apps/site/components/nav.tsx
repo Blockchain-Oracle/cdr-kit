@@ -101,9 +101,9 @@ export function Nav() {
               </div>
             )}
           </div>
-          <Link className="nav-new" href="/showcase/blog">
-            <span className="nav-new-dot">new · 0.2</span>
-            <span className="nav-new-label">UnlockablePill</span>
+          <Link className="nav-new" href="/docs/contracts/multi-sig-condition">
+            <span className="nav-new-dot">new · 0.5</span>
+            <span className="nav-new-label">4 advanced conditions</span>
           </Link>
         </nav>
         <div className="nav-right">

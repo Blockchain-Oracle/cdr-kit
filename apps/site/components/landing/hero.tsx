@@ -10,9 +10,9 @@ export function Hero() {
       <div className="container">
         <div className="hero-grid">
           <div className="hero-left">
-            <Link href="/showcase/blog" className="hero-new reveal">
-              <span className="mono dot">new · 0.2</span>
-              <span className="hn-txt">&lt;UnlockablePill&gt; — inline paywalls for any blog</span>
+            <Link href="/docs/contracts/multi-sig-condition" className="hero-new reveal">
+              <span className="mono dot">new · 0.5</span>
+              <span className="hn-txt">4 advanced conditions live · TimeWindow / DeadMan / Escrow / MultiSig</span>
               <span className="arr" aria-hidden="true">→</span>
             </Link>
             <div className="hero-eyebrows reveal">
@@ -37,11 +37,11 @@ export function Hero() {
             <div className="hero-proof reveal">
               <span className="proof-item">
                 <span className="mk">✦</span>
-                <span className="mono">12</span> packages on npm
+                <span className="mono">15</span> packages on npm
               </span>
               <span className="proof-item">
                 <span className="mk">✦</span>
-                <span className="mono">30</span> Solidity tests
+                <span className="mono">99 + 7</span> Solidity tests
               </span>
               <span className="proof-item">
                 <span className="mk">✦</span>MIT licensed

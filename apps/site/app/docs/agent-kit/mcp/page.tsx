@@ -37,6 +37,16 @@ const TOOLS_TABLE: { name: string; group: string; description: string }[] = [
   { name: "cdr_create_vault", group: "Author / publish", description: "Mint NFT + register IP + allocate slot + configure read condition — one tx." },
   { name: "cdr_write_vault_data", group: "Author / publish", description: "Encrypt a small (<1KB) UTF-8 string and write it to a vault." },
   { name: "cdr_upload_file", group: "Author / publish", description: "Encrypt + IPFS-pin + allocate + write — for any >1KB payload." },
+  // 0.5 advanced-condition vaults
+  { name: "cdr_create_time_window_vault", group: "Advanced conditions (0.5)", description: "Create a Story CDR vault gated by an absolute time (or block) window." },
+  { name: "cdr_create_dead_man_vault", group: "Advanced conditions (0.5)", description: "Create a dead-man-switch vault — auto-unlocks to heirs if the creator stops poke()-ing." },
+  { name: "cdr_create_escrow_vault", group: "Advanced conditions (0.5)", description: "Create a buyer-pays-then-confirms-delivery escrow vault with optional arbiter." },
+  { name: "cdr_create_multi_sig_vault", group: "Advanced conditions (0.5)", description: "Create an N-of-M EIP-712 multi-sig vault — first-of-kind in the CDR ecosystem." },
+  // 0.5 Story IP integration
+  { name: "cdr_register_ip", group: "Story IP (0.5)", description: "Register an NFT as a Story IP asset (fresh-mint via SPG)." },
+  { name: "cdr_attach_license_terms", group: "Story IP (0.5)", description: "Attach PIL license terms to a Story IP asset (required before minting license tokens)." },
+  { name: "cdr_mint_license_token", group: "Story IP (0.5)", description: "Mint Story license tokens against an IP asset's licenseTermsId." },
+  { name: "cdr_publish_data", group: "Story IP (0.5)", description: "Agent-as-publisher one-shot: register IP + attach commercial terms + create license-gated CDR vault + write encrypted secret. The highest-DX win for autonomous data sellers." },
 ];
 
 export default function Page() {
@@ -45,8 +55,8 @@ export default function Page() {
       data={{
         breadcrumb: ["@cdr-kit", "Agent kit", "MCP server"],
         title: "MCP server",
-        badges: <><Badge tone="primary">@cdr-kit/mcp</Badge><Badge>13 tools · v0.4</Badge></>,
-        lede: <>One stdio binary that plugs into Claude Desktop, Cursor, Windsurf, and any MCP host. Exposes the full CDR surface — discover, subscribe, access, audit, publish — as <b>13 tools</b> backed by the agent&apos;s own auto-generated wallet. Shares code with <code>@cdr-kit/cli</code>, so anything the MCP can do, <code>cdr &lt;cmd&gt;</code> can do at the terminal.</>,
+        badges: <><Badge tone="primary">@cdr-kit/mcp</Badge><Badge>21 tools · v0.5</Badge></>,
+        lede: <>One stdio binary that plugs into Claude Desktop, Cursor, Windsurf, and any MCP host. Exposes the full CDR surface — discover, subscribe, access, audit, publish, plus 4 advanced-condition vault creators and 4 Story IP wrappers (including the <code>cdr_publish_data</code> one-shot) — as <b>21 tools</b> backed by the agent&apos;s own auto-generated wallet. Shares code with <code>@cdr-kit/cli</code>, so anything the MCP can do, <code>cdr &lt;cmd&gt;</code> can do at the terminal.</>,
         sections: [
           {
             id: "install",
