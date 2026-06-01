@@ -1,6 +1,6 @@
 {
   "name": "@cdr-kit/goat",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "GOAT SDK adapter for cdr-kit — getGoatTools(agent) / cdrPlugin.",
   "type": "module",
   "sideEffects": false,

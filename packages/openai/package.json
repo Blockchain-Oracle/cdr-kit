@@ -1,6 +1,6 @@
 {
   "name": "@cdr-kit/openai",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "OpenAI / Anthropic tool-calling adapter for cdr-kit — JSON-Schema tools[] + a dispatch router.",
   "type": "module",
   "sideEffects": false,

@@ -1,6 +1,6 @@
 {
   "name": "@cdr-kit/tools",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Framework-agnostic CDR agent tools ({name, description, Zod schema, invoke}) — the single source mapped to MCP + every agent framework.",
   "type": "module",
   "sideEffects": false,
@@ -36,7 +36,7 @@
     "zod-to-json-schema": "^3.24.1"
   },
   "peerDependencies": {
-    "@cdr-kit/story": "workspace:*"
+    "@cdr-kit/story": ">=0.4.0"
   },
   "peerDependenciesMeta": {
     "@cdr-kit/story": {

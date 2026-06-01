@@ -1,5 +1,50 @@
 # @cdr-kit/goat
 
+## 0.5.0
+
+### Minor Changes
+
+- cdr-kit 0.5.0 — advanced conditions, Story IP creator surface, storage backends, dashboard expansion.
+
+  **4 new condition contracts** deployed to Aeneid (bound to existing `CdrKitVault` factory `0xac592f…`, no factory redeploy):
+  - `TimeWindowCondition` (`0x67911435…`) — read-allowed inside `[startTs, endTs]`; supports release-on-date, limited window, and block-based modes.
+  - `DeadManSwitchCondition` (`0x37226f97…`) — auto-unlock to heir(s)/public if creator stops `poke()`-ing within `duration`. Optional `creatorCanReadWhileLocked` + `publicAfterUnlock`.
+  - `ConditionalEscrowCondition` (`0x7fcDe02D…`) — buyer `pay()` → `confirmDelivery()` → seller paid + buyer reads. Optional arbiter + seller-side `claimAfterTimeout`. Refunds excess `msg.value` in-tx.
+  - `MultiSigCondition` (`0x3A0Cf72f…`) — N-of-M with **two parallel approval paths**: off-chain EIP-712 sigs (gas-free; submitted as `accessAuxData`) OR on-chain `approve(uuid, expectedEpoch)` (Safe-style; signers pay gas; dashboards read `currentApprovalsCount`). Either path reaching threshold passes. `rotateSigners` bumps `epoch` — invalidates BOTH paths in one call. **First-of-kind dual-path in the CDR ecosystem.**
+
+  **New `@cdr-kit/story` package** wrapping `@story-protocol/core-sdk` for the full IP-asset creator flow:
+  - `registerIpAsset`, `mintAndRegisterIp`, `registerPilTerms(PILFlavors)`, `attachLicenseTerms`, `mintLicenseTokens`, `registerDerivative`, `wrapIp`, `approveWip`.
+  - `CdrAgent.publish({ data, priceWei, flavor })` one-shot: register IP + attach commercial PIL terms + create license-gated CDR vault + write encrypted secret. The agent-as-publisher wedge.
+
+  **3 ecosystem storage adapters** (lazy-load their SDKs via `new Function("s", "return import(s)")` indirection so Vite/Rollup don't try to statically resolve optional peer deps): `createPinataStorage`, `createSupabaseStorage`, `createS3CompatibleStorage` (R2/S3 compatible).
+
+  **Dashboard expansion** (`@cdr-kit/react`):
+  - 5 new components: `<HeartbeatTimer>`, `<TimeWindowBadge>`, `<MultiSigApprovalTracker>`, `<EscrowDeliveryConfirm>`, `<StorageBackendPicker>`.
+  - 7 new hooks: `useDeadManTimer`, `useTimeWindowState`, `useMultiSigStatus`, `useEscrowState`, `useStorageBackend`, `useApproveMultiSig`, `useRotateMultiSigSigners` + Story IP hooks (`useStoryClient`, `useRegisterIp`, `useMintLicenseToken`, `useAttachLicenseTerms`, `usePublish`).
+  - `<Vault>` compound + `<VaultGate>` extended with new states (`window-closed`, `awaiting-approvals`, `escrow-pending`).
+
+  **Agent surface widened**: 13 → 34 MCP tools, 17 → 25 CLI commands, 5 → 11 Claude Code skills. All new surfaces ship with matching docs pages at cdr-kit.dev (`/docs/contracts/{time-window,dead-man-switch,conditional-escrow,multi-sig}`, `/docs/components/{heartbeat-timer,…}`, `/docs/hooks/{use-dead-man-timer,…}`, `/docs/story`, `/docs/storage`, updated `/docs/cli` + `/docs/agent-kit/mcp`).
+
+  **Correctness + DX fixes**:
+  - `timeoutMs` default 600_000 → 120_000 (matches Story CDR docs ceiling).
+  - 5 typed SDK errors mapped: `LABEL_MISMATCH`, `CONTENT_SIZE_EXCEEDED`, `CID_INTEGRITY`, `INVALID_CONDITION_CONTRACT`, `WALLET_CLIENT_REQUIRED`.
+  - 5 missing addresses added to `@cdr-kit/contracts`: `royaltyWorkflows`, `registrationWorkflows`, `merc20`, `royaltyPolicyLap`, `royaltyPolicyLrp`.
+  - `INLINE_LIMIT_BYTES` now reads `CDR.maxEncryptedDataSize()` at runtime instead of hardcoding 1024.
+  - `useDiscoverVaults` event-decode no longer crashes on partial decodes (`Number(undefined) === NaN` latent bug).
+  - MultiSig on-chain `approve` requires `expectedEpoch` arg — guards against in-flight `rotateSigners` binding approval to a signer set the signer didn't see (reverts `EpochChanged(expected, current)`).
+
+  **Architectural decisions** logged in `context/decisions/decision-log.md`: D22 (dual-path MultiSig), D23 (storage adapter lazy-load pattern), D24 (no factory redeploy when adding conditions).
+
+  **Live on Aeneid (chain 1315)** — all 4 conditions verified end-to-end via forge tests (110/110), TS agent layer (`packages/agent/scripts/e2e_multisig_new.ts`), and live MCP tool calls (`cdr_create_time_window_vault` → uuid 4874, `cdr_create_dead_man_vault` → 4875, `cdr_create_escrow_vault` → 4876, MultiSig approve+EpochChanged → 4880).
+
+  Breaking: `MultiSigCondition.approve(uint32)` → `approve(uint32, uint64 expectedEpoch)`. The TS helper `CdrAgent.approveMultiSig(uuid, expectedEpoch?)` defaults to reading current epoch from `getConfig` so callers don't have to change unless they want the explicit fail-fast bind.
+
+### Patch Changes
+
+- Updated dependencies
+  - @cdr-kit/agent@0.5.0
+  - @cdr-kit/tools@0.5.0
+
 ## 0.4.0
 
 ### Minor Changes
