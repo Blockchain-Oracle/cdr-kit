@@ -19,8 +19,10 @@ async function loadStory(agent: CdrAgent): Promise<{
   if (!agent.client.walletClient?.account) {
     throw new Error("cdr-kit/agent: a wallet client is required for Story IP integration");
   }
+  const addrs = resolveAddresses(agent.network);
   const client = await story.createStoryClient({
     account: agent.client.walletClient.account as unknown as { address: Hex },
+    rpcUrl: addrs.rpcUrl,
     chainId: agent.network === "aeneid" ? 1315 : undefined,
   });
   return { story, client };

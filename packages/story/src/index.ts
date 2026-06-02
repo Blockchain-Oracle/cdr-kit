@@ -10,7 +10,7 @@
  * this package without the SDK installed will fail at the dynamic-import boundary in
  * `createStoryClient`, with a clear "install @story-protocol/core-sdk" error message.
  */
-import type { Hex } from "viem";
+import { http, type Hex } from "viem";
 import type {
   StoryClient as StoryClientT,
   RegisterIpResponse,
@@ -25,16 +25,25 @@ export { PILFlavor } from "@story-protocol/core-sdk";
 /** Story Aeneid testnet (chain 1315). The only deployed network as of 2026-06-01. */
 export const STORY_AENEID_CHAIN_ID = 1315;
 
-/** Construct a StoryClient via the SDK's account-based factory. Aeneid by default. */
+/** Default Aeneid RPC if caller doesn't pass one. */
+export const STORY_AENEID_RPC_URL = "https://aeneid.storyrpc.io";
+
+/** Construct a StoryClient via the SDK's account-based factory. Aeneid by default.
+ *
+ *  The SDK requires a real viem-style transport — it does NOT auto-derive one from chainId.
+ *  We build a default `http(rpcUrl)` transport so callers can omit `rpcUrl` for Aeneid; pass
+ *  it explicitly for custom endpoints (private nodes, mainnet when it ships).
+ */
 export async function createStoryClient(opts: {
   account: { address: Hex; signMessage?: unknown; signTransaction?: unknown };
   rpcUrl?: string;
   chainId?: number;
 }): Promise<StoryClientT> {
   const { StoryClient } = await loadSdk();
+  const transport = http(opts.rpcUrl ?? STORY_AENEID_RPC_URL);
   return StoryClient.newClientUseAccount({
     account: opts.account as never,
-    transport: undefined as never,
+    transport: transport as never,
     chainId: (opts.chainId ?? STORY_AENEID_CHAIN_ID) as never,
   });
 }

@@ -1,5 +1,28 @@
 # @cdr-kit/react
 
+## 0.5.2
+
+### Patch Changes
+
+- cdr-kit 0.5.2 — fix Story IP commands silently failing with `transport is null`.
+
+  **Bug:** `createStoryClient` in `@cdr-kit/story` was passing `transport: undefined` to `StoryClient.newClientUseAccount`. Every Story IP CLI command (`cdr ip register|attach-terms|mint-license|register-derivative|wrap-ip|approve-wip`), every agent helper (`agent.publish`, `agent.registerIpAsset`, etc.), and every React hook (`useStoryClient`, `usePublish`, `useRegisterIp`, etc.) immediately failed with:
+
+  ```
+  error: transport is null, please pass in a valid RPC Provider URL as the transport.
+  ```
+
+  The SDK does NOT auto-derive a transport from `chainId` (as some viem clients do) — it requires an explicit `http()` transport.
+
+  **Fix:**
+  - `@cdr-kit/story` — `createStoryClient` now builds `http(opts.rpcUrl ?? STORY_AENEID_RPC_URL)` by default; new `STORY_AENEID_RPC_URL` constant exported.
+  - `@cdr-kit/agent` — `loadStory` now passes `rpcUrl: addrs.rpcUrl` from the resolved network addresses.
+  - `@cdr-kit/react` — `useStoryClient` now passes `rpcUrl: walletClient.chain?.rpcUrls.default.http[0]` from the connected wagmi chain.
+
+  **Verified live:** After patching, `cdr ip wrap-ip` and `cdr ip approve-wip` landed real on-chain txs (`0x2fc86ff857…` and `0xcb185384a6…`); `cdr ip register|attach-terms|mint-license|register-derivative` all reach the chain and surface clean SDK-decoded protocol errors ("The IP with id 0x… is not registered.") instead of the client-side transport crash.
+
+  Caught during the exhaustive 37-command CLI sweep (Abu's "run them all" pass on 2026-06-02).
+
 ## 0.5.1
 
 ### Patch Changes

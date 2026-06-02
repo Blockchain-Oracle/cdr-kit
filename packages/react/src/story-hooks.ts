@@ -46,8 +46,10 @@ export function useStoryClient(chainId = 1315): StoryClientLike | undefined {
     let cancelled = false;
     loadStoryModule()
       .then(async (story) => {
+        const rpcUrl = walletClient.chain?.rpcUrls.default.http[0];
         const c = await story.createStoryClient({
           account: walletClient.account as unknown as { address: Hex },
+          rpcUrl,
           chainId,
         });
         if (!cancelled) setClient(c as unknown as StoryClientLike);
