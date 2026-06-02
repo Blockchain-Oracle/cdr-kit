@@ -172,6 +172,55 @@ export async function wrapIp(client: StoryClient, params: { amountWei: bigint })
   return { txHash: (res as { txHash: Hex }).txHash };
 }
 
+/* ============================================================ */
+/* SPG NFT Collection — prerequisite for IP registration         */
+/* ============================================================ */
+
+export interface CreateSpgCollectionParams {
+  name: string;
+  symbol: string;
+  /** When true, anyone can mint into the collection. Required `true` if you want third parties
+   *  to be able to mint+register IPs via `mintAndRegisterIp` without a per-call minter grant. */
+  isPublicMinting?: boolean;
+  /** Mint window open at creation time. Almost always `true` — set `false` only if you want to
+   *  deploy then enable later via the SPG admin role. */
+  mintOpen?: boolean;
+  /** Where the per-mint fees go. Defaults to the deployer wallet. */
+  mintFeeRecipient?: Hex;
+  /** ERC-7572 contract metadata URI. Empty string is allowed but discouraged. */
+  contractURI?: string;
+  /** Per-token base URI. Empty string is fine — tokenURI then comes from per-mint nftMetadataURI. */
+  baseURI?: string;
+  /** Optional: charge a flat mint fee. Pair with `mintFeeToken` (defaults to native IP if omitted). */
+  mintFee?: bigint;
+  mintFeeToken?: Hex;
+  maxSupply?: number;
+  /** Collection owner (admin). Defaults to the deployer wallet. */
+  owner?: Hex;
+}
+
+/** Deploy a new SPG NFT collection on Story. Required before `registerIpAsset` / `mintAndRegisterIp`
+ *  / `agent.publish` can mint into a collection you control. Returns the SPG contract address. */
+export async function createSpgCollection(
+  client: StoryClient,
+  params: CreateSpgCollectionParams,
+): Promise<{ spgNftContract: Hex; txHash: Hex }> {
+  const res = (await client.nftClient.createNFTCollection({
+    name: params.name,
+    symbol: params.symbol,
+    isPublicMinting: params.isPublicMinting ?? true,
+    mintOpen: params.mintOpen ?? true,
+    mintFeeRecipient: (params.mintFeeRecipient ?? "0x0000000000000000000000000000000000000000") as never,
+    contractURI: params.contractURI ?? "",
+    baseURI: params.baseURI,
+    mintFee: params.mintFee,
+    mintFeeToken: params.mintFeeToken as never,
+    maxSupply: params.maxSupply,
+    owner: params.owner as never,
+  } as never)) as { spgNftContract: Hex; txHash: Hex };
+  return { spgNftContract: res.spgNftContract, txHash: res.txHash };
+}
+
 /** Approve `spender` to pull `amountWei` of WIP from this wallet (needed before paying royalty). */
 export async function approveWip(
   client: StoryClient,

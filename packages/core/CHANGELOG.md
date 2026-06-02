@@ -1,5 +1,32 @@
 # @cdr-kit/core
 
+## 0.6.0
+
+### Minor Changes
+
+- cdr-kit 0.5.2 — friendly contract-revert decoding, CLI auto-wait-for-receipt, real-SPG IP creation.
+
+  **Decode gap fix** (closes `cli-error-decode-gap` from the 0.6.x backlog):
+  - NEW `decodeContractRevert(err)` + `writeWithDecode(wc, params)` exported from `@cdr-kit/core`. Walks viem's error chain for `ContractFunctionRevertedError`, pulls `errorName + args` from the contract's ABI, formats a one-line message: `"EpochChanged(expected=0n, current=1n)"`.
+  - All 7 `walletClient.writeContract` calls in `@cdr-kit/agent`'s advanced helpers (approve/poke/pay/confirm/claim-timeout/refund/rotate) + the 2 in `@cdr-kit/core`'s flows (createVault, subscribeAndAccess) now go through `writeWithDecode`. CLI's `friendlyError()` also calls `decodeContractRevert` on direct viem reverts so chain calls outside the agent helpers (e.g. `cdr subscribe` against a non-subscription vault) also decode.
+  - Both CLI and MCP get the friendly message for free since both share the agent layer. Verified live: `cdr multi-sig approve 4908 --expected-epoch 0` now prints `error: EpochChanged(0n, 1n)` instead of viem's 20-line wall-of-text.
+
+  **Race fix** (closes `cli-post-tx-read-race`):
+  - NEW `okTx(agent, txHash, extra?)` helper in `@cdr-kit/cli` that `waitForTransactionReceipt({ confirmations: 1 })` before printing. Output now includes `{txHash, blockNumber, status, ...extra}`.
+  - Every CLI action that returns a tx hash uses `okTx` instead of `ok({txHash})` (15 sites in cli-advanced.ts).
+  - Eliminates the rotate→approve and pay→confirm races that bit users chaining commands. Verified: `cdr multi-sig rotate 4908` immediately followed by `cdr multi-sig approve 4908 --expected-epoch 2` now succeeds first try (rotate landed at block 19056000, approve at 19056005 — no manual sleep needed).
+  - MCP stays non-blocking (LLM batching), but the decoded EpochChanged from the first fix tells the LLM exactly what to retry.
+
+  **Real-SPG IP creation** (eliminates 0x0 zero-address dodges):
+  - NEW `createSpgCollection` in `@cdr-kit/story` (wraps Story SDK's `nftClient.createNFTCollection`).
+  - NEW `agent.createSpgCollection({...})` method on `CdrAgent`.
+  - NEW `cdr ip create-collection` CLI subcommand.
+  - Verified live: `cdr ip create-collection --name "..." --symbol "..."` deployed real SPG `0x694A8c3937…`; `cdr ip register --spg <real>` returned real ipId `0x3A4FDA09…`; `cdr ip attach-terms` succeeded against the real IP + terms 2536.
+
+  **Workspace gate:** build (16/16), typecheck (23/23), lint (16/16), test (21/21) all green.
+
+  Touched: 8 files across @cdr-kit/{core, agent, story, cli}. Live-verified all 3 fixes against the deployed Aeneid contracts.
+
 ## 0.5.0
 
 ### Minor Changes

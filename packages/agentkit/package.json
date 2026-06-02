@@ -1,6 +1,6 @@
 {
   "name": "@cdr-kit/agentkit",
-  "version": "0.5.0",
+  "version": "0.5.2",
   "description": "Coinbase AgentKit adapter for cdr-kit — getCdrActionProvider(agent).",
   "type": "module",
   "sideEffects": false,

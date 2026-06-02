@@ -5,6 +5,7 @@ import {
   multiSigConditionAbi,
   conditionalEscrowConditionAbi,
 } from "@cdr-kit/contracts";
+import { writeWithDecode } from "@cdr-kit/core";
 import type { CdrAgent } from "./agent.js";
 import { log } from "./logger.js";
 
@@ -123,7 +124,7 @@ export async function approveMultiSig(
     })) as readonly [readonly Hex[], number, bigint];
     epoch = cfg[2];
   }
-  return wc.writeContract({
+  return writeWithDecode(wc, {
     address: addrs.multiSigCondition as Hex,
     abi: multiSigConditionAbi,
     functionName: "approve",
@@ -138,7 +139,7 @@ export async function pokeDeadMan(agent: CdrAgent, uuid: number): Promise<Hex> {
   const addrs = resolveAddresses(agent.network);
   const wc = agent.client.walletClient;
   if (!wc) throw new Error("agent has no wallet client");
-  return wc.writeContract({
+  return writeWithDecode(wc, {
     address: addrs.deadManSwitchCondition as Hex,
     abi: deadManSwitchConditionAbi,
     functionName: "poke",
@@ -200,7 +201,7 @@ export async function payEscrow(agent: CdrAgent, p: { uuid: number; price: bigin
   const addrs = resolveAddresses(agent.network);
   const wc = agent.client.walletClient;
   if (!wc) throw new Error("agent has no wallet client");
-  return wc.writeContract({
+  return writeWithDecode(wc, {
     address: addrs.conditionalEscrowCondition as Hex,
     abi: conditionalEscrowConditionAbi,
     functionName: "pay",
@@ -220,7 +221,7 @@ export async function claimEscrowAfterTimeout(
   const addrs = resolveAddresses(agent.network);
   const wc = agent.client.walletClient;
   if (!wc) throw new Error("agent has no wallet client");
-  return wc.writeContract({
+  return writeWithDecode(wc, {
     address: addrs.conditionalEscrowCondition as Hex,
     abi: conditionalEscrowConditionAbi,
     functionName: "claimAfterTimeout",
@@ -238,7 +239,7 @@ export async function refundEscrow(
   const addrs = resolveAddresses(agent.network);
   const wc = agent.client.walletClient;
   if (!wc) throw new Error("agent has no wallet client");
-  return wc.writeContract({
+  return writeWithDecode(wc, {
     address: addrs.conditionalEscrowCondition as Hex,
     abi: conditionalEscrowConditionAbi,
     functionName: "arbiterRefund",
@@ -258,7 +259,7 @@ export async function rotateMultiSigSigners(
   const wc = agent.client.walletClient;
   if (!wc) throw new Error("agent has no wallet client");
   const sorted = [...p.signers].sort((a, b) => (BigInt(a) < BigInt(b) ? -1 : 1));
-  return wc.writeContract({
+  return writeWithDecode(wc, {
     address: addrs.multiSigCondition as Hex,
     abi: multiSigConditionAbi,
     functionName: "rotateSigners",
@@ -273,7 +274,7 @@ export async function confirmEscrowDelivery(agent: CdrAgent, uuid: number): Prom
   const addrs = resolveAddresses(agent.network);
   const wc = agent.client.walletClient;
   if (!wc) throw new Error("agent has no wallet client");
-  return wc.writeContract({
+  return writeWithDecode(wc, {
     address: addrs.conditionalEscrowCondition as Hex,
     abi: conditionalEscrowConditionAbi,
     functionName: "confirmDelivery",

@@ -1,5 +1,13 @@
 # @cdr-kit/tools
 
+## 0.5.2
+
+### Patch Changes
+
+- Updated dependencies
+  - @cdr-kit/core@0.6.0
+  - @cdr-kit/agent@0.6.0
+
 ## 0.5.1
 
 ### Patch Changes

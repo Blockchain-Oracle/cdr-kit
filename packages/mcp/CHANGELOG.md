@@ -1,5 +1,21 @@
 # @cdr-kit/mcp
 
+## 0.5.2
+
+### Patch Changes
+
+- Updated dependencies
+  - @cdr-kit/agent@0.6.0
+  - @cdr-kit/cli@0.6.0
+
+## 0.5.1
+
+### Patch Changes
+
+- Updated dependencies
+  - @cdr-kit/agent@0.5.1
+  - @cdr-kit/cli@0.5.1
+
 ## 0.5.0
 
 ### Minor Changes

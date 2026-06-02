@@ -1,6 +1,6 @@
 {
   "name": "@cdr-kit/story",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "Thin TypeScript wrappers over @story-protocol/core-sdk: register IP, mint license tokens, attach PIL terms, register derivatives, wrap IP. The agent-as-publisher surface for cdr-kit.",
   "type": "module",
   "sideEffects": false,

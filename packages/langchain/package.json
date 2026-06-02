@@ -1,6 +1,6 @@
 {
   "name": "@cdr-kit/langchain",
-  "version": "0.5.0",
+  "version": "0.5.2",
   "description": "LangChain adapter for cdr-kit — getLangChainTools(agent).",
   "type": "module",
   "sideEffects": false,

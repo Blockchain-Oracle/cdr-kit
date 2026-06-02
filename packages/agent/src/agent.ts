@@ -418,6 +418,13 @@ export class CdrAgent {
   /* 0.5.0 Story IP integration — delegated to ./agent-story.ts    */
   /* (@cdr-kit/story is an optional peer dep; helpers lazy-load it)*/
   /* ============================================================ */
+  /** Deploy a fresh SPG NFT collection — prerequisite for `registerIpAsset` / `publish` to mint
+   *  new tokens. Returns the collection address; pass it as `spgNftContract` in later calls. */
+  createSpgCollection(
+    params: Parameters<typeof story.createSpgCollection>[1],
+  ): ReturnType<typeof story.createSpgCollection> {
+    return story.createSpgCollection(this, params);
+  }
   registerIpAsset(params: Parameters<typeof story.registerIpAsset>[1]): ReturnType<typeof story.registerIpAsset> {
     return story.registerIpAsset(this, params);
   }

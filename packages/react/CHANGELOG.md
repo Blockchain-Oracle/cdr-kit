@@ -1,5 +1,12 @@
 # @cdr-kit/react
 
+## 0.5.3
+
+### Patch Changes
+
+- Updated dependencies
+  - @cdr-kit/core@0.6.0
+
 ## 0.5.2
 
 ### Patch Changes

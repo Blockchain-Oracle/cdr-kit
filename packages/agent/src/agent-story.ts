@@ -28,6 +28,30 @@ async function loadStory(agent: CdrAgent): Promise<{
   return { story, client };
 }
 
+/** Deploy a fresh SPG NFT collection — prerequisite for `registerIpAsset` / `publish` to mint
+ *  new tokens. Without an SPG, IP registration calls fail with "address is not a contract".
+ *  Defaults to public minting + open mint window so subsequent IP registrations Just Work. */
+export async function createSpgCollection(
+  agent: CdrAgent,
+  params: {
+    name: string;
+    symbol: string;
+    isPublicMinting?: boolean;
+    mintOpen?: boolean;
+    mintFeeRecipient?: Hex;
+    contractURI?: string;
+    baseURI?: string;
+    mintFee?: bigint;
+    mintFeeToken?: Hex;
+    maxSupply?: number;
+    owner?: Hex;
+  },
+): Promise<{ spgNftContract: Hex; txHash: Hex }> {
+  const { story, client } = await loadStory(agent);
+  log.info({ name: params.name, symbol: params.symbol }, "create SPG NFT collection");
+  return story.createSpgCollection(client, params);
+}
+
 /** Register an NFT as a Story IP asset. Supports both `mint` and `minted` variants; optionally
  *  registers + attaches PIL terms in the same tx via `licenseTermsData`. */
 export async function registerIpAsset(

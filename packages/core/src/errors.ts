@@ -1,3 +1,11 @@
+import {
+  BaseError,
+  ContractFunctionRevertedError,
+  type WalletClient,
+  type WriteContractParameters,
+  type Hex,
+} from "viem";
+
 /** Stable, branchable error codes for every cdr-kit failure mode. */
 export type CdrErrorCode =
   | "WASM_NOT_INITIALIZED"
@@ -170,5 +178,65 @@ export function mapSdkError(e: unknown): CdrError {
       return CdrErrors.unknown(`invalid parameters: ${message}`, e);
     default:
       return CdrErrors.unknown(message, e);
+  }
+}
+
+/* ============================================================ */
+/* Contract revert decoding — viem ABI custom errors             */
+/* ============================================================ */
+
+/**
+ * Walk a viem error chain for a `ContractFunctionRevertedError` and format the matched custom
+ * error from the contract's ABI as a short readable string. Returns `null` if no decoded revert
+ * was found (caller should fall back to the original error message).
+ *
+ * Examples:
+ *   "EpochChanged(expected=0n, current=1n)"
+ *   "AlreadyDelivered()"
+ *   "BadWindow()"
+ *
+ * Complement to `mapSdkError` — that handles `@piplabs/cdr-sdk` throws; this handles on-chain
+ * reverts from any contract whose ABI was passed to the failing call (which all CDR condition
+ * writes do via the generated ABIs in `@cdr-kit/contracts`).
+ */
+export function decodeContractRevert(err: unknown): string | null {
+  if (!(err instanceof BaseError)) return null;
+  const revert = err.walk((e) => e instanceof ContractFunctionRevertedError);
+  if (!(revert instanceof ContractFunctionRevertedError)) return null;
+  const data = revert.data;
+  if (!data?.errorName) return revert.reason ?? null;
+  const args = data.args ?? [];
+  if (args.length === 0) return `${data.errorName}()`;
+  return `${data.errorName}(${args.map(formatArg).join(", ")})`;
+}
+
+function formatArg(arg: unknown): string {
+  if (typeof arg === "bigint") return `${arg.toString()}n`;
+  if (typeof arg === "string") return arg;
+  if (typeof arg === "number" || typeof arg === "boolean") return String(arg);
+  if (Array.isArray(arg)) return `[${arg.map(formatArg).join(",")}]`;
+  return JSON.stringify(arg, (_k, v) => (typeof v === "bigint" ? v.toString() + "n" : v));
+}
+
+/**
+ * Wrapper around `walletClient.writeContract` that re-throws viem reverts with a decoded
+ * message and the original error attached as `cause`. Used by core's `flows.ts` (createVault /
+ * subscribeAndAccess) and agent's advanced/story helpers so CLI's `friendlyError()` AND MCP's
+ * auto error envelope both surface readable contract reverts for free.
+ */
+export async function writeWithDecode(
+  wc: WalletClient,
+  params: WriteContractParameters,
+): Promise<Hex> {
+  try {
+    return (await wc.writeContract(params)) as Hex;
+  } catch (e) {
+    const decoded = decodeContractRevert(e);
+    if (decoded) {
+      const wrapped = new Error(decoded);
+      (wrapped as Error & { cause?: unknown }).cause = e;
+      throw wrapped;
+    }
+    throw e;
   }
 }

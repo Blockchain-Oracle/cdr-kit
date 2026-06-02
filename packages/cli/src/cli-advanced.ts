@@ -1,6 +1,6 @@
 import type { Command } from "commander";
 import type { CdrAgent } from "@cdr-kit/agent";
-import { ok } from "./lib/output.js";
+import { ok, okTx } from "./lib/output.js";
 
 /**
  * 0.5 CLI surface — advanced-condition vault creators + mutators + Story IP wrappers.
@@ -36,7 +36,7 @@ export function registerAdvancedCommands(program: Command, buildAgent: (n?: stri
         licenseTermsId: opts.licenseTermsId ? BigInt(opts.licenseTermsId) : undefined,
         valueWei: opts.value ? BigInt(opts.value) : undefined,
       });
-      ok({ txHash, hint: "read uuid from VaultCreated event in the receipt" });
+      await okTx(agent, txHash, { hint: "read uuid from VaultCreated event in the receipt" });
     });
 
   create
@@ -69,7 +69,7 @@ export function registerAdvancedCommands(program: Command, buildAgent: (n?: stri
         licenseTermsId: opts.licenseTermsId ? BigInt(opts.licenseTermsId) : undefined,
         valueWei: opts.value ? BigInt(opts.value) : undefined,
       });
-      ok({ txHash });
+      await okTx(agent, txHash);
     });
 
   create
@@ -91,7 +91,7 @@ export function registerAdvancedCommands(program: Command, buildAgent: (n?: stri
         licenseTermsId: opts.licenseTermsId ? BigInt(opts.licenseTermsId) : undefined,
         valueWei: opts.value ? BigInt(opts.value) : undefined,
       });
-      ok({ txHash });
+      await okTx(agent, txHash);
     });
 
   create
@@ -110,7 +110,7 @@ export function registerAdvancedCommands(program: Command, buildAgent: (n?: stri
         licenseTermsId: opts.licenseTermsId ? BigInt(opts.licenseTermsId) : undefined,
         valueWei: opts.value ? BigInt(opts.value) : undefined,
       });
-      ok({ txHash });
+      await okTx(agent, txHash);
     });
 
   /* ============================================================ */
@@ -128,7 +128,7 @@ export function registerAdvancedCommands(program: Command, buildAgent: (n?: stri
       const agent = buildAgent(network());
       const expected = opts.expectedEpoch === undefined ? undefined : BigInt(opts.expectedEpoch);
       const txHash = await agent.approveMultiSig(Number(uuidArg), expected);
-      ok({ txHash });
+      await okTx(agent, txHash);
     });
   ms.command("sign <uuid>")
     .description("produce an off-chain EIP-712 sig — collect threshold-many off-band, then `access`")
@@ -164,7 +164,7 @@ export function registerAdvancedCommands(program: Command, buildAgent: (n?: stri
     .action(async (uuidArg: string) => {
       const agent = buildAgent(network());
       const txHash = await agent.pokeDeadMan(Number(uuidArg));
-      ok({ txHash });
+      await okTx(agent, txHash);
     });
 
   /* ============================================================ */
@@ -178,14 +178,14 @@ export function registerAdvancedCommands(program: Command, buildAgent: (n?: stri
     .action(async (uuidArg: string, opts: { price: string }) => {
       const agent = buildAgent(network());
       const txHash = await agent.payEscrow({ uuid: Number(uuidArg), price: BigInt(opts.price) });
-      ok({ txHash });
+      await okTx(agent, txHash);
     });
   escrow.command("confirm <uuid>")
     .description("confirm delivery — releases funds to seller, grants buyer read access (step 2 of 2)")
     .action(async (uuidArg: string) => {
       const agent = buildAgent(network());
       const txHash = await agent.confirmEscrowDelivery(Number(uuidArg));
-      ok({ txHash });
+      await okTx(agent, txHash);
     });
   escrow.command("claim-timeout <uuid>")
     .description("seller-side: claim funds + grant buyer read after listing's timeoutSecs of silence")
@@ -193,7 +193,7 @@ export function registerAdvancedCommands(program: Command, buildAgent: (n?: stri
     .action(async (uuidArg: string, opts: { buyer: string }) => {
       const agent = buildAgent(network());
       const txHash = await agent.claimEscrowAfterTimeout({ uuid: Number(uuidArg), buyer: opts.buyer as `0x${string}` });
-      ok({ txHash });
+      await okTx(agent, txHash);
     });
   escrow.command("arbiter-refund <uuid>")
     .description("arbiter-side: refund a buyer who paid but disputes delivery")
@@ -201,7 +201,7 @@ export function registerAdvancedCommands(program: Command, buildAgent: (n?: stri
     .action(async (uuidArg: string, opts: { buyer: string }) => {
       const agent = buildAgent(network());
       const txHash = await agent.refundEscrow({ uuid: Number(uuidArg), buyer: opts.buyer as `0x${string}` });
-      ok({ txHash });
+      await okTx(agent, txHash);
     });
 
   ms.command("rotate <uuid>")
@@ -216,7 +216,7 @@ export function registerAdvancedCommands(program: Command, buildAgent: (n?: stri
         signers,
         threshold: Number(opts.threshold),
       });
-      ok({ txHash });
+      await okTx(agent, txHash);
     });
 
   /* ============================================================ */
@@ -224,6 +224,39 @@ export function registerAdvancedCommands(program: Command, buildAgent: (n?: stri
   /* ============================================================ */
 
   const ip = program.command("ip").description("Story IP integration (requires @cdr-kit/story + @story-protocol/core-sdk)");
+  ip.command("create-collection")
+    .description("deploy a new SPG NFT collection — prerequisite for `ip register` / `publish` to mint into")
+    .requiredOption("--name <name>", "collection name (e.g. \"cdr-kit Test IP\")")
+    .requiredOption("--symbol <symbol>", "collection symbol (e.g. \"CDRTEST\")")
+    .option("--no-public-minting", "restrict minting to addresses with the minter role (default: public)")
+    .option("--contract-uri <uri>", "ERC-7572 contract metadata URI", "")
+    .option("--base-uri <uri>", "base URI for tokenURI resolution")
+    .option("--mint-fee <wei>", "per-mint fee in wei (omit for free mints)")
+    .option("--mint-fee-token <addr>", "ERC-20 used for the fee (omit for native IP)")
+    .option("--max-supply <n>", "maximum tokens that can be minted (omit for unbounded)")
+    .action(async (opts: {
+      name: string;
+      symbol: string;
+      publicMinting?: boolean;
+      contractUri: string;
+      baseUri?: string;
+      mintFee?: string;
+      mintFeeToken?: string;
+      maxSupply?: string;
+    }) => {
+      const agent = buildAgent(network());
+      const res = await agent.createSpgCollection({
+        name: opts.name,
+        symbol: opts.symbol,
+        isPublicMinting: opts.publicMinting !== false,
+        contractURI: opts.contractUri,
+        baseURI: opts.baseUri,
+        mintFee: opts.mintFee ? BigInt(opts.mintFee) : undefined,
+        mintFeeToken: opts.mintFeeToken as `0x${string}` | undefined,
+        maxSupply: opts.maxSupply ? Number(opts.maxSupply) : undefined,
+      });
+      await okTx(agent, res.txHash, { spgNftContract: res.spgNftContract });
+    });
   ip.command("register")
     .description("register a freshly-minted NFT as a Story IP asset (mint mode)")
     .requiredOption("--spg <addr>", "SPG NFT contract address")
@@ -251,7 +284,7 @@ export function registerAdvancedCommands(program: Command, buildAgent: (n?: stri
         ipId: opts.ip as `0x${string}`,
         licenseTermsId: BigInt(opts.termsId),
       });
-      ok({ txHash: res.txHash });
+      await okTx(agent, res.txHash);
     });
   ip.command("mint-license")
     .description("mint Story license tokens against an IP asset's licenseTermsId")
@@ -286,7 +319,7 @@ export function registerAdvancedCommands(program: Command, buildAgent: (n?: stri
         parentIpIds: opts.parents.split(",").map((s) => s.trim()) as `0x${string}`[],
         licenseTermsIds: opts.termsIds.split(",").map((s) => BigInt(s.trim())),
       });
-      ok({ txHash: res.txHash });
+      await okTx(agent, res.txHash);
     });
   ip.command("wrap-ip")
     .description("wrap native IP into WIP (ERC-20) — required before paying royalties")
@@ -294,7 +327,7 @@ export function registerAdvancedCommands(program: Command, buildAgent: (n?: stri
     .action(async (opts: { amount: string }) => {
       const agent = buildAgent(network());
       const res = await agent.wrapIp({ amountWei: BigInt(opts.amount) });
-      ok({ txHash: res.txHash });
+      await okTx(agent, res.txHash);
     });
   ip.command("approve-wip")
     .description("approve a spender (typically RoyaltyModule) to pull WIP from the agent's wallet")
@@ -303,6 +336,6 @@ export function registerAdvancedCommands(program: Command, buildAgent: (n?: stri
     .action(async (opts: { spender: string; amount: string }) => {
       const agent = buildAgent(network());
       const res = await agent.approveWip({ spender: opts.spender as `0x${string}`, amountWei: BigInt(opts.amount) });
-      ok({ txHash: res.txHash });
+      await okTx(agent, res.txHash);
     });
 }

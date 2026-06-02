@@ -1,5 +1,21 @@
 # @cdr-kit/langchain
 
+## 0.5.2
+
+### Patch Changes
+
+- Updated dependencies
+  - @cdr-kit/agent@0.6.0
+  - @cdr-kit/tools@0.5.2
+
+## 0.5.1
+
+### Patch Changes
+
+- Updated dependencies
+  - @cdr-kit/agent@0.5.1
+  - @cdr-kit/tools@0.5.1
+
 ## 0.5.0
 
 ### Minor Changes

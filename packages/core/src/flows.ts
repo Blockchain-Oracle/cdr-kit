@@ -3,7 +3,7 @@ import { uuidToLabel, EmptyVaultError, PartialCollectionTimeoutError } from "@pi
 import { subscriptionConditionAbi, cdrKitVaultAbi } from "@cdr-kit/contracts";
 import type { CdrKitClient } from "./client.js";
 import { ensureWasm } from "./wasm.js";
-import { CdrError, CdrErrors } from "./errors.js";
+import { CdrError, CdrErrors, writeWithDecode } from "./errors.js";
 
 export type AccessStep = "paying" | "collecting-partials" | "ready";
 export type ProgressFn = (step: AccessStep) => void;
@@ -79,7 +79,7 @@ export async function subscribeAndAccess(
 ): Promise<Uint8Array> {
   const wallet = requireWallet(client);
   params.onProgress?.("paying");
-  const hash = await wallet.writeContract({
+  const hash = await writeWithDecode(wallet, {
     address: params.subscriptionCondition,
     abi: subscriptionConditionAbi,
     functionName: "subscribe",
@@ -116,7 +116,7 @@ export async function createVault(
   },
 ): Promise<Hex> {
   const wallet = requireWallet(client);
-  return wallet.writeContract({
+  return writeWithDecode(wallet, {
     address: params.vault,
     abi: cdrKitVaultAbi,
     functionName: "createVault",
