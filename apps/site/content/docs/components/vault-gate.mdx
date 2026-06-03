@@ -19,7 +19,7 @@ next:
 
 <p>Press subscribe to run the full mock flow — condition check, payment, threshold key-share collection, and local decryption. It mirrors the real 2-step <code>subscribeAndAccess</code> path against the actual <code>createMockCdrKit()</code> from <code>@cdr-kit/core</code>.</p>
 
-<Demo preview={<VaultGateDemo />} code={`import { CdrProvider, VaultGate } from "@cdr-kit/react";
+<Demo badge={<Badge>mock kit</Badge>} preview={<VaultGateDemo />} code={`import { CdrProvider, VaultGate } from "@cdr-kit/react";
 import { createMockCdrKit } from "@cdr-kit/core";
 
 export function SignalCard() {

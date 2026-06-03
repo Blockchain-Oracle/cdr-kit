@@ -16,7 +16,6 @@
     "@cdr-kit/forms": "npm:@cdr-kit/forms@^0.7.1",
     "@cdr-kit/react": "npm:@cdr-kit/react@^0.7.0",
     "@cdr-kit/react-ui": "npm:@cdr-kit/react-ui@^0.7.0",
-    "@radix-ui/react-popover": "^1.1.15",
     "@rainbow-me/rainbowkit": "^2.2.11",
     "@tanstack/react-query": "^5.62.0",
     "fumadocs-core": "^16.9.3",
