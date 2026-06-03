@@ -7,6 +7,8 @@ const KNOWN_TEMPLATES: TemplateName[] = [
   "starter",
   "blog",
   "paywall",
+  "data-marketplace",
+  "forms",
   "mcp-server",
   "agent-vercel-ai",
   "agent-openai",
@@ -49,8 +51,8 @@ function parseArgs(argv: string[]): { target?: string; template: TemplateName; h
 }
 
 function printHelp(): void {
-  process.stdout.write("usage: create-cdr-kit-app <dir> [--template starter|blog]\n\ntemplates:\n");
-  for (const t of listTemplates()) process.stdout.write(`  ${t.name.padEnd(8)}  ${t.description}\n`);
+  process.stdout.write("usage: create-cdr-kit-app <dir> [--template <name>]\n\ntemplates:\n");
+  for (const t of listTemplates()) process.stdout.write(`  ${t.name.padEnd(20)}  ${t.description}\n`);
 }
 
 // CLI entry (skipped when imported, e.g. by tests).

@@ -1,9 +1,25 @@
 import { dedent } from "../util.js";
-import { CDR_VERSION, type Template } from "./types.js";
+import {
+  ENV_LOCAL_EXAMPLE,
+  GITIGNORE,
+  NEXT_CONFIG_TS,
+  NEXT_ENV_DTS,
+  PROVIDERS_TSX,
+  SHARED_DEPS,
+  SHARED_DEV_DEPS,
+  THEME_INIT_SCRIPT,
+  TSCONFIG_JSON,
+} from "./shared.js";
+import type { Template } from "./types.js";
 
+/**
+ * Premium blog template — inline <UnlockablePill> paywalls over a dark editorial layout.
+ * Real Aeneid integration from the first render. No mock. Connect a wallet to interact.
+ */
 export const BLOG: Template = {
   name: "blog",
-  description: "Next.js 16 blog with inline <UnlockablePill> paywalls. Mock-CDR out of the box; swap one provider to go live.",
+  description:
+    "Next.js 16 editorial blog with inline <UnlockablePill> paywalls — real Aeneid integration, dark premium design.",
   postInstall: ["pnpm install", "pnpm dev   # http://localhost:3000"],
   files: [
     {
@@ -13,108 +29,77 @@ export const BLOG: Template = {
           name: "cdr-kit-blog",
           private: true,
           version: "0.0.1",
-          scripts: { dev: "next dev", build: "next build", start: "next start", lint: "next lint" },
-          dependencies: {
-            "@cdr-kit/contracts": CDR_VERSION,
-            "@cdr-kit/core": CDR_VERSION,
-            "@cdr-kit/react": CDR_VERSION,
-            "@cdr-kit/react-ui": CDR_VERSION,
-            "@tanstack/react-query": "^5.62.0",
-            next: "^16.2.6",
-            react: "^19.2.0",
-            "react-dom": "^19.2.0",
-            viem: "^2.51.3",
-            wagmi: "^2.14.0",
+          scripts: {
+            dev: "next dev",
+            build: "next build",
+            start: "next start",
+            lint: "next lint",
+            "upload:sample": "tsx scripts/upload.ts",
           },
-          devDependencies: {
-            "@types/node": "^20",
-            "@types/react": "^19",
-            "@types/react-dom": "^19",
-            typescript: "^5.7.2",
-          },
+          dependencies: SHARED_DEPS,
+          devDependencies: { ...SHARED_DEV_DEPS, tsx: "^4.19.2" },
         },
         null,
         2,
       ),
     },
-    {
-      path: "tsconfig.json",
-      content: JSON.stringify(
-        {
-          compilerOptions: {
-            target: "ES2022",
-            lib: ["dom", "dom.iterable", "esnext"],
-            module: "esnext",
-            moduleResolution: "bundler",
-            jsx: "preserve",
-            strict: true,
-            esModuleInterop: true,
-            skipLibCheck: true,
-            isolatedModules: true,
-            noEmit: true,
-            incremental: true,
-            resolveJsonModule: true,
-            allowJs: true,
-            plugins: [{ name: "next" }],
-            paths: { "@/*": ["./*"] },
-          },
-          include: ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-          exclude: ["node_modules"],
-        },
-        null,
-        2,
-      ),
-    },
-    { path: "next.config.ts", content: "export default { reactStrictMode: true };\n" },
-    { path: "next-env.d.ts", content: '/// <reference types="next" />\n/// <reference types="next/types/global" />\n' },
+    { path: "tsconfig.json", content: TSCONFIG_JSON },
+    { path: "next.config.ts", content: NEXT_CONFIG_TS },
+    { path: "next-env.d.ts", content: NEXT_ENV_DTS },
     {
       path: "app/layout.tsx",
       content: dedent(`
         import type { ReactNode } from "react";
         import { Providers } from "./providers";
+        import { SiteHeader } from "./header";
         import "@cdr-kit/react-ui/styles.css";
         import "./globals.css";
 
         export const metadata = {
           title: "cdr-kit blog — pay-to-unlock prose",
-          description: "Inline paywalls powered by Story Confidential Data Rails.",
+          description: "Inline paywalls powered by Story Confidential Data Rails (real Aeneid testnet).",
         };
 
         export default function RootLayout({ children }: { children: ReactNode }) {
           return (
-            <html lang="en">
+            <html lang="en" data-theme="dark" suppressHydrationWarning>
+              <head>
+                ${THEME_INIT_SCRIPT}
+              </head>
               <body>
-                <Providers>{children}</Providers>
+                <Providers>
+                  <SiteHeader />
+                  <main>{children}</main>
+                </Providers>
               </body>
             </html>
           );
         }
       `),
     },
+    { path: "app/providers.tsx", content: PROVIDERS_TSX },
     {
-      path: "app/providers.tsx",
+      path: "app/header.tsx",
       content: dedent(`
         "use client";
 
-        import { useMemo, type ReactNode } from "react";
-        import { CdrProvider } from "@cdr-kit/react";
-        import { createMockCdrKit } from "@cdr-kit/core";
+        import { ConnectButton } from "@rainbow-me/rainbowkit";
+        import { CdrNetworkChip } from "@cdr-kit/react-ui";
 
-        /** Mock CDR provider — every <UnlockablePill> on the page runs the full
-         *  subscribe → threshold-read → decrypt flow against in-memory bytes.
-         *  Swap mockKit for { config, apiUrl } to go live on Aeneid. */
-        export function Providers({ children }: { children: ReactNode }) {
-          const kit = useMemo(() => {
-            const k = createMockCdrKit({ readDelayMs: 2200, threshold: 7 });
-            void k.writeVaultData({ uuid: 4242, dataKey: new TextEncoder().encode(
-              "Exhibit 14B — sheriff's report excerpt:\\n\\n\\"At 7:42pm the suspect was observed exiting via the boat-house door, not the main path as the witness initially stated.\\"",
-            ) });
-            void k.writeVaultData({ uuid: 4243, dataKey: new TextEncoder().encode(
-              "The shadow on the dock wasn't her sister.\\n\\nArlo had paid Mrs. Calder twenty dollars to keep the negative — she'd developed it in her own basement that summer.",
-            ) });
-            return k;
-          }, []);
-          return <CdrProvider mockKit={kit}>{children}</CdrProvider>;
+        /** Top bar with the network chip + RainbowKit connect button. */
+        export function SiteHeader() {
+          return (
+            <header className="site-header">
+              <div className="brand">
+                <span className="brand-dot" aria-hidden />
+                <span>cdr-kit blog</span>
+              </div>
+              <div className="header-actions">
+                <CdrNetworkChip />
+                <ConnectButton accountStatus="address" chainStatus="icon" />
+              </div>
+            </header>
+          );
         }
       `),
     },
@@ -122,6 +107,11 @@ export const BLOG: Template = {
       path: "app/page.tsx",
       content: dedent(`
         import { UnlockablePill } from "@cdr-kit/react-ui";
+
+        /** Real Aeneid vault IDs (deployed via the cdr-kit factory at 0xac592f…).
+         *  Swap these for your own after running scripts/upload.ts. */
+        const VAULT_EXHIBIT = 4200;
+        const VAULT_CHAPTER = 4201;
 
         export default function HomePage() {
           return (
@@ -134,7 +124,7 @@ export const BLOG: Template = {
 
               <p>
                 Arlo Vance told the press he was alone in Tahoe to write. But{" "}
-                <UnlockablePill uuid={4242} priceLabel="3 $IP" title="Exhibit 14B" subtitle="sheriff's report · attached">
+                <UnlockablePill uuid={VAULT_EXHIBIT} priceLabel="3 $IP" title="Exhibit 14B" subtitle="sheriff's report · attached">
                   the woman beside him on the dock
                 </UnlockablePill>{" "}
                 disagrees — and the timeline in the official record doesn't add up.
@@ -142,10 +132,16 @@ export const BLOG: Template = {
 
               <p>
                 What follows is the part the estate fought to suppress —{" "}
-                <UnlockablePill uuid={4243} priceLabel="8 $IP" title="Closing chapter" subtitle="prose · unpublished">
+                <UnlockablePill uuid={VAULT_CHAPTER} priceLabel="8 $IP" title="Closing chapter" subtitle="prose · unpublished">
                   the closing chapter from Arlo's lost notebook
                 </UnlockablePill>{" "}
                 — written in his own hand the morning after.
+              </p>
+
+              <p className="hint">
+                Click either inline pill above to run the real subscribe → threshold-read → decrypt flow on Aeneid.
+                You'll need a wallet connected with a small amount of testnet IP (free from{" "}
+                <a href="https://aeneid.faucet.story.foundation/" target="_blank" rel="noreferrer">the faucet</a>).
               </p>
             </article>
           );
@@ -155,21 +151,61 @@ export const BLOG: Template = {
     {
       path: "app/globals.css",
       content: dedent(`
-        :root { color-scheme: light dark; }
+        :root { color-scheme: dark light; }
         * { box-sizing: border-box; }
+        html { background: var(--cdr-ui-bg, oklch(13% 0.012 90)); }
         body {
-          margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-          background: #fafafa; color: #1a1614;
+          margin: 0;
+          font-family: var(--cdr-ui-font-sans, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif);
+          background: var(--cdr-ui-bg, oklch(13% 0.012 90));
+          color: var(--cdr-ui-fg, oklch(94% 0.01 90));
           -webkit-font-smoothing: antialiased;
         }
-        .post { max-width: 680px; margin: 0 auto; padding: 64px 24px 96px; }
-        .post .eyebrow { font-family: ui-monospace, monospace; font-size: 0.72rem; color: #d9952e; letter-spacing: 0.06em; text-transform: uppercase; margin: 0 0 12px; }
-        .post h1 { font-size: clamp(2.1rem, 4.4vw, 3rem); font-weight: 800; letter-spacing: -0.025em; line-height: 1.1; margin: 0 0 14px; }
-        .post .byline { font-family: ui-monospace, monospace; font-size: 0.78rem; color: #777; margin: 0 0 36px; }
-        .post p { font-size: 1.08rem; line-height: 1.72; color: #2c2825; margin: 0 0 22px; }
-        @media (prefers-color-scheme: dark) {
-          body { background: #15110f; color: #fafafa; }
-          .post p { color: #d4cfc9; }
+        a { color: var(--cdr-ui-primary, oklch(78% 0.16 70)); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        .site-header {
+          display: flex; align-items: center; justify-content: space-between;
+          padding: 18px 28px;
+          border-bottom: 1px solid var(--cdr-ui-border, oklch(22% 0.012 90));
+          backdrop-filter: blur(8px);
+          position: sticky; top: 0; z-index: 10;
+          background: color-mix(in oklab, var(--cdr-ui-bg) 80%, transparent);
+        }
+        .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; letter-spacing: -0.01em; }
+        .brand-dot {
+          width: 10px; height: 10px; border-radius: 999px;
+          background: linear-gradient(135deg, oklch(78% 0.16 70), oklch(72% 0.20 30));
+        }
+        .header-actions { display: flex; align-items: center; gap: 14px; }
+
+        .post { max-width: 720px; margin: 0 auto; padding: 80px 28px 120px; }
+        .post .eyebrow {
+          font-family: ui-monospace, monospace; font-size: 0.72rem;
+          color: var(--cdr-ui-accent, oklch(78% 0.16 70));
+          letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 14px;
+        }
+        .post h1 {
+          font-size: clamp(2.2rem, 4.4vw, 3.4rem); font-weight: 800;
+          letter-spacing: -0.028em; line-height: 1.08; margin: 0 0 16px;
+          background: linear-gradient(135deg, var(--cdr-ui-fg, #fafafa) 0%, color-mix(in oklab, var(--cdr-ui-fg) 60%, var(--cdr-ui-primary, oklch(78% 0.16 70))) 100%);
+          -webkit-background-clip: text; background-clip: text; color: transparent;
+        }
+        .post .byline {
+          font-family: ui-monospace, monospace; font-size: 0.78rem;
+          color: var(--cdr-ui-muted, oklch(60% 0.01 90)); margin: 0 0 44px;
+        }
+        .post p { font-size: 1.12rem; line-height: 1.78; color: var(--cdr-ui-fg, #fafafa); margin: 0 0 22px; opacity: 0.92; }
+        .post .hint {
+          margin-top: 56px; padding: 18px 22px;
+          font-size: 0.92rem; line-height: 1.6;
+          border: 1px dashed var(--cdr-ui-border, oklch(28% 0.012 90));
+          border-radius: 12px;
+          color: var(--cdr-ui-muted, oklch(60% 0.01 90));
+        }
+
+        @media (prefers-color-scheme: light) {
+          [data-theme="light"] html, [data-theme="light"] body { background: oklch(98% 0.005 90); color: oklch(20% 0.012 90); }
         }
       `),
     },
@@ -204,8 +240,6 @@ export const BLOG: Template = {
         const client = createCdrKitClient({ apiUrl: "https://aeneid.storyrpc.io", publicClient, walletClient });
 
         const bytes = readFileSync(path);
-        // Set IPFS_ADD_URL + IPFS_GATEWAY_URL for your pinning service (web3.storage, Pinata, etc.)
-        // Optionally IPFS_AUTH for an Authorization header.
         const storage = createIpfsStorage({
           addUrl: process.env.IPFS_ADD_URL ?? "https://api.web3.storage/upload",
           gatewayUrl: process.env.IPFS_GATEWAY_URL ?? "https://w3s.link",
@@ -214,7 +248,6 @@ export const BLOG: Template = {
         const res = await uploadFile(client, {
           content: bytes,
           storage,
-          // default = OpenCondition. For paywall, pass subscriptionCondition + readConditionData.
           readConditionAddr: aeneid.subscriptionCondition as \`0x\${string}\`,
         });
         console.log("uuid:", res.uuid);
@@ -227,38 +260,38 @@ export const BLOG: Template = {
       content: dedent(`
         # cdr-kit blog
 
-        Inline pay-to-unlock paywalls with Story CDR — the [onscroll.app](https://onscroll.app) pattern.
+        Inline pay-to-unlock paywalls with Story CDR — the [onscroll.app](https://onscroll.app) pattern,
+        wired to **real Aeneid testnet** from the first render. No mock layer.
 
         \`\`\`bash
         pnpm install
-        pnpm dev      # http://localhost:3000 — mock mode, no wallet
+        pnpm dev      # http://localhost:3000
         \`\`\`
+
+        Connect any wallet that supports the Story Aeneid testnet (chain ID 1315). Grab free testnet IP
+        from <https://aeneid.faucet.story.foundation/>. Click an inline pill → real subscribe + decrypt
+        runs on chain.
 
         ## How it works
 
-        Each \`<UnlockablePill>\` is an inline span tied to a CDR vault \`uuid\`. Click it →
-        a popover opens → "Unlock" runs the full \`subscribe → threshold-read → decrypt\`
-        flow → the encrypted attachment renders right there. The anchor text stays
-        plaintext (it's a public teaser); only the **attached payload** is encrypted.
+        Each \`<UnlockablePill>\` is an inline span tied to a CDR vault \`uuid\`. Click → popover opens →
+        "Unlock" runs the full subscribe → threshold-read → decrypt flow → encrypted attachment renders.
+        The anchor text stays plaintext (it's a teaser); only the attached payload is encrypted.
 
-        ## Going live on Aeneid
+        ## Using your own vaults
 
-        1. Get a funded Aeneid testnet wallet. Add \`WALLET_PRIVATE_KEY=0x...\` to \`.env.local\`.
-        2. Upload your real file & get its uuid:
+        1. Get a funded Aeneid wallet. Set \`WALLET_PRIVATE_KEY=0x...\` in \`.env.local\`.
+        2. Upload your file:
            \`\`\`bash
-           pnpm tsx scripts/upload.ts ./your-photo.jpg
+           pnpm upload:sample ./your-photo.jpg
            # → uuid: 12345
            \`\`\`
-        3. Replace the \`Providers\` in \`app/providers.tsx\` — drop the \`mockKit\`, wire your
-           \`wagmi\` config + the Aeneid apiUrl. (Or use \`@cdr-kit/react\`'s \`CdrConfigProvider\`
-           in a wagmi tree you already maintain.)
-        4. Update the \`<UnlockablePill uuid={...}>\` to use the real uuid from step 2.
+        3. Replace the \`VAULT_EXHIBIT\` / \`VAULT_CHAPTER\` constants in \`app/page.tsx\`.
 
-        See full docs: <https://github.com/Blockchain-Oracle/cdr-kit>
+        Full docs: <https://cdr-kit.dev>
       `),
     },
-    { path: ".gitignore", content: "node_modules\n.next\ndist\n.env\n.env.local\n.env.*.local\n" },
-    { path: ".env.local.example", content: "# WALLET_PRIVATE_KEY=0x...  # required only when uploading or going live\n" },
+    { path: ".gitignore", content: GITIGNORE },
+    { path: ".env.local.example", content: ENV_LOCAL_EXAMPLE },
   ],
 };
-

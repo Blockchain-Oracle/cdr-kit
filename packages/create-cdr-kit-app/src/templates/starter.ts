@@ -3,8 +3,14 @@ import { CDR_VERSION, type Template } from "./types.js";
 
 export const STARTER: Template = {
   name: "starter",
-  description: "Minimal Node script — runs the CDR mock flow end-to-end. Good for verifying the kit works in your env.",
-  postInstall: ["pnpm install", "pnpm start"],
+  description:
+    "Minimal Node script — runs the full CDR allocate → write → read flow against real Aeneid testnet.",
+  postInstall: [
+    "pnpm install",
+    "cp .env.example .env",
+    "# add your funded Aeneid testnet WALLET_PRIVATE_KEY=0x...",
+    "pnpm start",
+  ],
   files: [
     {
       path: "package.json",
@@ -14,8 +20,15 @@ export const STARTER: Template = {
           private: true,
           type: "module",
           scripts: { start: "tsx src/index.ts" },
-          dependencies: { "@cdr-kit/core": CDR_VERSION, consola: "^3.2.3" },
-          devDependencies: { tsx: "^4.19.2", typescript: "^5.7.2" },
+          dependencies: {
+            "@cdr-kit/agent": CDR_VERSION,
+            "@cdr-kit/contracts": CDR_VERSION,
+            "@cdr-kit/core": CDR_VERSION,
+            consola: "^3.2.3",
+            dotenv: "^16.4.7",
+            viem: "^2.51.3",
+          },
+          devDependencies: { tsx: "^4.19.2", typescript: "^5.7.2", "@types/node": "^20" },
         },
         null,
         2,
@@ -24,7 +37,16 @@ export const STARTER: Template = {
     {
       path: "tsconfig.json",
       content: JSON.stringify(
-        { compilerOptions: { target: "ES2022", module: "ESNext", moduleResolution: "Bundler", strict: true } },
+        {
+          compilerOptions: {
+            target: "ES2022",
+            module: "ESNext",
+            moduleResolution: "Bundler",
+            strict: true,
+            esModuleInterop: true,
+            skipLibCheck: true,
+          },
+        },
         null,
         2,
       ),
@@ -32,19 +54,40 @@ export const STARTER: Template = {
     {
       path: "src/index.ts",
       content: dedent(`
-        import { createMockCdrKit } from "@cdr-kit/core";
+        import "dotenv/config";
+        import { createCdrAgent } from "@cdr-kit/agent";
         import { consola } from "consola";
 
-        // Mock mode: the full CDR flow (incl. the threshold-decrypt read) with no wallet/chain.
-        const kit = createMockCdrKit({ readDelayMs: 800, threshold: 4 });
+        const privateKey = process.env.WALLET_PRIVATE_KEY as \`0x\${string}\` | undefined;
+        if (!privateKey) {
+          consola.error("Missing WALLET_PRIVATE_KEY env. Copy .env.example to .env and add a funded Aeneid testnet wallet.");
+          consola.info("Grab free testnet IP from https://aeneid.faucet.story.foundation/");
+          process.exit(1);
+        }
 
-        const secret = new TextEncoder().encode("hello from cdr-kit");
-        const { uuid } = await kit.createVault({ data: secret });
-        consola.info(\`created vault \${uuid}\`);
+        const agent = createCdrAgent({ privateKey, rpcUrl: "https://aeneid.storyrpc.io" });
 
-        consola.start("reading (simulated CDR threshold-decrypt)…");
-        const data = await kit.accessVault({ uuid, onProgress: (p) => consola.info(\`  partials \${p.collected}/\${p.threshold}\`) });
-        consola.success(\`decrypted: \${new TextDecoder().decode(data)}\`);
+        const secret = new TextEncoder().encode("hello from cdr-kit on real Aeneid");
+
+        consola.start("creating real CDR vault on Aeneid…");
+        const { uuid, txHash } = await agent.createVault({});
+        consola.success(\`vault uuid=\${uuid}  tx=\${txHash}\`);
+
+        consola.start("writing encrypted data via CDR precompile…");
+        await agent.writeVaultData({ uuid, dataKey: secret });
+        consola.success("write confirmed");
+
+        consola.start("reading + decrypting (threshold-decrypt over the network)…");
+        const bytes = await agent.readVaultData({ uuid });
+        consola.success(\`decrypted: \${new TextDecoder().decode(bytes)}\`);
+      `),
+    },
+    {
+      path: ".env.example",
+      content: dedent(`
+        # Required: funded Aeneid testnet wallet (chain ID 1315)
+        # Get free testnet IP at https://aeneid.faucet.story.foundation/
+        WALLET_PRIVATE_KEY=0x_your_aeneid_testnet_private_key
       `),
     },
     {
@@ -52,14 +95,20 @@ export const STARTER: Template = {
       content: dedent(`
         # cdr-kit starter
 
+        Runs the full CDR flow (allocate → write encrypted → threshold-decrypt read) against
+        **real Aeneid testnet** — no mock. Proves your environment can talk to CDR end to end.
+
         \`\`\`bash
         pnpm install
-        pnpm start   # runs the mock-mode CDR flow — no wallet/chain needed
+        cp .env.example .env       # add your funded Aeneid testnet WALLET_PRIVATE_KEY
+        pnpm start
         \`\`\`
 
-        Swap \`createMockCdrKit()\` for \`createCdrKitClient({ privateKey, apiUrl })\` + the flow helpers to go live on Aeneid. See https://github.com/Blockchain-Oracle/cdr-kit
+        Need testnet IP? <https://aeneid.faucet.story.foundation/>
+
+        Full docs: <https://cdr-kit.dev>
       `),
     },
-    { path: ".gitignore", content: "node_modules\ndist\n" },
+    { path: ".gitignore", content: "node_modules\ndist\n.env\n" },
   ],
 };

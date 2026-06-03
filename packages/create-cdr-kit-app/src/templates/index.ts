@@ -2,15 +2,17 @@ import type { Template, TemplateName } from "./types.js";
 import { STARTER } from "./starter.js";
 import { BLOG } from "./blog.js";
 import { PAYWALL } from "./paywall.js";
+import { DATA_MARKETPLACE } from "./data-marketplace.js";
 import { MCP_SERVER } from "./mcp-server.js";
 import { AGENT_VERCEL_AI, AGENT_OPENAI, AGENT_LANGCHAIN, AGENT_AGENTKIT, AGENT_GOAT } from "./agents.js";
 
 export type { Template, TemplateFile, TemplateName } from "./types.js";
 
-const TEMPLATES: Record<TemplateName, Template> = {
+const TEMPLATES: Partial<Record<TemplateName, Template>> = {
   starter: STARTER,
   blog: BLOG,
   paywall: PAYWALL,
+  "data-marketplace": DATA_MARKETPLACE,
   "mcp-server": MCP_SERVER,
   "agent-vercel-ai": AGENT_VERCEL_AI,
   "agent-openai": AGENT_OPENAI,
@@ -26,5 +28,7 @@ export function getTemplate(name: TemplateName): Template {
 }
 
 export function listTemplates(): { name: TemplateName; description: string }[] {
-  return Object.values(TEMPLATES).map((t) => ({ name: t.name, description: t.description }));
+  return Object.values(TEMPLATES)
+    .filter((t): t is Template => Boolean(t))
+    .map((t) => ({ name: t.name, description: t.description }));
 }
