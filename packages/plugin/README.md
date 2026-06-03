@@ -5,7 +5,7 @@
 ## Use the skills from any agent (Claude Code · Cursor · Copilot · Cline · …)
 
 ```
-npx skills add Blockchain-Oracle/story-cdr
+npx skills add Blockchain-Oracle/cdr-kit
 ```
 
 Installs the cdr-kit Agent Skills via [skills.sh](https://skills.sh).
