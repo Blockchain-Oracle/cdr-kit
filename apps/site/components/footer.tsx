@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LockboxGlyph } from "./icons";
+import { LogoMark } from "./brand/logo";
 
 const COLUMNS: { heading: string; links: { href: string; label: string; external?: boolean }[] }[] = [
   {
@@ -39,7 +39,7 @@ export function Footer() {
           <div>
             <Link className="brand" href="/" aria-label="cdr-kit home">
               <span className="glyph" aria-hidden="true">
-                <LockboxGlyph />
+                <LogoMark />
               </span>
               <span className="word">
                 cdr<b>-</b>kit

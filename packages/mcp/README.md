@@ -1,3 +1,9 @@
+<p align="center">
+  <a href="https://cdrkit.xyz">
+    <img src="https://raw.githubusercontent.com/Blockchain-Oracle/cdr-kit/main/assets/icon.svg" alt="cdr-kit" width="80">
+  </a>
+</p>
+
 # @cdr-kit/mcp
 
 > Model Context Protocol (stdio) server for Story CDR. One binary, 34 tools, plugs into Claude Desktop / Cursor / any MCP host.

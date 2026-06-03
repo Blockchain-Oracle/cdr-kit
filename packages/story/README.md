@@ -1,3 +1,9 @@
+<p align="center">
+  <a href="https://cdrkit.xyz">
+    <img src="https://raw.githubusercontent.com/Blockchain-Oracle/cdr-kit/main/assets/icon.svg" alt="cdr-kit" width="80">
+  </a>
+</p>
+
 # @cdr-kit/story
 
 Thin TypeScript wrappers over [`@story-protocol/core-sdk`](https://docs.story.foundation/) for the **Story Protocol IP creator surface**: register an IP asset, attach PIL license terms, mint license tokens, register derivatives, wrap IP into WIP. The companion to [`@cdr-kit/agent`](../agent), which adds the headline `agent.publish()` one-shot that collapses IP-register + PIL-attach + create-license-gated-vault + write-encrypted-data into a single call.

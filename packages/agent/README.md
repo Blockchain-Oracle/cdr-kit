@@ -1,3 +1,9 @@
+<p align="center">
+  <a href="https://cdrkit.xyz">
+    <img src="https://raw.githubusercontent.com/Blockchain-Oracle/cdr-kit/main/assets/icon.svg" alt="cdr-kit" width="80">
+  </a>
+</p>
+
 # @cdr-kit/agent
 
 > Autonomous-agent client for Story Confidential Data Rails — wallet, discovery, subscribe, decrypt, advanced conditions, IP integration.

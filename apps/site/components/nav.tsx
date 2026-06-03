@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { LockboxGlyph, Npm, Github } from "./icons";
+import { Npm, Github } from "./icons";
+import { LogoMark } from "./brand/logo";
 import { ThemeToggle } from "./theme-toggle";
 import { NavSearch } from "./nav-search";
 
@@ -66,7 +67,7 @@ export function Nav() {
       <div className="nav-inner">
         <Link className="brand" href="/" aria-label="cdr-kit home">
           <span className="glyph" aria-hidden="true">
-            <LockboxGlyph />
+            <LogoMark />
           </span>
           <span className="word">
             cdr<b>-</b>kit

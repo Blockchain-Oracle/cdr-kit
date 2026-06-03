@@ -1,3 +1,9 @@
+<p align="center">
+  <a href="https://cdrkit.xyz">
+    <img src="https://raw.githubusercontent.com/Blockchain-Oracle/cdr-kit/main/assets/icon.svg" alt="cdr-kit" width="80">
+  </a>
+</p>
+
 # @cdr-kit/forms
 
 > Encrypted form submissions on Story Aeneid. Drop-in `<CdrForm>` + `<CdrField>` + server helper. Multi-provider storage, platform-wallet pattern, whole-form encryption.

@@ -1,3 +1,9 @@
+<p align="center">
+  <a href="https://cdrkit.xyz">
+    <img src="https://raw.githubusercontent.com/Blockchain-Oracle/cdr-kit/main/assets/icon.svg" alt="cdr-kit" width="80">
+  </a>
+</p>
+
 # @cdr-kit/vercel-ai
 
 > Vercel AI SDK adapter for cdr-kit. All 34 CDR tools as `tool()`s for `generateText` / `streamText`.

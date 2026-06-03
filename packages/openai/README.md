@@ -1,3 +1,9 @@
+<p align="center">
+  <a href="https://cdrkit.xyz">
+    <img src="https://raw.githubusercontent.com/Blockchain-Oracle/cdr-kit/main/assets/icon.svg" alt="cdr-kit" width="80">
+  </a>
+</p>
+
 # @cdr-kit/openai
 
 > Raw OpenAI / Anthropic function-calling adapter for cdr-kit — no framework dep. Returns a `tools[]` JSON-Schema array + a `dispatch()` router.

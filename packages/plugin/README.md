@@ -1,3 +1,9 @@
+<p align="center">
+  <a href="https://cdrkit.xyz">
+    <img src="https://raw.githubusercontent.com/Blockchain-Oracle/cdr-kit/main/assets/icon.svg" alt="cdr-kit" width="80">
+  </a>
+</p>
+
 # cdr-kit Claude Code plugin
 
 > 11 skills + 2 reference docs that teach Claude *how* to design, wire, and debug around Story Confidential Data Rails.

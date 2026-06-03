@@ -1,3 +1,9 @@
+<p align="center">
+  <a href="https://cdrkit.xyz">
+    <img src="https://raw.githubusercontent.com/Blockchain-Oracle/cdr-kit/main/assets/icon.svg" alt="cdr-kit" width="80">
+  </a>
+</p>
+
 # @cdr-kit/react-ui
 
 > Styled, batteries-included components for Story CDR. Clerk + RainbowKit pattern: `@cdr-kit/react` is headless, this package is the designed default.
