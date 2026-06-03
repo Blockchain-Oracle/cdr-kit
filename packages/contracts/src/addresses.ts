@@ -27,7 +27,7 @@ export const aeneid = {
   /// Wrapped IP (ERC-20 form of native IP); license-mint fees flow in WIP via the Royalty module.
   wip: "0x1514000000000000000000000000000000000000",
   // cdr-kit (deployed to Aeneid 2026-05-28)
-  openCondition: "0x36fB2e2d10efd1E905b7779A684F34B9c775b62B",
+  openCondition: "0x78528c2dd16fc450ff417189cc0436e8d2d82389",
   cdrKitVault: "0xac592f165D8dD1f27A087bdB39c0b2f619FF6C8C",
   creatorWriteCondition: "0x85CEB332445ca1d3D1975d6929cA6BED25195b2F",
   subscriptionCondition: "0xB75Cc6571ac7E0ee30A519192740fc471e187458",

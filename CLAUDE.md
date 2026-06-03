@@ -48,6 +48,7 @@ pnpm + Turborepo + tsdown + Foundry. 0.5 ships live on Aeneid with 4 advanced co
 - `DeadManSwitchCondition`: `0x37226f97e184843aB0b8d4f08A55969801B97766`
 - `ConditionalEscrowCondition`: `0x7fcDe02DB7c14fD3587aB2fED064a1D8355b7584`
 - `MultiSigCondition`: `0x3A0Cf72f167A2c1f5a7A5025eb36219f28C20FCd` (2026-06-01 r2 — `approve(uuid, expectedEpoch)` arg + defensive `threshold==0` guard in `evaluate()`; prior `0x61061CCb…`, `0xb22EBF…` retired)
+- `OpenCondition`: `0x78528c2dd16fc450ff417189cc0436e8d2d82389` (2026-06-03 r3 — inherits ConditionBase so factory `_configure` works; checkRead/Write `pure return true` so SDK-direct `allocate` (uploadFile) works; prior `0x36fB2e…`, `0x37f47bd…` retired)
 
 ## Building the dashboard (E7)
 - Spec: `docs/ux-spec.md` + `docs/stories/story-e7-dashboard.md`. Build on `@cdr-kit/react` (dogfood).

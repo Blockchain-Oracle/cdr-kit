@@ -57,7 +57,7 @@ export const STARTER: Template = {
         import "dotenv/config";
         import { CdrAgent } from "@cdr-kit/agent";
         import { aeneid, cdrKitVaultAbi } from "@cdr-kit/contracts";
-        import { encodeAbiParameters, parseEventLogs } from "viem";
+        import { parseEventLogs } from "viem";
         import { consola } from "consola";
 
         const privateKey = process.env.WALLET_PRIVATE_KEY as \`0x\${string}\` | undefined;
@@ -76,19 +76,10 @@ export const STARTER: Template = {
         const fees = await agent.getFees();
         consola.info(\`  allocate fee: \${fees.allocateWei} wei\`);
 
-        // TimeWindowCondition with (startTs=1, endTs=0) = "always open from genesis, no upper
-        // bound" — the cleanest factory-compatible "always allow" gate on the current Aeneid
-        // deployment. OpenCondition exists but isn't yet ConditionBase-derived so the factory
-        // _configure() step reverts (planned 0.7.x contract fix).
-        const readConfig = encodeAbiParameters(
-          [{ type: "uint64" }, { type: "uint64" }, { type: "bool" }],
-          [1n, 0n, false], // startTs=1 → since genesis, endTs=0 → forever, time-based (not block)
-        );
-
         consola.start("creating real CDR vault on Aeneid…");
         const txHash = await agent.createVault({
-          readConditionAddr: aeneid.timeWindowCondition as \`0x\${string}\`,
-          readConfig,
+          readConditionAddr: aeneid.openCondition as \`0x\${string}\`,
+          readConfig: "0x", // OpenCondition takes no config
           valueWei: fees.allocateWei,
         });
         consola.info(\`  tx=\${txHash}\`);

@@ -258,7 +258,15 @@ export async function uploadFile(
 /** Read a file vault: collect partials, recover the key, fetch the body from `storage`, decrypt. */
 export async function downloadFile(
   client: CdrKitClient,
-  params: { uuid: number; storage: CdrStorageProvider; accessAuxData?: Hex; timeoutMs?: number },
+  params: {
+    uuid: number;
+    storage: CdrStorageProvider;
+    accessAuxData?: Hex;
+    timeoutMs?: number;
+    /** Skip CIDv1 multibase integrity check. Required when storage handle is not an IPFS CID
+     *  (Supabase paths, S3 keys, etc.). Default false (verify) — IPFS-shaped storages keep it. */
+    skipCidVerification?: boolean;
+  },
 ): Promise<{ content: Uint8Array; cid: string }> {
   await ensureWasm();
   // Default aligned to Story CDR SDK docs (`downloadFile` example uses 120_000ms). Was 600_000.
@@ -269,6 +277,7 @@ export async function downloadFile(
       accessAuxData: params.accessAuxData ?? "0x",
       storageProvider: params.storage,
       timeoutMs,
+      skipCidVerification: params.skipCidVerification,
     });
     return { content: res.content, cid: res.cid };
   } catch (e) {

@@ -1,6 +1,6 @@
 import "server-only";
 import { consola } from "consola";
-import { encodeAbiParameters, parseEventLogs, type Hex } from "viem";
+import { parseEventLogs, type Hex } from "viem";
 // Type-only — erased at build. The runtime values for these modules are loaded
 // via the lazy-import pattern below so client-only consumers don't have to
 // install them.
@@ -98,16 +98,11 @@ export async function storeFormSubmission(
   const agent = new CdrAgent({ privateKey: params.privateKey, rpcUrl: params.rpcUrl });
   const addrs = resolveAddresses(agent.network);
 
-  // Default to TimeWindowCondition (1, 0, false) = "open from genesis, no end".
-  // OpenCondition exists but isn't factory-config compatible on the 0.7.x deployment.
-  const readConditionAddr =
-    params.readConditionAddr ?? (addrs.timeWindowCondition as Hex);
-  const readConditionData =
-    params.readConditionData ??
-    encodeAbiParameters(
-      [{ type: "uint64" }, { type: "uint64" }, { type: "bool" }],
-      [1n, 0n, false],
-    );
+  // Default to OpenCondition (always-allow) — anyone holding the read key can decrypt.
+  // For production, pass a tighter gate like creatorWriteCondition or
+  // subscriptionCondition + condition data via params.readConditionAddr.
+  const readConditionAddr = params.readConditionAddr ?? (addrs.openCondition as Hex);
+  const readConditionData = params.readConditionData ?? "0x";
 
   const payload = JSON.stringify({
     answers: serializeFields(fields),

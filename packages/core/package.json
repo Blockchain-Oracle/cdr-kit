@@ -1,6 +1,6 @@
 {
   "name": "@cdr-kit/core",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Typed TS SDK for Story CDR: condition encoders, the CdrKitVault flow, and the 2-step pay->access helpers.",
   "type": "module",
   "sideEffects": false,
