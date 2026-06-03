@@ -1,6 +1,23 @@
 ---
 title: ComposableCondition
-description: Composable AND/OR combinator.
+description: 'Boolean AND / OR over child conditions, up to 8 deep. Compose "Subscription OR Tier" or "Royalty AND License" — natively, on chain, in one read check.'
+importLine: "address = 0x74F2f94e7867b07ECDFbcc667050CBec1dE2800B"
+breadcrumb: ["@cdr-kit/contracts", "Conditions", "ComposableCondition"]
+prev:
+  href: /docs/contracts/tier-gate-condition
+  label: TierGateCondition
+next:
+  href: /docs/contracts/open-condition
+  label: OpenCondition
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Config shape
+
+<ul>
+  <li><code>mode: uint8</code> — 0 = AND, 1 = OR.</li>
+  <li><code>children: address[]</code> — child condition addresses (1–8).</li>
+</ul>
+
+## accessAuxData
+
+<p>ABI-encoded <code>bytes[]</code> of per-child aux, aligned to the configured children order.</p>
