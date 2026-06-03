@@ -288,7 +288,7 @@ export const BLOG: Template = {
            \`\`\`
         3. Replace the \`VAULT_EXHIBIT\` / \`VAULT_CHAPTER\` constants in \`app/page.tsx\`.
 
-        Full docs: <https://cdr-kit.dev>
+        Full docs: <https://cdrkit.xyz>
       `),
     },
     { path: ".gitignore", content: GITIGNORE },

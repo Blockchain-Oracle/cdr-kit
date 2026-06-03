@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useSubscribeAndAccess } from "@cdr-kit/react";
 import { Badge } from "@/components/primitives/badge";
-import { DocsLiveProvider } from "../providers";
+import { DocsMockProvider } from "../providers";
 
 const PRICE_WEI = BigInt(5);
 const PERIOD = 30 * 24 * 60 * 60;
@@ -78,8 +78,8 @@ function VaultWidget() {
 
 export function VaultGateDemo() {
   return (
-    <DocsLiveProvider>
+    <DocsMockProvider>
       <VaultWidget />
-    </DocsLiveProvider>
+    </DocsMockProvider>
   );
 }

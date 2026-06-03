@@ -295,7 +295,7 @@ export const DATA_MARKETPLACE: Template = {
         - \`<CdrNetworkChip>\` in the header shows the live network state
         - RainbowKit \`<ConnectButton>\` handles wallet connection
 
-        Full docs: <https://cdr-kit.dev>
+        Full docs: <https://cdrkit.xyz>
       `),
     },
     { path: ".gitignore", content: GITIGNORE },

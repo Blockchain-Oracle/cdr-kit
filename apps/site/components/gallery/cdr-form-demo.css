@@ -1,0 +1,117 @@
+.cdr-form-demo {
+  width: 100%;
+  max-width: 460px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.cdr-form-demo form,
+.cdr-form-demo [data-cdr-form] {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.cdr-form-demo [data-cdr-field] {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.cdr-form-demo [data-cdr-field] label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--ink-2);
+  letter-spacing: 0.01em;
+}
+.cdr-form-demo [data-cdr-field] input,
+.cdr-form-demo [data-cdr-field] textarea {
+  font-family: inherit;
+  font-size: 0.92rem;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 9px 12px;
+  outline: none;
+  transition: border-color 0.14s, box-shadow 0.14s;
+}
+.cdr-form-demo [data-cdr-field] textarea {
+  min-height: 78px;
+  resize: vertical;
+}
+.cdr-form-demo [data-cdr-field] input:focus,
+.cdr-form-demo [data-cdr-field] textarea:focus {
+  border-color: var(--primary-line);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+.cdr-form-demo [data-cdr-submit] {
+  margin-top: 4px;
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--paper);
+  background: var(--primary);
+  border: 1px solid var(--primary-line);
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background-color 0.14s, transform 0.12s;
+}
+.cdr-form-demo [data-cdr-submit]:hover {
+  transform: translateY(-1px);
+}
+.cdr-form-demo [data-cdr-submit][disabled] {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.cdr-form-demo-result {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cdr-form-demo-eyebrow {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin: 0;
+}
+.cdr-form-demo-vault {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 2px 0;
+}
+.cdr-form-demo-vault b {
+  font-family: var(--mono);
+  font-weight: 700;
+}
+.cdr-form-demo-sub {
+  font-size: 0.88rem;
+  color: var(--ink-2);
+  line-height: 1.5;
+  margin: 0;
+}
+.cdr-form-demo-reset {
+  align-self: flex-start;
+  margin-top: 8px;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--ink-2);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+.cdr-form-demo-reset:hover {
+  color: var(--ink);
+  border-color: var(--line-2);
+}

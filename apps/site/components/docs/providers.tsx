@@ -1,45 +1,57 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useAccount } from "wagmi";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useMemo } from "react";
 import { CdrConfigProvider } from "@cdr-kit/react";
-import { AENEID_CHAIN_ID } from "@/lib/wagmi-config";
+import { createMockCdrKit } from "@cdr-kit/core";
+import { DEMO_VAULTS } from "@/lib/demo-vaults";
 
 /**
- * Live CDR provider for docs demos. Reads wagmi from the surrounding SiteProviders.
- * No mock. When the visitor hasn't connected (or is on the wrong chain) we render
- * a frosted overlay with a Connect CTA; once they connect, the demo runs the real
- * on-chain flow against the configured vault.
+ * Mock CDR provider for docs demos. Every hook/component renders against an
+ * in-memory mock kit — no wallet, no chain, no funded testnet account required.
+ *
+ * Why mock for docs:
+ *   - The docs site must "just work" for any visitor landing on cdrkit.xyz.
+ *   - Asking visitors to connect a wallet + grab testnet IP just to see a demo
+ *     is a brutal first impression and breaks the read-the-docs path.
+ *   - Scaffolded templates (`create-cdr-kit-app`) are where real integration lives —
+ *     consumers shipping products configure their own wagmi + funded wallet there.
+ *
+ * The mock kit pre-seeds the canonical DEMO_VAULTS uuids with realistic payloads
+ * (trading-signal JSON, unlockable prose, etc.) so demos look identical to live.
+ * Every demo using this provider should pass `badge={<Badge>mock kit</Badge>}`
+ * to its enclosing `<Demo>` so visitors know what they're seeing.
  */
-export function DocsLiveProvider({ children }: { children: ReactNode }) {
-  const { isConnected, chainId } = useAccount();
-  const onAeneid = chainId === AENEID_CHAIN_ID;
+export function DocsMockProvider({ children }: { children: ReactNode }) {
+  const mockKit = useMemo(() => {
+    const kit = createMockCdrKit({ readDelayMs: 2400, threshold: 5 });
+    // Pre-seed canonical demo vaults so `accessVault` / `subscribeAndAccess`
+    // return realistic content without needing a prior `createVault` step.
+    const enc = new TextEncoder();
+    void kit.writeVaultData({
+      uuid: DEMO_VAULTS.tradingSignal,
+      dataKey: enc.encode(
+        JSON.stringify({ signal: "BUY", pair: "ETH/USD", confidence: 0.86, ts: Date.now() }),
+      ),
+    });
+    void kit.writeVaultData({
+      uuid: DEMO_VAULTS.secondarySignal,
+      dataKey: enc.encode(
+        JSON.stringify({ signal: "SELL", pair: "SOL/USDC", confidence: 0.74, ts: Date.now() }),
+      ),
+    });
+    void kit.writeVaultData({
+      uuid: DEMO_VAULTS.image,
+      dataKey: enc.encode("[fake-image-payload: closing chapter handwritten page · 4.4 MB]"),
+    });
+    void kit.writeVaultData({
+      uuid: DEMO_VAULTS.unlockProse,
+      dataKey: enc.encode(
+        "She told the press she was alone in Tahoe. The timeline in the official record doesn't add up — and the photo nobody published shows otherwise.",
+      ),
+    });
+    return kit;
+  }, []);
 
-  return (
-    <CdrConfigProvider>
-      <div className="docs-live-wrap">
-        {children}
-        {(!isConnected || !onAeneid) && (
-          <div className="docs-live-overlay" aria-live="polite">
-            <div className="docs-live-card">
-              <p className="docs-live-eyebrow">live · Aeneid testnet</p>
-              <p className="docs-live-title">
-                {!isConnected ? "Connect your wallet to interact." : "Switch to Aeneid testnet."}
-              </p>
-              <p className="docs-live-sub">
-                Every demo runs the real subscribe → threshold-decrypt → reveal flow.
-                Grab free testnet IP at{" "}
-                <a href="https://aeneid.faucet.story.foundation/" target="_blank" rel="noreferrer">
-                  the Aeneid faucet
-                </a>
-                .
-              </p>
-              <ConnectButton accountStatus="address" chainStatus="icon" />
-            </div>
-          </div>
-        )}
-      </div>
-    </CdrConfigProvider>
-  );
+  return <CdrConfigProvider mockKit={mockKit}>{children}</CdrConfigProvider>;
 }

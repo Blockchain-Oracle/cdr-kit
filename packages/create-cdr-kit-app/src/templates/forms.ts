@@ -373,7 +373,7 @@ export const FORMS: Template = {
         # cdr-kit forms
 
         End-to-end encrypted form submissions on Story Aeneid. Built on
-        [\`@cdr-kit/forms\`](https://cdr-kit.dev/docs/forms).
+        [\`@cdr-kit/forms\`](https://cdrkit.xyz/docs/forms).
 
         \`\`\`bash
         pnpm install
@@ -409,7 +409,7 @@ export const FORMS: Template = {
         Whatever you pick, make sure \`/api/respond\` and \`/api/results\` use the
         same adapter — that's why both routes import \`getStorage()\` from one place.
 
-        Full docs: <https://cdr-kit.dev/docs/forms>
+        Full docs: <https://cdrkit.xyz/docs/forms>
       `),
     },
     { path: ".gitignore", content: GITIGNORE },

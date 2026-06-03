@@ -226,7 +226,7 @@ export const PAYWALL: Template = {
         1. Run \`uploadFile()\` from \`@cdr-kit/core\` server-side (or the \`cdr\` CLI) with your real data + a SubscriptionCondition.
         2. Update \`VAULT_ID\` and \`PRICE_WEI\` in \`app/page.tsx\`.
 
-        Full docs: <https://cdr-kit.dev>
+        Full docs: <https://cdrkit.xyz>
       `),
     },
     { path: ".gitignore", content: GITIGNORE },

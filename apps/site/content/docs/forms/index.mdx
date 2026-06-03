@@ -15,6 +15,21 @@ Drop `<CdrForm>` + a few `<CdrField>`s into any page; each submission gets its o
 
 Storage adapter selection is a developer concern: you wire one of the six `CdrStorageProvider` factories from `@cdr-kit/core` into your server route once, with credentials from env vars. The respondent UI never sees a "pick a storage backend" choice — that would be a UX smell.
 
+## Live preview
+
+<Demo
+  badge={<Badge>mock kit</Badge>}
+  preview={<CdrFormDemo />}
+  code={`<CdrForm onEncrypt={(fields) => fetch("/api/respond", { method: "POST", body: JSON.stringify({ fields }) }).then(r => r.json()).then(d => d.vaultId)}>
+  <CdrField name="mood" label="Mood (1–10)" type="number" required />
+  <CdrField name="highlight" label="Highlight of the week" required />
+  <CdrField name="notes" label="Anything else?" type="textarea" />
+  <CdrSubmitButton>Submit securely</CdrSubmitButton>
+</CdrForm>`}
+/>
+
+This preview runs the real `@cdr-kit/forms` components against an in-memory mock `onEncrypt` that returns a fake vault uuid after a short delay — same UX as the live network round-trip, no wallet needed to see it.
+
 ## Install
 
 <CodePanel code={`pnpm add @cdr-kit/forms @cdr-kit/agent @cdr-kit/core`} language="bash" />
@@ -97,7 +112,27 @@ const { fields, submittedAt } = await readFormSubmission(vaultId, {
   { name: "createHeliaStorage", type: "(opts?: { helia? }) => CdrStorageProvider", description: "Self-hosted in-process Helia node. Good for local dev, no third-party deps." },
 ]} />
 
-## `<CdrField>` types
+## `<CdrForm>` props
+
+<PropsTable rows={[
+  { name: "onEncrypt", type: "(fields: CdrFormFields) => Promise<number>", required: true, description: "Called with the serialized field map on submit. Returns the CDR vault uuid. Server-side encryption happens inside this callback (typically a POST to /api/respond)." },
+  { name: "onSuccess", type: "(vaultId: number) => void", description: "Fired after onEncrypt resolves. Receives the same vault uuid the callback returned." },
+  { name: "onError", type: "(err: Error) => void", description: "Fired if onEncrypt rejects. Pair with form-level error UI." },
+  { name: "children", type: "ReactNode", required: true, description: "CdrFields, CdrSubmitButton, and any layout you want around them." },
+]} />
+
+## `<CdrField>` props
+
+<PropsTable rows={[
+  { name: "name", type: "string", required: true, description: "FormData key. Becomes a top-level property in the encrypted JSON payload." },
+  { name: "label", type: "string", description: "Visible label above the input." },
+  { name: "type", type: "CdrFieldType", defaultValue: '"text"', description: "One of: text · textarea · email · number · select · radio · checkbox." },
+  { name: "placeholder", type: "string", description: "Placeholder for text-like inputs." },
+  { name: "required", type: "boolean", defaultValue: "false", description: "HTML5 required attribute." },
+  { name: "options", type: "{ value: string; label: string }[]", description: "Required for select / radio / checkbox; ignored otherwise." },
+]} />
+
+### `<CdrField>` type values
 
 <PropsTable rows={[
   { name: "text", type: "CdrFieldType", description: "Single-line input." },
@@ -107,6 +142,12 @@ const { fields, submittedAt } = await readFormSubmission(vaultId, {
   { name: "select", type: "CdrFieldType", description: "Dropdown — pass `options={[{value, label}]}`." },
   { name: "radio", type: "CdrFieldType", description: "Radio group — pass `options={[{value, label}]}`." },
   { name: "checkbox", type: "CdrFieldType", description: "Checkbox group — pass `options={[{value, label}]}`." },
+]} />
+
+## `<CdrSubmitButton>` props
+
+<PropsTable rows={[
+  { name: "children", type: "ReactNode", defaultValue: '"Submit securely"', description: "Button label while idle. Auto-swapped to “Encrypting…” during submit and “Submitted ✓” after success." },
 ]} />
 
 ## `useCdrSubmit()` (low-level)

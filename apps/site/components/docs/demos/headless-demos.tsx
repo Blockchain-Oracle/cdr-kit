@@ -1,13 +1,13 @@
 "use client";
 
 import { CdrInspector, CdrSkeleton, EmptyVaults } from "@cdr-kit/react";
-import { DocsLiveProvider } from "../providers";
+import { DocsMockProvider } from "../providers";
 
 export function CdrInspectorDemo() {
   return (
-    <DocsLiveProvider>
+    <DocsMockProvider>
       <CdrInspector />
-    </DocsLiveProvider>
+    </DocsMockProvider>
   );
 }
 

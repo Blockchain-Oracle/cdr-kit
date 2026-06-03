@@ -15,3 +15,8 @@ dist/
 # browser/visual-loop artifacts
 .playwright-mcp/
 /*.png
+screenshots/
+# forge broadcast logs (may contain real tx data / addresses for runs against live chains)
+contracts/broadcast/
+# Next.js fumadocs generated content cache
+apps/site/.source/

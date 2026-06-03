@@ -4,30 +4,72 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
 /**
- * Compact docs search button → dialog. Hits `/api/search` (Orama, via fumadocs).
+ * Pagefind-backed docs search.
  *
- * We fetch the endpoint directly with a 120ms debounce instead of going through
- * fumadocs' `useDocsSearch` — the hook silently returned no data even when the
- * underlying API returned 5 results, which made it ship-broken.
+ * Pagefind runs as a post-build step (`pagefind --site .next/server/app …`) and
+ * emits a static index to `public/pagefind/`. The browser loads `/pagefind/pagefind.js`
+ * at runtime, runs the index in-WASM, returns results in single-digit ms. No API route,
+ * no server-side index rebuild, nothing to debug.
  *
- * Keyboard: Cmd/Ctrl+K opens, Esc closes, ArrowUp/Down navigates, Enter follows.
+ * Keyboard: Cmd/Ctrl+K opens, Esc closes, ↑/↓ navigates, Enter follows.
  */
 
-interface SearchResult {
+interface PagefindResult {
   id: string;
-  type: "page" | "heading" | "text";
-  content: string;
+  data(): Promise<{
+    url: string;
+    raw_url: string;
+    meta: { title?: string };
+    excerpt: string;
+  }>;
+}
+
+interface PagefindAPI {
+  search(query: string): Promise<{ results: PagefindResult[] }>;
+}
+
+interface Hit {
+  id: string;
+  title: string;
   url: string;
-  breadcrumbs?: string[];
+  excerpt: string;
+}
+
+declare global {
+  interface Window {
+    pagefind?: PagefindAPI;
+  }
+}
+
+const __dynImport = (specifier: string): Promise<unknown> => {
+  // Hide the literal specifier from Next/Turbopack static-analysis — pagefind is
+  // a *post-build* asset that lives under /pagefind/, not in node_modules.
+  const dyn = new Function("s", "return import(s)") as (s: string) => Promise<unknown>;
+  return dyn(specifier);
+};
+
+async function loadPagefind(): Promise<PagefindAPI | null> {
+  if (typeof window === "undefined") return null;
+  if (window.pagefind) return window.pagefind;
+  try {
+    const mod = (await __dynImport("/pagefind/pagefind.js")) as PagefindAPI;
+    window.pagefind = mod;
+    return mod;
+  } catch {
+    return null;
+  }
 }
 
 export function NavSearch() {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<SearchResult[]>([]);
+  const [hits, setHits] = useState<Hit[]>([]);
+  const [loading, setLoading] = useState(false);
   const [focused, setFocused] = useState(0);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const debounceRef = useRef<number | undefined>(undefined);
+  const pagefindRef = useRef<PagefindAPI | null>(null);
+  const pagefindMissing = useRef(false);
 
   // Cmd/Ctrl+K opens; Esc closes
   useEffect(() => {
@@ -43,44 +85,64 @@ export function NavSearch() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
+  // Lazy-load Pagefind on first open
+  useEffect(() => {
+    if (!open || pagefindRef.current || pagefindMissing.current) return;
+    void loadPagefind().then((pf) => {
+      if (pf) pagefindRef.current = pf;
+      else pagefindMissing.current = true;
+    });
+  }, [open]);
+
   // Focus input on open
   useEffect(() => {
     if (open) setTimeout(() => inputRef.current?.focus(), 10);
   }, [open]);
 
-  // Debounced search
-  const runSearch = useCallback((q: string) => {
+  const runSearch = useCallback(async (q: string) => {
     if (!q.trim()) {
-      setResults([]);
+      setHits([]);
+      setLoading(false);
       return;
     }
-    fetch(`/api/search?query=${encodeURIComponent(q)}`)
-      .then((r) => r.json())
-      .then((data: SearchResult[] | { error?: string }) => {
-        if (Array.isArray(data)) {
-          // Strip <mark> tags for clean display (server marks the matched substring)
-          setResults(data.slice(0, 10));
-        } else {
-          setResults([]);
-        }
-      })
-      .catch(() => setResults([]));
+    const pf = pagefindRef.current ?? (await loadPagefind());
+    if (!pf) {
+      setHits([]);
+      setLoading(false);
+      pagefindMissing.current = true;
+      return;
+    }
+    pagefindRef.current = pf;
+    setLoading(true);
+    try {
+      const search = await pf.search(q);
+      const data = await Promise.all(search.results.slice(0, 8).map((r) => r.data()));
+      setHits(
+        data.map((d, i) => ({
+          id: search.results[i]!.id,
+          title: d.meta.title ?? d.url,
+          url: d.url,
+          excerpt: d.excerpt,
+        })),
+      );
+    } catch {
+      setHits([]);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => {
     window.clearTimeout(debounceRef.current);
-    debounceRef.current = window.setTimeout(() => runSearch(query), 120);
+    debounceRef.current = window.setTimeout(() => void runSearch(query), 60);
     return () => window.clearTimeout(debounceRef.current);
   }, [query, runSearch]);
-
-  // Strip <mark>/</mark> for clean display
-  const clean = (s: string) => s.replace(/<\/?mark>/g, "");
 
   return (
     <>
       <button
         type="button"
-        className="icon-btn nav-icon-md nav-search-btn"
+        className="nav-search-trigger"
         onClick={() => setOpen(true)}
         aria-label="Search docs"
         title="Search docs (⌘K)"
@@ -89,14 +151,31 @@ export function NavSearch() {
           <circle cx="11" cy="11" r="7" />
           <path d="m21 21-4.3-4.3" />
         </svg>
-        <span className="nav-search-kbd">⌘K</span>
+        <span className="nav-search-placeholder">Search docs</span>
+        <kbd className="nav-search-kbd">⌘K</kbd>
       </button>
 
       {open && (
-        <div className="nav-search-overlay" role="dialog" aria-modal="true" aria-label="Search docs" onClick={() => setOpen(false)}>
+        <div
+          className="nav-search-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Search docs"
+          onClick={() => setOpen(false)}
+        >
           <div className="nav-search-panel" onClick={(e) => e.stopPropagation()}>
             <div className="nav-search-inputrow">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden
+              >
                 <circle cx="11" cy="11" r="7" />
                 <path d="m21 21-4.3-4.3" />
               </svg>
@@ -110,12 +189,12 @@ export function NavSearch() {
                 onKeyDown={(e) => {
                   if (e.key === "ArrowDown") {
                     e.preventDefault();
-                    setFocused((i) => Math.min(i + 1, results.length - 1));
+                    setFocused((i) => Math.min(i + 1, hits.length - 1));
                   } else if (e.key === "ArrowUp") {
                     e.preventDefault();
                     setFocused((i) => Math.max(i - 1, 0));
-                  } else if (e.key === "Enter" && results[focused]) {
-                    window.location.href = results[focused]!.url;
+                  } else if (e.key === "Enter" && hits[focused]) {
+                    window.location.href = hits[focused]!.url;
                   }
                 }}
                 placeholder="Search components, hooks, contracts…"
@@ -124,24 +203,35 @@ export function NavSearch() {
               <kbd className="nav-search-esckbd">esc</kbd>
             </div>
             <div className="nav-search-results">
-              {results.length === 0 && query && (
-                <p className="nav-search-empty">No matches for &ldquo;{query}&rdquo;.</p>
+              {loading && query && <p className="nav-search-hint">Searching&hellip;</p>}
+              {!loading && pagefindMissing.current && (
+                <p className="nav-search-empty">
+                  Search index is built at <code>pnpm build</code>. Run a production build to enable
+                  search.
+                </p>
               )}
-              {results.length === 0 && !query && (
+              {!loading && hits.length === 0 && query && !pagefindMissing.current && (
+                <p className="nav-search-empty">
+                  No docs pages match &ldquo;{query}&rdquo;. Try <em>vault</em>, <em>hook</em>, or{" "}
+                  <em>condition</em>.
+                </p>
+              )}
+              {!loading && hits.length === 0 && !query && (
                 <p className="nav-search-hint">Type to search the docs.</p>
               )}
-              {results.map((r, i) => (
+              {hits.map((hit, i) => (
                 <Link
-                  key={r.id}
-                  href={r.url}
+                  key={hit.id}
+                  href={hit.url}
                   className={i === focused ? "nav-search-result is-focused" : "nav-search-result"}
                   onMouseEnter={() => setFocused(i)}
                   onClick={() => setOpen(false)}
                 >
-                  <span className="nav-search-title">{clean(r.content)}</span>
-                  <span className="nav-search-url">
-                    {r.breadcrumbs ? r.breadcrumbs.join(" › ") : r.url}
-                  </span>
+                  <span className="nav-search-title">{hit.title}</span>
+                  <span
+                    className="nav-search-url"
+                    dangerouslySetInnerHTML={{ __html: hit.excerpt }}
+                  />
                 </Link>
               ))}
             </div>

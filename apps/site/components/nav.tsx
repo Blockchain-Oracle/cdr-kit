@@ -102,10 +102,6 @@ export function Nav() {
               </div>
             )}
           </div>
-          <Link className="nav-new" href="/docs/contracts/multi-sig-condition">
-            <span className="nav-new-dot">new · 0.5</span>
-            <span className="nav-new-label">4 advanced conditions</span>
-          </Link>
         </nav>
         <div className="nav-right">
           <NavSearch />

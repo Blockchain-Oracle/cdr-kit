@@ -100,7 +100,7 @@ Behind the scenes: `mintAndRegisterIp` → `registerPilTerms` → `attachLicense
 - `useAttachLicenseTerms(client)` — `{ attach, isLoading, error }`
 - `usePublish()` — `{ publish, isLoading, error, result }` — render-side wrapper for `agent.publish()`
 
-See [`/docs/hooks/use-story-client`](https://cdr-kit.dev/docs/hooks/use-story-client) etc.
+See [`/docs/hooks/use-story-client`](https://cdrkit.xyz/docs/hooks/use-story-client) etc.
 
 ## Skill
 

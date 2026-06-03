@@ -4,14 +4,16 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && pnpm run build:pagefind",
+    "build:pagefind": "pagefind --site .next/server/app --output-path public/pagefind --glob \"docs/**/*.html\"",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "next typegen && tsc --noEmit"
   },
   "dependencies": {
-    "@cdr-kit/contracts": "npm:@cdr-kit/contracts@^0.7.0",
-    "@cdr-kit/core": "npm:@cdr-kit/core@^0.7.0",
+    "@cdr-kit/contracts": "npm:@cdr-kit/contracts@^0.7.1",
+    "@cdr-kit/core": "npm:@cdr-kit/core@^0.7.1",
+    "@cdr-kit/forms": "npm:@cdr-kit/forms@^0.7.1",
     "@cdr-kit/react": "npm:@cdr-kit/react@^0.7.0",
     "@cdr-kit/react-ui": "npm:@cdr-kit/react-ui@^0.7.0",
     "@radix-ui/react-popover": "^1.1.15",
@@ -31,6 +33,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "pagefind": "^1.5.2",
     "typescript": "^5"
   }
 }

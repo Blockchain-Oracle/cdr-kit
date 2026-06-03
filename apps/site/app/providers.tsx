@@ -9,8 +9,9 @@ import "@rainbow-me/rainbowkit/styles.css";
 
 /**
  * Site-wide client providers: wagmi → react-query → RainbowKit. Wraps everything
- * inside <body>. No CdrConfigProvider here — that lives inside the docs Demo blocks
- * (via DocsLiveProvider) so non-docs pages don't pay the WASM init cost.
+ * inside <body>. No CdrConfigProvider here — docs Demo blocks bring their own
+ * mock CDR kit (via DocsMockProvider) so non-docs pages don't pay the WASM init cost.
+ * Scaffolded templates ship real integration; docs stay mock.
  */
 export function SiteProviders({ children }: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());

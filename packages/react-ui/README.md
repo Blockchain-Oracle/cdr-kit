@@ -1,8 +1,8 @@
 # @cdr-kit/react-ui
 
-Styled component variants for [`@cdr-kit/react`](../react) — `ConditionBadge`, `AccessStepper`, `SubscribeButton`, `VaultCard`, plus DX primitives (`CopyButton`, `ShortAddress`, `ExplorerLink`, `IpPrice`, `CdrNetworkChip`, `CdrSpinner`, `CdrProgress`, `CdrError`).
+> Styled, batteries-included components for Story CDR. Clerk + RainbowKit pattern: `@cdr-kit/react` is headless, this package is the designed default.
 
-The Clerk / RainbowKit pattern: the headless `@cdr-kit/react` ships hooks + render-prop slots; **this package adds the designed, batteries-included variants**.
+---
 
 ## Install
 
@@ -16,7 +16,9 @@ Import the stylesheet once at your app root:
 import "@cdr-kit/react-ui/styles.css";
 ```
 
-## Use
+---
+
+## Quick start
 
 ```tsx
 import { CdrProvider } from "@cdr-kit/react";
@@ -28,13 +30,39 @@ import { SubscribeButton } from "@cdr-kit/react-ui";
 </CdrProvider>
 ```
 
+---
+
+## Components
+
+| component                       | what                                                                |
+| ------------------------------- | ------------------------------------------------------------------- |
+| `<ConditionBadge>`              | tone-coded badge for any condition kind                             |
+| `<AccessStepper>`               | progress strip: `idle → paying → collecting-partials → ready/error` |
+| `<SubscribeButton>`             | batteries-included CTA (wraps `useSubscribeAndAccess`)              |
+| `<UnlockablePill>`              | inline-prose paywall pill (Onscroll / Confide pattern)              |
+| `<VaultCard>`                   | full vault tile for discovery grids                                 |
+| `<HeartbeatTimer>`              | dead-man-switch countdown                                           |
+| `<TimeWindowBadge>`             | time-window state (before / inside / after)                         |
+| `<MultiSigApprovalTracker>`     | live signer-set + epoch + counts                                    |
+| `<MultiSigSigner>`              | sign / approve button for multi-sig vaults                          |
+| `<EscrowDeliveryConfirm>`       | buyer-side pay → confirm flow                                       |
+| `<CopyButton>` `<CopyLine>`     | one-click copy helpers                                              |
+| `<ShortAddress>`                | EIP-55 truncated address                                            |
+| `<ExplorerLink>`                | external link to the Aeneid block explorer                          |
+| `<IpPrice>`                     | render a wei BigInt as `5 $IP / month`                              |
+| `<CdrNetworkChip>`              | live/connecting status pill (Aeneid vs mainnet vs offline)          |
+| `<CdrSpinner>` `<CdrProgress>`  | loading + progress primitives                                       |
+| `<CdrError>`                    | typed-error renderer (maps `CdrErrorCode` → readable copy)          |
+
+---
+
 ## Theming
 
-No Tailwind, no lucide, no framer-motion as hard requirements. Components are styled with **CSS custom properties on a `--cdr-ui-*` namespace**, with light + dark defaults shipped via `[data-theme="dark"]`. Override at any ancestor:
+No Tailwind, no lucide, no framer-motion as hard requirements. Styled via CSS custom properties on a `--cdr-ui-*` namespace, with light + dark defaults shipped via `[data-theme="dark"]`. Override at any ancestor:
 
 ```css
 :root {
-  --cdr-ui-primary: #3E3BE3;
+  --cdr-ui-primary: #e86c2e;
   --cdr-ui-signal:  #1E9C66;
   --cdr-ui-warn:    #C0863A;
   --cdr-ui-danger:  #D32D2D;
@@ -42,6 +70,18 @@ No Tailwind, no lucide, no framer-motion as hard requirements. Components are st
 }
 ```
 
-## License
+---
 
-MIT.
+## Peer dependencies
+
+- `@cdr-kit/react` ≥ 0.7.0
+- `@cdr-kit/core` ≥ 0.7.0
+- `react` ≥ 18
+
+---
+
+## Links
+
+- Full docs: <https://cdrkit.xyz/docs/components>
+- npm: <https://www.npmjs.com/package/@cdr-kit/react-ui>
+- GitHub: <https://github.com/Blockchain-Oracle/cdr-kit>

@@ -22,3 +22,4 @@ yarn-debug.log*
 
 # T1 migration temp backup of TSX docs pages
 _docs_old_tsx_backup/
+public/

@@ -1,41 +1,124 @@
 # @cdr-kit/forms
 
-Encrypted form submission components for [Story Protocol CDR](https://cdr-kit.dev). Drop in `<CdrForm>` + `<CdrField>` + `<StorageProviderPicker>`, wire `onEncrypt` to the bundled server helper (`@cdr-kit/forms/server`), and every submission becomes a CDR vault — multi-provider storage, platform-wallet payment, whole-form encryption — with no decrypt key on the client.
+> Encrypted form submissions on Story Aeneid. Drop-in `<CdrForm>` + `<CdrField>` + server helper. Multi-provider storage, platform-wallet pattern, whole-form encryption.
+
+The respondent never holds a wallet. Gas + signature + storage upload are the server's burden — they fill in fields, hit submit, and the data lands in a CDR vault that only the form owner can decrypt. Pattern extracted from [Confide](https://github.com/Blockchain-Oracle/confide).
+
+---
 
 ## Install
 
-```sh
-pnpm add @cdr-kit/forms @cdr-kit/react @cdr-kit/core
+```bash
+pnpm add @cdr-kit/forms @cdr-kit/agent @cdr-kit/core
 ```
 
-## Quickstart
+---
+
+## Client
 
 ```tsx
-// app/contact/page.tsx
+"use client";
 import { CdrForm, CdrField, CdrSubmitButton } from "@cdr-kit/forms";
 import "@cdr-kit/forms/styles.css";
-import { encryptFormAction } from "./actions";
 
-export default function ContactPage() {
+export default function Survey() {
   return (
-    <CdrForm onEncrypt={encryptFormAction} onSuccess={(id) => console.log("vault", id)}>
-      <CdrField name="email" label="Email" type="email" required />
-      <CdrField name="message" label="Message" type="textarea" required />
-      <CdrSubmitButton />
+    <CdrForm
+      onEncrypt={async (fields) => {
+        const r = await fetch("/api/respond", {
+          method: "POST",
+          body: JSON.stringify({ fields }),
+        });
+        const { vaultId } = await r.json();
+        return vaultId;
+      }}
+      onSuccess={(uuid) => console.log("stored at vault", uuid)}
+    >
+      <CdrField name="mood" label="Mood (1-10)" type="number" required />
+      <CdrField name="highlight" label="Highlight of the week" required />
+      <CdrField name="notes" label="Anything else?" type="textarea" />
+      <CdrSubmitButton>Submit securely</CdrSubmitButton>
     </CdrForm>
   );
 }
 ```
 
-```ts
-// app/contact/actions.ts
-"use server";
-import { storeFormSubmission } from "@cdr-kit/forms/server";
+---
 
-export async function encryptFormAction(fields: Record<string, FormDataEntryValue>) {
-  const { vaultId } = await storeFormSubmission(fields, { privateKey: process.env.PLATFORM_KEY! as `0x${string}` });
-  return vaultId;
+## Server
+
+```ts
+// app/api/respond/route.ts
+import { NextResponse } from "next/server";
+import { storeFormSubmission } from "@cdr-kit/forms/server";
+import { createPinataStorage } from "@cdr-kit/core";
+
+export async function POST(req: Request) {
+  const { fields } = await req.json();
+
+  // Storage adapter is optional — payloads ≤ 1KB go directly through the CDR precompile.
+  const storage = createPinataStorage({
+    jwt: process.env.PINATA_JWT!,
+    gatewayUrl: process.env.PINATA_GATEWAY_URL ?? "https://gateway.pinata.cloud",
+  });
+
+  const { vaultId, cid } = await storeFormSubmission(fields, {
+    privateKey: process.env.PLATFORM_WALLET_PRIVATE_KEY as `0x${string}`,
+    storage,            // optional — needed only for >1KB payloads
+    rpcUrl: "https://aeneid.storyrpc.io",
+  });
+
+  return NextResponse.json({ vaultId, cid });
 }
 ```
 
-Docs: [cdr-kit.dev/docs/forms](https://cdr-kit.dev/docs/forms).
+Decrypt later via:
+
+```ts
+import { readFormSubmission } from "@cdr-kit/forms/server";
+const { fields, submittedAt } = await readFormSubmission(vaultId, {
+  privateKey: process.env.PLATFORM_WALLET_PRIVATE_KEY as `0x${string}`,
+  storage,    // pass only if the write used one
+});
+```
+
+---
+
+## Exports
+
+| symbol               | what it is                                                                  |
+| -------------------- | --------------------------------------------------------------------------- |
+| `CdrForm`            | form wrapper; takes `onEncrypt` callback returning the vault uuid           |
+| `CdrField`           | typed input — `text` · `textarea` · `email` · `number` · `select` · `radio` · `checkbox` |
+| `CdrSubmitButton`    | button with idle / encrypting / submitted states                            |
+| `useCdrSubmit`       | low-level hook if you want full control over your form layout               |
+| `useCdrFormContext`  | sibling-component access to the form's state                                |
+| `storeFormSubmission`| (server) encrypt + store a submission, returns vault uuid                   |
+| `readFormSubmission` | (server) decrypt a submission by uuid                                       |
+
+---
+
+## Scaffolder
+
+```bash
+pnpm create cdr-kit-app my-forms --template forms
+```
+
+Generates a Next.js app with `<CdrForm>` on the public page, `/api/respond` + `/api/results` routes, dark premium layout — ready to deploy.
+
+---
+
+## Peer dependencies
+
+- `@cdr-kit/agent` ≥ 0.7.0
+- `@cdr-kit/core` ≥ 0.7.0
+- `react` ≥ 18
+
+---
+
+## Links
+
+- Full docs: <https://cdrkit.xyz/docs/forms>
+- npm: <https://www.npmjs.com/package/@cdr-kit/forms>
+- GitHub: <https://github.com/Blockchain-Oracle/cdr-kit>
+- Confide (origin pattern): <https://github.com/Blockchain-Oracle/confide>

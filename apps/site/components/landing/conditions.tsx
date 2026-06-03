@@ -9,7 +9,7 @@ function trunc(addr: string): string {
 interface RowProps {
   name: string;
   highlight?: boolean;
-  badge: string;
+  badge?: string;
   badgeTone?: "live" | "primary" | "warn";
   address: string;
   soon?: boolean;
@@ -23,7 +23,7 @@ function CondRow({ name, highlight = false, badge, badgeTone = "live", address, 
         <span className="cond-name" style={highlight ? { color: "var(--primary)" } : undefined}>
           {name}
         </span>
-        <Badge tone={badgeTone}>{badge}</Badge>
+        {badge ? <Badge tone={badgeTone}>{badge}</Badge> : null}
       </div>
       <p>{children}</p>
       <span className="addr">{address}</span>
@@ -71,19 +71,19 @@ export function Conditions() {
           <CondRow name="CdrKitVault" highlight badge="factory" badgeTone="primary" address={aeneid.cdrKitVault}>
             One tx: mint the vault NFT, register it as Story IP, allocate the CDR slot, set the read condition, attach PIL terms.
           </CondRow>
-          <CondRow name="TimeWindowCondition" badge="new · 0.5" badgeTone="primary" address={aeneid.timeWindowCondition}>
+          <CondRow name="TimeWindowCondition" address={aeneid.timeWindowCondition}>
             Reads gated to an absolute <span className="mono">[startTs, endTs]</span> window. <span className="mono">endTs=0</span> = open-ended.
             Release-on-date drops, embargoes, scheduled publication, time-bound previews.
           </CondRow>
-          <CondRow name="DeadManSwitchCondition" badge="new · 0.5" badgeTone="primary" address={aeneid.deadManSwitchCondition}>
+          <CondRow name="DeadManSwitchCondition" address={aeneid.deadManSwitchCondition}>
             Auto-unlock to heirs (or public) if the creator stops <span className="mono">poke()</span>-ing within{" "}
             <span className="mono">duration</span>. The canonical wallet-recovery + leak-on-disappearance pattern.
           </CondRow>
-          <CondRow name="ConditionalEscrowCondition" badge="new · 0.5" badgeTone="primary" address={aeneid.conditionalEscrowCondition}>
+          <CondRow name="ConditionalEscrowCondition" address={aeneid.conditionalEscrowCondition}>
             Buyer pays → confirms delivery → seller is paid + buyer reads. Optional arbiter for disputes; seller can
             claim after a buyer-silence timeout.
           </CondRow>
-          <CondRow name="MultiSigCondition" highlight badge="new · 0.5" badgeTone="primary" address={aeneid.multiSigCondition}>
+          <CondRow name="MultiSigCondition" highlight address={aeneid.multiSigCondition}>
             N-of-M with <b>two parallel approval paths</b>: off-chain EIP-712 sigs (gas-free) OR on-chain{" "}
             <span className="mono">approve(uuid, epoch)</span>. Either path reaching threshold passes.{" "}
             <span className="mono">rotateSigners</span> invalidates both. First-of-kind in the CDR ecosystem.

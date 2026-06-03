@@ -4,7 +4,7 @@
 
 A standard library of 9 deployed CDR condition contracts + a typed TS SDK + a React layer + an autonomous agent SDK + a CLI + an MCP server + a Claude Code plugin + a Next.js dashboard, so anyone can ship private, paid, license-gated data on Story without hand-rolling the protocol. CDR's encryption is commodity (Lit/TACo do it too) — cdr-kit's edge is the **Story IP coupling** (license-tier gating + royalty rails) made usable.
 
-> **Status: 0.6.0 live on npm + Aeneid.** 15 packages published to [npmjs.com/org/cdr-kit](https://www.npmjs.com/org/cdr-kit). 9 conditions deployed on Story Aeneid (5 base + 4 advanced shipped in 0.5). 110 Foundry tests + workspace lint/typecheck/build/test all green. Dashboard live at [cdr-kit.dev](https://cdr-kit.dev) (built from `apps/site/`). The full encrypt→write→read→decrypt round-trip, the dual-path MultiSig flow, the Story IP creator path (`agent.publish()`), and an autonomous LLM-driven agent paying + reading via MCP tools all run end-to-end on real chain.
+> **Status: 0.6.0 live on npm + Aeneid.** 15 packages published to [npmjs.com/org/cdr-kit](https://www.npmjs.com/org/cdr-kit). 9 conditions deployed on Story Aeneid (5 base + 4 advanced shipped in 0.5). 110 Foundry tests + workspace lint/typecheck/build/test all green. Dashboard live at [cdrkit.xyz](https://cdrkit.xyz) (built from `apps/site/`). The full encrypt→write→read→decrypt round-trip, the dual-path MultiSig flow, the Story IP creator path (`agent.publish()`), and an autonomous LLM-driven agent paying + reading via MCP tools all run end-to-end on real chain.
 
 ## Install (any of these — pick the surface you want)
 
@@ -118,7 +118,7 @@ story-cdr/
 ├── contracts/      # Foundry: 9 conditions + CdrKitVault + Deploy*.s.sol scripts
 ├── packages/       # 15 npm packages — see table above
 │   └── plugin/cdr-kit/   # Claude Code plugin: 11 skills
-├── apps/site/      # Next.js dashboard / docs site (cdr-kit.dev)
+├── apps/site/      # Next.js dashboard / docs site (cdrkit.xyz)
 ├── examples/       # vercel-ai-chatbot — runnable LLM-driven agent demo
 ├── docs/           # SPECS — PRD, architecture, ux-spec, epics, BDD stories
 ├── context/        # KNOWLEDGE BASE — research, decisions (D1–D24), vendored source

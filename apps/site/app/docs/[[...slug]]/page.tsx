@@ -2,11 +2,25 @@ import { notFound } from "next/navigation";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Metadata } from "next";
-import type { ComponentType } from "react";
+import type { ComponentType, ReactElement, ReactNode } from "react";
 import { source } from "@/lib/source";
 import { DocPage } from "@/components/docs/doc-page";
 import { CopyPageButton } from "@/components/docs/copy-page-button";
 import { getMDXComponents } from "@/lib/mdx-components";
+
+/** Recursively flatten an MDX heading title (string | ReactElement) to plain text.
+ *  Without this, headings containing `<code>foo</code>` or other markup render as
+ *  empty labels in the right rail because the React element isn't a string. */
+function flattenTitle(node: unknown): string {
+  if (node == null || typeof node === "boolean") return "";
+  if (typeof node === "string" || typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(flattenTitle).join("");
+  if (typeof node === "object" && "props" in node) {
+    const props = (node as ReactElement<{ children?: ReactNode }>).props;
+    return flattenTitle(props?.children);
+  }
+  return "";
+}
 
 type Props = { params: Promise<{ slug?: string[] }> };
 
@@ -49,11 +63,13 @@ export default async function Page({ params }: Props) {
 
   // Map fumadocs TOC ({ url: "#id", title, depth }) → DocTocItem ({ id, label }).
   // Only h2/h3 land in the right rail to match the existing scrollspy density.
+  // When a heading contains markup (e.g. `## <code>foo</code>`), `title` is a React
+  // element rather than a string — flatten it to text so the rail isn't blank.
   const tocItems = data.toc
     .filter((node) => node.depth <= 3)
     .map((node) => ({
       id: node.url.replace(/^#/, ""),
-      label: typeof node.title === "string" ? node.title : "",
+      label: flattenTitle(node.title),
     }));
 
   // Raw MDX for the per-page Copy button. Server-read once; passed as a string

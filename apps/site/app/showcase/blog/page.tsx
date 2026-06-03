@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { UnlockablePill } from "@cdr-kit/react-ui";
-import { DocsLiveProvider } from "@/components/docs/providers";
+import { DocsMockProvider } from "@/components/docs/providers";
 import "./blog.css";
 
 const HINT_KEY = "cdr-blog-pill-hint-seen";
@@ -40,7 +40,7 @@ function FirstPillHint() {
 
 export default function ShowcaseBlogPage() {
   return (
-    <DocsLiveProvider>
+    <DocsMockProvider>
       <article className="blog">
         <header className="blog-head">
           <Link href="/" className="blog-back">← cdr-kit</Link>
@@ -110,6 +110,6 @@ export default function ShowcaseBlogPage() {
           </p>
         </div>
       </article>
-    </DocsLiveProvider>
+    </DocsMockProvider>
   );
 }

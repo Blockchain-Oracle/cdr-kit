@@ -50,6 +50,16 @@ const storage = createSupabaseStorage({
 
 <p>The "CID" is the bucket-relative path the object was uploaded to. Supabase doesn't speak IPFS, but <code>CdrStorageProvider</code> only requires a string round-trip handle.</p>
 
+<Callout type="warn">
+On the read side, pass <code>skipCidVerification: true</code> to <code>downloadFile</code> whenever the storage handle is not an IPFS CIDv1 (Supabase paths, S3 keys, anything custom). Without it, the SDK's default multibase decode will throw because the handle isn't a valid CID — verified live on Aeneid in 0.7.1.
+</Callout>
+
+<CodePanel title="ts" language="ts" code={`const { content } = await downloadFile(client, {
+  uuid,
+  storage,
+  skipCidVerification: true,   // ← required for Supabase / S3 / any non-IPFS storage
+});`} />
+
 ## createReadOnlyGatewayStorage
 
 <CodePanel title="ts" language="ts" code={`import { createReadOnlyGatewayStorage, downloadFile } from "@cdr-kit/core";

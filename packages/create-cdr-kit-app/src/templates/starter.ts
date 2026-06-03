@@ -125,7 +125,7 @@ export const STARTER: Template = {
 
         Need testnet IP? <https://aeneid.faucet.story.foundation/>
 
-        Full docs: <https://cdr-kit.dev>
+        Full docs: <https://cdrkit.xyz>
       `),
     },
     { path: ".gitignore", content: "node_modules\ndist\n.env\n" },

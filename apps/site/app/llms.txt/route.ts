@@ -21,7 +21,7 @@ export async function GET() {
     const data = page.data as unknown as { title?: string; description?: string };
     const title = data.title ?? page.url;
     const desc = data.description ? `: ${data.description}` : "";
-    lines.push(`- [${title}](https://cdr-kit.dev${page.url})${desc}`);
+    lines.push(`- [${title}](https://cdrkit.xyz${page.url})${desc}`);
   }
 
   return new Response(lines.join("\n"), {

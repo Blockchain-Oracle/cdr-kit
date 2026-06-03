@@ -3,7 +3,7 @@
 Developer toolkit for Story Protocol Confidential Data Rails (CDR). 15 npm packages:
 `@cdr-kit/{contracts,core,agent,tools,mcp,cli,react,react-ui,story}` + 5 framework adapters
 (`vercel-ai, openai, langchain, agentkit, goat`) + `create-cdr-kit-app` scaffolder + a
-multi-skill Claude Code plugin. Plus the `apps/site` Next.js dashboard at cdr-kit.dev.
+multi-skill Claude Code plugin. Plus the `apps/site` Next.js dashboard at cdrkit.xyz.
 pnpm + Turborepo + tsdown + Foundry. 0.5 ships live on Aeneid with 4 advanced conditions
 (TimeWindow / DeadMan / Escrow / MultiSig dual-path) on top of the 0.4 surface.
 
@@ -67,5 +67,5 @@ pnpm + Turborepo + tsdown + Foundry. 0.5 ships live on Aeneid with 4 advanced co
   - **Adapters**: `vercel-ai`, `openai`, `langchain`, `agentkit`, `goat`
   - **Scaffolder**: `create-cdr-kit-app`
   - **Plugin**: `plugin/cdr-kit/` (multi-skill Claude Code plugin — 11 skills)
-- `apps/site/` — Next.js dashboard / documentation site (cdr-kit.dev).
+- `apps/site/` — Next.js dashboard / documentation site (cdrkit.xyz).
 - `examples/vercel-ai-chatbot/` — runnable end-to-end agent demo.

@@ -10,11 +10,6 @@ export function Hero() {
       <div className="container">
         <div className="hero-grid">
           <div className="hero-left">
-            <Link href="/docs/contracts/multi-sig-condition" className="hero-new reveal">
-              <span className="mono dot">new · 0.5</span>
-              <span className="hn-txt">4 advanced conditions live · TimeWindow / DeadMan / Escrow / MultiSig</span>
-              <span className="arr" aria-hidden="true">→</span>
-            </Link>
             <div className="hero-eyebrows reveal">
               <Badge tone="primary">Story Protocol · Confidential Data Rails</Badge>
               <Badge tone="live">Live on Aeneid</Badge>

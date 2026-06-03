@@ -342,26 +342,6 @@ h1, h2, h3 { font-family: var(--display); font-weight: 700; letter-spacing: -0.0
   padding: 7px 11px; border-radius: var(--r-sm); transition: all .14s; white-space: nowrap;
 }
 .nav-links a:hover { color: var(--ink); background: var(--paper-2); }
-.nav-new {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 0.86rem; font-weight: 500;
-  padding: 5px 11px 5px 5px;
-  border-radius: 999px;
-  background: var(--card);
-  border: 1px solid var(--line);
-  margin-left: 4px;
-  color: var(--ink-2) !important;
-  transition: border-color .14s, transform .12s, background-color .14s;
-}
-.nav-new:hover { border-color: var(--line-2); transform: translateY(-1px); background: var(--paper-2) !important; color: var(--ink) !important; }
-.nav-new-dot {
-  font-family: var(--mono); font-size: 0.64rem; font-weight: 600;
-  letter-spacing: 0.06em; text-transform: uppercase;
-  color: var(--primary); background: var(--primary-soft);
-  border: 1px solid var(--primary-line); border-radius: 999px;
-  padding: 2px 7px;
-}
-.nav-new-label { white-space: nowrap; }
 
 /* ---------- Nav "More" dropdown ---------- */
 .nav-more { position: relative; }
@@ -497,9 +477,34 @@ h1, h2, h3 { font-family: var(--display); font-weight: 700; letter-spacing: -0.0
 
 
 /* T1-F: docs search — compact icon button in nav, popover dialog with results */
-.nav-search-btn { display: inline-flex; align-items: center; gap: 6px; padding: 0 9px; font-family: ui-monospace, monospace; font-size: 0.72rem; }
-.nav-search-btn svg { width: 14px; height: 14px; }
-.nav-search-kbd { color: var(--ink-2); opacity: 0.7; }
+.nav-search-trigger {
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 34px; padding: 0 10px 0 11px;
+  min-width: 220px;
+  font-family: inherit; font-size: 0.84rem;
+  color: var(--ink-2);
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color .14s, background-color .14s, color .14s;
+}
+.nav-search-trigger:hover { border-color: var(--line-2); background: var(--card); color: var(--ink); }
+.nav-search-trigger svg { width: 14px; height: 14px; flex-shrink: 0; }
+.nav-search-placeholder { flex: 1; text-align: left; }
+.nav-search-kbd {
+  font-family: ui-monospace, monospace; font-size: 0.7rem;
+  color: var(--ink-2); opacity: 0.85;
+  padding: 2px 6px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  flex-shrink: 0;
+}
+@media (max-width: 860px) {
+  .nav-search-trigger { min-width: 0; padding: 0 10px; }
+  .nav-search-placeholder { display: none; }
+}
 @media (max-width: 720px) { .nav-search-kbd { display: none; } }
 
 .nav-search-overlay {

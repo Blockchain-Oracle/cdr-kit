@@ -19,7 +19,7 @@ export async function GET() {
 
     chunks.push(`# ${title}\n`);
     if (desc) chunks.push(`> ${desc}\n`);
-    chunks.push(`\nSource: https://cdr-kit.dev${page.url}\n\n`);
+    chunks.push(`\nSource: https://cdrkit.xyz${page.url}\n\n`);
 
     // Read the raw MDX file for the body — page.data.body is a compiled React
     // component, not text. Try both <rel>.mdx (leaves) and <rel>/index.mdx
