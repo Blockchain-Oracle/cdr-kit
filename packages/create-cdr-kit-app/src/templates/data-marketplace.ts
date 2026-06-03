@@ -98,7 +98,7 @@ export const DATA_MARKETPLACE: Template = {
                 <a href="/seller">Seller</a>
               </nav>
               <div className="header-actions">
-                <CdrNetworkChip />
+                <CdrNetworkChip mode="live" />
                 <ConnectButton accountStatus="address" chainStatus="icon" />
               </div>
             </header>

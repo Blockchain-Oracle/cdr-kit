@@ -93,7 +93,7 @@ export const PAYWALL: Template = {
                 <span>signal.cdr</span>
               </div>
               <div className="header-actions">
-                <CdrNetworkChip />
+                <CdrNetworkChip mode="live" />
                 <ConnectButton accountStatus="address" chainStatus="icon" />
               </div>
             </header>

@@ -110,7 +110,7 @@ export const FORMS: Template = {
                 <Link href="/results">Results</Link>
               </nav>
               <div className="header-actions">
-                <CdrNetworkChip />
+                <CdrNetworkChip mode="live" />
                 <ConnectButton accountStatus="address" chainStatus="icon" />
               </div>
             </header>
