@@ -1,6 +1,145 @@
 ---
 title: "@cdr-kit/forms"
-description: Encrypted form submissions with multi-provider storage selection.
+description: Encrypted form submissions on Story Aeneid. Multi-provider storage picker, whole-form CDR encryption, platform-wallet pattern — respondents never hold a wallet.
+importLine: 'import { CdrForm, CdrField, CdrSubmitButton, StorageProviderPicker } from "@cdr-kit/forms"'
+breadcrumb: ["@cdr-kit/forms", "Overview"]
+prev:
+  href: /docs/agent-kit/mcp
+  label: MCP server
+next:
+  href: /docs
+  label: Introduction
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+The encrypted-forms primitive. Drop `<CdrForm>` + a few `<CdrField>`s into any page; each submission gets its own CDR vault on Aeneid. Only the form creator can decrypt. Respondents never connect a wallet — gas + signature is the server's burden via the platform-wallet pattern (extracted from [Confide](https://github.com/Blockchain-Oracle/confide)).
+
+## Install
+
+<CodePanel code={`pnpm add @cdr-kit/forms`} language="bash" />
+
+If you don't have CDR wired up yet, also install the React peer:
+
+<CodePanel code={`pnpm add @cdr-kit/forms @cdr-kit/react @cdr-kit/core`} language="bash" />
+
+## Client quickstart
+
+<CodePanel code={`"use client";
+
+import { CdrForm, CdrField, CdrSubmitButton } from "@cdr-kit/forms";
+import "@cdr-kit/forms/styles.css";
+
+export function Survey() {
+  return (
+    <CdrForm
+      onEncrypt={async (fields) => {
+        const r = await fetch("/api/respond", {
+          method: "POST",
+          body: JSON.stringify(fields),
+        });
+        const { vaultId } = await r.json();
+        return vaultId;
+      }}
+      onSuccess={(uuid) => console.log("stored at vault", uuid)}
+    >
+      <CdrField name="mood" label="Mood (1–10)" type="number" required />
+      <CdrField name="highlight" label="Highlight of the week" required />
+      <CdrField name="notes" label="Anything else?" type="textarea" />
+      <CdrSubmitButton />
+    </CdrForm>
+  );
+}`} language="tsx" />
+
+`<CdrForm>` serializes every `<CdrField>` (via `FormData`) and calls your `onEncrypt` with the resulting object. It expects you to return the CDR vault UUID — that's what gets persisted in your DB so you can decrypt later.
+
+## Server quickstart
+
+<CodePanel code={`// app/api/respond/route.ts
+import { NextResponse } from "next/server";
+import { storeFormSubmission } from "@cdr-kit/forms/server";
+
+export async function POST(req: Request) {
+  const fields = await req.json();
+  const { vaultId } = await storeFormSubmission(fields, {
+    privateKey: process.env.WALLET_PRIVATE_KEY as \`0x\${string}\`,
+    rpcUrl: "https://aeneid.storyrpc.io",
+  });
+  return NextResponse.json({ vaultId });
+}`} language="tsx" />
+
+`storeFormSubmission()` allocates a fresh CDR vault on Aeneid (your platform wallet signs), encrypts the JSON-serialized fields, and returns the UUID. Store it in your DB alongside the form id so you can list + decrypt later.
+
+To read the submission back:
+
+<CodePanel code={`import { readFormSubmission } from "@cdr-kit/forms/server";
+
+const { fields, submittedAt } = await readFormSubmission(vaultId, {
+  privateKey: process.env.WALLET_PRIVATE_KEY,
+});`} language="tsx" />
+
+## Multi-provider storage picker
+
+`<StorageProviderPicker>` is a presentational React component that lets form builders pick which storage backend the encrypted blob lands in. The picker emits a `StorageProviderId` you wire into your server route.
+
+<CodePanel code={`import { useState } from "react";
+import { StorageProviderPicker, type StorageProviderId } from "@cdr-kit/forms";
+
+function Builder() {
+  const [provider, setProvider] = useState<StorageProviderId>("gateway");
+  return <StorageProviderPicker value={provider} onChange={setProvider} />;
+}`} language="tsx" />
+
+Bundled providers (logos included):
+
+<PropsTable rows={[
+  { name: "pinata", type: "StorageProviderId", description: "Pinata — IPFS pinning service." },
+  { name: "storacha", type: "StorageProviderId", description: "Storacha (w3up / Filecoin)." },
+  { name: "supabase", type: "StorageProviderId", description: "Supabase Postgres + Storage." },
+  { name: "ipfs", type: "StorageProviderId", description: "Self-hosted IPFS / Helia." },
+  { name: "gateway", type: "StorageProviderId", description: "Default CDR gateway (no extra setup)." },
+]} />
+
+## `<CdrField>` types
+
+<PropsTable rows={[
+  { name: "text", type: "CdrFieldType", description: "Single-line input." },
+  { name: "textarea", type: "CdrFieldType", description: "Multi-line textarea." },
+  { name: "email", type: "CdrFieldType", description: "Email input with HTML5 validation." },
+  { name: "number", type: "CdrFieldType", description: "Number input." },
+  { name: "select", type: "CdrFieldType", description: "Dropdown — pass `options={[{value, label}]}`." },
+  { name: "radio", type: "CdrFieldType", description: "Radio group — pass `options={[{value, label}]}`." },
+  { name: "checkbox", type: "CdrFieldType", description: "Checkbox group — pass `options={[{value, label}]}`." },
+]} />
+
+## `useCdrSubmit()` (low-level)
+
+If you don't want the `<CdrForm>` wrapper, you can call `useCdrSubmit({ onEncrypt })` directly to drive your own form layout. It returns `{ submit, isLoading, error, vaultId, reset }`.
+
+<CodePanel code={`import { useCdrSubmit } from "@cdr-kit/forms";
+
+function MyForm() {
+  const { submit, isLoading, vaultId } = useCdrSubmit({
+    onEncrypt: async (fields) => {
+      const r = await fetch("/api/respond", { method: "POST", body: JSON.stringify(fields) });
+      return (await r.json()).vaultId;
+    },
+  });
+
+  return (
+    <form onSubmit={(e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(e.currentTarget));
+      submit(data);
+    }}>
+      {/* ...your own inputs... */}
+      <button disabled={isLoading}>{vaultId ? "Submitted" : "Submit"}</button>
+    </form>
+  );
+}`} language="tsx" />
+
+## Scaffolder
+
+A working end-to-end forms app is one command away:
+
+<CodePanel code={`pnpm create cdr-kit-app my-forms --template forms`} language="bash" />
+
+The generated app includes the public survey, the creator-side results page, the `/api/respond` and `/api/results` routes, the StorageProviderPicker integration, and a dark premium layout matching cdr-kit.dev. See [the scaffolder docs](/docs/scaffolder) for other templates.

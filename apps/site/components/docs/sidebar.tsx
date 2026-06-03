@@ -141,6 +141,10 @@ export const SIDEBAR: SideGroup[] = [
     links: [{ href: "/docs/skill", label: "Claude Code plugin", tag: "new" }],
   },
   {
+    heading: "Forms",
+    links: [{ href: "/docs/forms", label: "@cdr-kit/forms", tag: "0.7" }],
+  },
+  {
     heading: "Showcase",
     links: [{ href: "/showcase/blog", label: "Pay-to-unlock blog" }],
   },
