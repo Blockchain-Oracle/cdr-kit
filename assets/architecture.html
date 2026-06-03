@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>cdr-kit · architecture</title>
+<!-- Uses the real design-system tokens — no invented colors. -->
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  * { margin: 0; box-sizing: border-box; }
+  body { background: var(--paper-2); }
+  .frame {
+    width: 1280px; position: relative; overflow: hidden;
+    background: var(--paper); font-family: var(--sans);
+    padding: 40px 56px 36px;
+  }
+  .frame::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0.6;
+    background-image:
+      linear-gradient(to right, var(--line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+    background-size: 56px 56px;
+    -webkit-mask-image: radial-gradient(ellipse 82% 64% at 70% 6%, #000 0%, transparent 74%);
+            mask-image: radial-gradient(ellipse 82% 64% at 70% 6%, #000 0%, transparent 74%);
+  }
+  .frame::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(820px 460px at 90% -10%, var(--primary-soft), transparent 62%);
+  }
+  .inner { position: relative; z-index: 2; }
+
+  .head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 22px; }
+  .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-3); display: flex; align-items: center; gap: 9px; margin-bottom: 16px; }
+  .eyebrow .tick { color: var(--primary); }
+  .title { font-family: var(--display); font-size: 36px; font-weight: 800; letter-spacing: -0.035em; line-height: 1.02; color: var(--ink); }
+  .title .am { color: var(--primary); }
+  .sub { font-size: 15px; color: var(--ink-2); margin-top: 12px; max-width: 560px; line-height: 1.45; }
+  .brand { display: inline-flex; align-items: center; gap: 11px; }
+  .brand .word { font-family: var(--mono); font-weight: 700; font-size: 19px; letter-spacing: -0.02em; color: var(--ink); }
+  .brand .word b { color: var(--primary); }
+
+  .stack { display: flex; flex-direction: column; align-items: stretch; }
+  .layer {
+    position: relative; background: var(--card);
+    border: 1px solid var(--line); border-radius: var(--r-lg);
+    padding: 17px 24px; display: grid; grid-template-columns: 230px 1fr; gap: 24px; align-items: center;
+    box-shadow: var(--sh-2);
+  }
+  .lbadge {
+    display: inline-flex; align-items: center; gap: 8px; align-self: flex-start;
+    font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+    color: var(--primary); background: var(--primary-soft); border: 1px solid var(--primary-line);
+    border-radius: 7px; padding: 4px 9px; margin-bottom: 9px;
+  }
+  .lname { font-family: var(--display); font-size: 20px; font-weight: 700; letter-spacing: -0.02em; color: var(--ink); line-height: 1.1; }
+  .lrole { font-size: 13px; color: var(--ink-2); margin-top: 6px; line-height: 1.4; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    font-family: var(--mono); font-size: 13px; font-weight: 500;
+    color: var(--ink-2); background: var(--paper-2);
+    border: 1px solid var(--line); border-radius: 8px; padding: 7px 12px; white-space: nowrap;
+  }
+  .chip.key { color: var(--primary); border-color: var(--primary-line); background: var(--primary-soft); }
+
+  .rail { display: flex; flex-direction: column; align-items: center; height: 22px; }
+  .rail .line { width: 2px; flex: 1; background: linear-gradient(180deg, var(--primary-line), var(--primary-soft)); }
+  .rail .node { width: 9px; height: 9px; border-radius: 2px; background: var(--primary); transform: rotate(45deg); box-shadow: 0 0 0 4px var(--primary-soft); margin: -1px 0; }
+
+  .foundation {
+    margin-top: 22px; background: var(--primary-soft);
+    border: 1px solid var(--primary-line); border-radius: var(--r-lg);
+    padding: 16px 24px; display: flex; align-items: center; gap: 18px;
+  }
+  .foundation .ftxt { flex: 1; }
+  .foundation .fname { font-family: var(--mono); font-size: 17px; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; }
+  .foundation .fdesc { font-size: 13px; color: var(--ink-2); margin-top: 4px; }
+  .foundation .fmeta { font-family: var(--mono); font-size: 12px; color: var(--primary); text-align: right; white-space: nowrap; }
+
+  .foot { display: flex; justify-content: space-between; align-items: center; margin-top: 18px; font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); letter-spacing: 0.02em; }
+  .foot .live { color: var(--signal); display: inline-flex; align-items: center; gap: 7px; }
+  .foot .live .d { width: 7px; height: 7px; border-radius: 50%; background: var(--signal); }
+</style>
+</head>
+<body>
+  <div class="frame">
+    <div class="inner">
+      <div class="head">
+        <div>
+          <div class="eyebrow"><span class="tick">▚</span>Architecture</div>
+          <div class="title">Three layers over<br><span class="am">Confidential Data Rails</span>.</div>
+          <div class="sub">One install per surface — adapters, a typed SDK, and a deployed Solidity condition library — all resolving to Story's CDR precompile.</div>
+        </div>
+        <div class="brand">
+          <svg width="34" height="34" viewBox="0 0 32 32" fill="none"><line x1="1.5" y1="16" x2="30.5" y2="16" stroke="var(--ink)" stroke-width="2.6" stroke-linecap="round"/><rect x="7" y="7" width="18" height="18" rx="5.2" stroke="var(--ink)" stroke-width="2.6"/><circle cx="16" cy="16" r="2.8" fill="var(--primary)"/></svg>
+          <span class="word">cdr<b>-</b>kit</span>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="layer">
+          <div>
+            <span class="lbadge">LAYER 3</span>
+            <div class="lname">Framework adapters &amp; tooling</div>
+            <div class="lrole">Call CDR from any agent framework, the CLI, an MCP host, or scaffold a fresh app.</div>
+          </div>
+          <div class="chips">
+            <span class="chip">vercel-ai</span><span class="chip">openai</span><span class="chip">langchain</span><span class="chip">agentkit</span><span class="chip">goat</span>
+            <span class="chip key">create-cdr-kit-app</span><span class="chip key">@cdr-kit/mcp</span><span class="chip key">@cdr-kit/cli</span>
+          </div>
+        </div>
+
+        <div class="rail"><div class="line"></div><div class="node"></div><div class="line"></div></div>
+
+        <div class="layer">
+          <div>
+            <span class="lbadge">LAYER 2</span>
+            <div class="lname">TypeScript SDK &amp; React</div>
+            <div class="lrole">Typed client, hooks, components, the autonomous agent, and the Story IP creator surface.</div>
+          </div>
+          <div class="chips">
+            <span class="chip key">@cdr-kit/core</span><span class="chip">@cdr-kit/agent</span><span class="chip">@cdr-kit/react</span><span class="chip">@cdr-kit/react-ui</span><span class="chip">@cdr-kit/forms</span><span class="chip">@cdr-kit/story</span>
+          </div>
+        </div>
+
+        <div class="rail"><div class="line"></div><div class="node"></div><div class="line"></div></div>
+
+        <div class="layer">
+          <div>
+            <span class="lbadge">LAYER 1</span>
+            <div class="lname">Solidity conditions</div>
+            <div class="lrole">A tested standard library of read/write rules, plus the one-tx vault factory.</div>
+          </div>
+          <div class="chips">
+            <span class="chip key">CdrKitVault · factory</span>
+            <span class="chip">Open</span><span class="chip">Subscription</span><span class="chip">TierGate</span><span class="chip">Composable</span><span class="chip">CreatorWrite</span><span class="chip">TimeWindow</span><span class="chip">DeadManSwitch</span><span class="chip">ConditionalEscrow</span><span class="chip">MultiSig</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="foundation">
+        <span class="vmark">
+          <svg width="40" height="40" viewBox="0 0 32 32" fill="none"><line x1="1.5" y1="16" x2="30.5" y2="16" stroke="var(--primary)" stroke-width="2.6" stroke-linecap="round"/><rect x="7" y="7" width="18" height="18" rx="5.2" stroke="var(--primary)" stroke-width="2.6"/><circle cx="16" cy="16" r="2.8" fill="var(--primary)"/></svg>
+        </span>
+        <div class="ftxt">
+          <div class="fname">CDR precompile</div>
+          <div class="fdesc">Story Protocol's on-chain threshold-encryption primitive — write encrypted, gate by condition, decrypt on satisfaction.</div>
+        </div>
+        <div class="fmeta">Story Protocol<br>Aeneid · chain 1315</div>
+      </div>
+
+      <div class="foot">
+        <span>15 packages · 9 conditions · 34 agent tools · MIT</span>
+        <span class="live"><span class="d"></span>Live on Aeneid · v0.7.1</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

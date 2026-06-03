@@ -1,11 +1,9 @@
 <p align="center">
   <a href="https://cdrkit.xyz">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Blockchain-Oracle/cdr-kit/main/assets/logo-wordmark-dark.svg">
-      <img src="https://raw.githubusercontent.com/Blockchain-Oracle/cdr-kit/main/assets/logo-wordmark.svg" alt="cdr-kit" width="200">
-    </picture>
+    <img src="https://raw.githubusercontent.com/Blockchain-Oracle/cdr-kit/main/assets/banner.svg" alt="cdr-kit — wagmi-style toolkit for Story Confidential Data Rails" width="100%">
   </a>
 </p>
+
 
 
 # @cdr-kit/contracts

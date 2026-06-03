@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="954" viewBox="0 0 1280 954" font-family="&#39;Hanken Grotesk&#39;, system-ui, sans-serif">
+<defs>
+  
+  <pattern id="grid" width="56" height="56" patternUnits="userSpaceOnUse">
+    <path d="M56 0H0V56" fill="none" stroke="#e7e4df" stroke-width="1"></path>
+  </pattern>
+  <radialGradient id="glow" cx="0.9" cy="0.04" r="0.5">
+    <stop offset="0" stop-color="#3a5adb" stop-opacity="0.10"></stop>
+    <stop offset="1" stop-color="#3a5adb" stop-opacity="0"></stop>
+  </radialGradient>
+  <radialGradient id="gridfade" cx="0.7" cy="0.06" r="0.7">
+    <stop offset="0" stop-color="#fff" stop-opacity="1"></stop><stop offset="1" stop-color="#fff" stop-opacity="0"></stop>
+  </radialGradient>
+  <mask id="gm"><rect width="1280" height="954" fill="url(#gridfade)"></rect></mask>
+</defs>
+<rect width="1280" height="954" fill="#fcfbf8"></rect>
+<rect width="1280" height="954" fill="url(#grid)" opacity="0.6" mask="url(#gm)"></rect>
+<rect width="1280" height="954" fill="url(#glow)"></rect>
+<text class="mono" x="56" y="58" font-size="12" letter-spacing="2" fill="#948f87"><tspan fill="#3a5adb">▚</tspan>  ARCHITECTURE</text>
+<text class="disp" x="56" y="96" font-size="36" font-weight="800" letter-spacing="-1.2" fill="#2b2724">Three layers over</text>
+<text class="disp" x="56" y="136" font-size="36" font-weight="800" letter-spacing="-1.2" fill="#3a5adb">Confidential Data Rails<tspan fill="#2b2724">.</tspan></text>
+<text x="56" y="170" font-size="15" fill="#6f6a63">One install per surface — adapters, a typed SDK, and a deployed Solidity</text>
+<text x="56" y="190" font-size="15" fill="#6f6a63">condition library — all resolving to Story&#39;s CDR precompile.</text>
+<g transform="translate(1074 44)">
+  <g transform="scale(1.12)"><line x1="1.5" y1="16" x2="30.5" y2="16" stroke="#2b2724" stroke-width="2.6" stroke-linecap="round"></line><rect x="7" y="7" width="18" height="18" rx="5.2" fill="none" stroke="#2b2724" stroke-width="2.6"></rect><circle cx="16" cy="16" r="2.8" fill="#3a5adb"></circle></g>
+  <text class="mono" x="46" y="28" font-size="19" font-weight="700" letter-spacing="-0.5" fill="#2b2724">cdr<tspan fill="#3a5adb">-</tspan>kit</text>
+</g>
+<rect x="56" y="210" width="1168" height="175" rx="14" fill="#ffffff" stroke="#e7e4df"></rect>
+<rect x="80" y="230" width="70" height="22" rx="6" fill="rgba(58,90,219,0.10)" stroke="rgba(58,90,219,0.32)"></rect>
+<text class="mono" x="115" y="245" font-size="11" font-weight="700" letter-spacing="1" text-anchor="middle" fill="#3a5adb">LAYER 3</text>
+<text class="disp" x="80" y="280" font-size="20" font-weight="700" letter-spacing="-0.4" fill="#2b2724">Framework adapters &amp;</text>
+<text class="disp" x="80" y="303" font-size="20" font-weight="700" letter-spacing="-0.4" fill="#2b2724">tooling</text>
+<text x="80" y="328" font-size="13" fill="#6f6a63">Call CDR from any agent framework, the</text>
+<text x="80" y="345" font-size="13" fill="#6f6a63">CLI, an MCP host, or scaffold a fresh</text>
+<text x="80" y="362" font-size="13" fill="#6f6a63">app.</text>
+<rect x="342" y="282.5" width="94" height="30" rx="8" fill="#f6f3ee" stroke="#e7e4df"></rect>
+<text class="mono" x="389" y="301.5" font-size="13" font-weight="500" text-anchor="middle" fill="#6f6a63">vercel-ai</text>
+<rect x="444" y="282.5" width="71" height="30" rx="8" fill="#f6f3ee" stroke="#e7e4df"></rect>
+<text class="mono" x="479.5" y="301.5" font-size="13" font-weight="500" text-anchor="middle" fill="#6f6a63">openai</text>
+<rect x="523" y="282.5" width="94" height="30" rx="8" fill="#f6f3ee" stroke="#e7e4df"></rect>
+<text class="mono" x="570" y="301.5" font-size="13" font-weight="500" text-anchor="middle" fill="#6f6a63">langchain</text>
+<rect x="625" y="282.5" width="87" height="30" rx="8" fill="#f6f3ee" stroke="#e7e4df"></rect>
+<text class="mono" x="668.5" y="301.5" font-size="13" font-weight="500" text-anchor="middle" fill="#6f6a63">agentkit</text>
+<rect x="720" y="282.5" width="55" height="30" rx="8" fill="#f6f3ee" stroke="#e7e4df"></rect>
+<text class="mono" x="747.5" y="301.5" font-size="13" font-weight="500" text-anchor="middle" fill="#6f6a63">goat</text>
+<rect x="783" y="282.5" width="165" height="30" rx="8" fill="rgba(58,90,219,0.10)" stroke="rgba(58,90,219,0.32)"></rect>
+<text class="mono" x="865.5" y="301.5" font-size="13" font-weight="500" text-anchor="middle" fill="#3a5adb">create-cdr-kit-app</text>
+<rect x="956" y="282.5" width="118" height="30" rx="8" fill="rgba(58,90,219,0.10)" stroke="rgba(58,90,219,0.32)"></rect>
+<text class="mono" x="1015" y="301.5" font-size="13" font-weight="500" text-anchor="middle" fill="#3a5adb">@cdr-kit/mcp</text>
+<rect x="1082" y="282.5" width="118" height="30" rx="8" fill="rgba(58,90,219,0.10)" stroke="rgba(58,90,219,0.32)"></rect>
+<text class="mono" x="1141" y="301.5" font-size="13" font-weight="500" text-anchor="middle" fill="#3a5adb">@cdr-kit/cli</text>
+<line x1="640" y1="389" x2="640" y2="396" stroke="rgba(58,90,219,0.32)" stroke-width="2"></line>
+<line x1="640" y1="410" x2="640" y2="417" stroke="rgba(58,90,219,0.32)" stroke-width="2"></line>
+<rect x="635" y="398" width="10" height="10" rx="2" transform="rotate(45 640 403)" fill="#3a5adb"></rect>
+<rect x="56" y="421" width="1168" height="152" rx="14" fill="#ffffff" stroke="#e7e4df"></rect>
+<rect x="80" y="441" width="70" height="22" rx="6" fill="rgba(58,90,219,0.10)" stroke="rgba(58,90,219,0.32)"></rect>
+<text class="mono" x="115" y="456" font-size="11" font-weight="700" letter-spacing="1" text-anchor="middle" fill="#3a5adb">LAYER 2</text>
+<text class="disp" x="80" y="491" font-size="20" font-weight="700" letter-spacing="-0.4" fill="#2b2724">TypeScript SDK &amp; React</text>
+<text x="80" y="516" font-size="13" fill="#6f6a63">Typed client, hooks, components, the</text>
+<text x="80" y="533" font-size="13" fill="#6f6a63">autonomous agent, and the Story IP</text>
+<text x="80" y="550" font-size="13" fill="#6f6a63">creator surface.</text>
+<rect x="342" y="482" width="126" height="30" rx="8" fill="rgba(58,90,219,0.10)" stroke="rgba(58,90,219,0.32)"></rect>
+<text class="mono" x="405" y="501" font-size="13" font-weight="500" text-anchor="middle" fill="#3a5adb">@cdr-kit/core</text>
+<rect x="476" y="482" width="134" height="30" rx="8" fill="#f6f3ee" stroke="#e7e4df"></rect>
+<text class="mono" x="543" y="501" font-size="13" font-weight="500" text-anchor="middle" fill="#6f6a63">@cdr-kit/agent</text>
+<rect x="618" y="482" width="134" height="30" rx="8" fill="#f6f3ee" stroke="#e7e4df"></rect>
+<text class="mono" x="685" y="501" font-size="13" font-weight="500" text-anchor="middle" fill="#6f6a63">@cdr-kit/react</text>
+<rect x="760" y="482" width="157" height="30" rx="8" fill="#f6f3ee" stroke="#e7e4df"></rect>
+<text class="mono" x="838.5" y="501" font-size="13" font-weight="500" text-anchor="middle" fill="#6f6a63">@cdr-kit/react-ui</text>
+<rect x="925" y="482" width="134" height="30" rx="8" fill="#f6f3ee" stroke="#e7e4df"></rect>
+<text class="mono" x="992" y="501" font-size="13" font-weight="500" text-anchor="middle" fill="#6f6a63">@cdr-kit/forms</text>
+<rect x="1067" y="482" width="134" height="30" rx="8" fill="#f6f3ee" stroke="#e7e4df"></rect>
+<text class="mono" x="1134" y="501" font-size="13" font-weight="500" text-anchor="middle" fill="#6f6a63">@cdr-kit/story</text>
+<line x1="640" y1="577" x2="640" y2="584" stroke="rgba(58,90,219,0.32)" stroke-width="2"></line>
+<line x1="640" y1="598" x2="640" y2="605" stroke="rgba(58,90,219,0.32)" stroke-width="2"></line>
+<rect x="635" y="586" width="10" height="10" rx="2" transform="rotate(45 640 591)" fill="#3a5adb"></rect>
+<rect x="56" y="609" width="1168" height="135" rx="14" fill="#ffffff" stroke="#e7e4df"></rect>
+<rect x="80" y="629" width="70" height="22" rx="6" fill="rgba(58,90,219,0.10)" stroke="rgba(58,90,219,0.32)"></rect>
+<text class="mono" x="115" y="644" font-size="11" font-weight="700" letter-spacing="1" text-anchor="middle" fill="#3a5adb">LAYER 1</text>
+<text class="disp" x="80" y="679" font-size="20" font-weight="700" letter-spacing="-0.4" fill="#2b2724">Solidity conditions</text>
+<text x="80" y="704" font-size="13" fill="#6f6a63">A tested standard library of read/write</text>
+<text x="80" y="721" font-size="13" fill="#6f6a63">rules, plus the one-tx vault factory.</text>
+<rect x="342" y="642.5" width="188" height="30" rx="8" fill="rgba(58,90,219,0.10)" stroke="rgba(58,90,219,0.32)"></rect>
+<text class="mono" x="436" y="661.5" font-size="13" font-weight="500" text-anchor="middle" fill="#3a5adb">CdrKitVault · factory</text>
+<rect x="538" y="642.5" width="55" height="30" rx="8" fill="#f6f3ee" stroke="#e7e4df"></rect>
+<text class="mono" x="565.5" y="661.5" font-size="13" font-weight="500" text-anchor="middle" fill="#6f6a63">Open</text>
+<rect x="601" y="642.5" width="118" height="30" rx="8" fill="#f6f3ee" stroke="#e7e4df"></rect>
+<text class="mono" x="660" y="661.5" font-size="13" font-weight="500" text-anchor="middle" fill="#6f6a63">Subscription</text>
+<rect x="727" y="642.5" width="87" height="30" rx="8" fill="#f6f3ee" stroke="#e7e4df"></rect>
+<text class="mono" x="770.5" y="661.5" font-size="13" font-weight="500" text-anchor="middle" fill="#6f6a63">TierGate</text>
+<rect x="822" y="642.5" width="102" height="30" rx="8" fill="#f6f3ee" stroke="#e7e4df"></rect>
+<text class="mono" x="873" y="661.5" font-size="13" font-weight="500" text-anchor="middle" fill="#6f6a63">Composable</text>
+<rect x="932" y="642.5" width="118" height="30" rx="8" fill="#f6f3ee" stroke="#e7e4df"></rect>
+<text class="mono" x="991" y="661.5" font-size="13" font-weight="500" text-anchor="middle" fill="#6f6a63">CreatorWrite</text>
+<rect x="1058" y="642.5" width="102" height="30" rx="8" fill="#f6f3ee" stroke="#e7e4df"></rect>
+<text class="mono" x="1109" y="661.5" font-size="13" font-weight="500" text-anchor="middle" fill="#6f6a63">TimeWindow</text>
+<rect x="342" y="680.5" width="126" height="30" rx="8" fill="#f6f3ee" stroke="#e7e4df"></rect>
+<text class="mono" x="405" y="699.5" font-size="13" font-weight="500" text-anchor="middle" fill="#6f6a63">DeadManSwitch</text>
+<rect x="476" y="680.5" width="157" height="30" rx="8" fill="#f6f3ee" stroke="#e7e4df"></rect>
+<text class="mono" x="554.5" y="699.5" font-size="13" font-weight="500" text-anchor="middle" fill="#6f6a63">ConditionalEscrow</text>
+<rect x="641" y="680.5" width="87" height="30" rx="8" fill="#f6f3ee" stroke="#e7e4df"></rect>
+<text class="mono" x="684.5" y="699.5" font-size="13" font-weight="500" text-anchor="middle" fill="#6f6a63">MultiSig</text>
+<rect x="56" y="770" width="1168" height="84" rx="14" fill="rgba(58,90,219,0.10)" stroke="rgba(58,90,219,0.32)"></rect>
+<g transform="translate(80 792)"><g transform="scale(1.25)"><line x1="1.5" y1="16" x2="30.5" y2="16" stroke="#3a5adb" stroke-width="2.6" stroke-linecap="round"></line><rect x="7" y="7" width="18" height="18" rx="5.2" fill="none" stroke="#3a5adb" stroke-width="2.6"></rect><circle cx="16" cy="16" r="2.8" fill="#3a5adb"></circle></g></g>
+<text class="mono" x="148" y="804" font-size="17" font-weight="700" letter-spacing="-0.3" fill="#2b2724">CDR precompile</text>
+<text x="148" y="826" font-size="13" fill="#6f6a63">Story Protocol&#39;s on-chain threshold-encryption primitive — write encrypted, gate by condition, decrypt on satisfaction.</text>
+<text class="mono" x="1202" y="804" font-size="12" text-anchor="end" fill="#3a5adb">Story Protocol</text>
+<text class="mono" x="1202" y="822" font-size="12" text-anchor="end" fill="#3a5adb">Aeneid · chain 1315</text>
+<text class="mono" x="56" y="892" font-size="11.5" fill="#948f87">15 packages · 9 conditions · 34 agent tools · MIT</text>
+<circle cx="1074" cy="888" r="4" fill="#1e9c66"></circle>
+<text class="mono" x="1084" y="892" font-size="11.5" fill="#1e9c66">Live on Aeneid · v0.7.1</text>
+</svg>

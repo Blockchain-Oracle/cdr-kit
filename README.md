@@ -1,11 +1,9 @@
 <p align="center">
   <a href="https://cdrkit.xyz">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Blockchain-Oracle/cdr-kit/main/assets/logo-wordmark-dark.svg">
-      <img src="https://raw.githubusercontent.com/Blockchain-Oracle/cdr-kit/main/assets/logo-wordmark.svg" alt="cdr-kit" width="200">
-    </picture>
+    <img src="https://raw.githubusercontent.com/Blockchain-Oracle/cdr-kit/main/assets/banner.svg" alt="cdr-kit — wagmi-style toolkit for Story Confidential Data Rails" width="100%">
   </a>
 </p>
+
 
 
 # cdr-kit
@@ -44,6 +42,16 @@ pnpm add @cdr-kit/react @cdr-kit/core wagmi viem
 pnpm add @cdr-kit/agent      # autonomous-agent client
 pnpm add @cdr-kit/story @story-protocol/core-sdk   # Story IP creator surface
 ```
+
+## Architecture
+
+<p align="center">
+  <a href="https://cdrkit.xyz">
+    <img src="https://raw.githubusercontent.com/Blockchain-Oracle/cdr-kit/main/assets/architecture.svg" alt="cdr-kit architecture — 3-layer stack: Solidity conditions → TypeScript SDK → Framework adapters" width="100%">
+  </a>
+</p>
+
+Three layers, one mental model: a Solidity standard library of read-condition contracts on Aeneid, a typed TS SDK that wraps the CDR precompile + the conditions, and a set of framework adapters so any agent or app can use it without reaching for raw ABIs.
 
 ## Packages (15 on npm @ 0.5.x / 0.6.0)
 
@@ -156,3 +164,18 @@ story-cdr/
 - **MultiSig dual-path:** off-chain EIP-712 sigs OR on-chain `approve(uuid, expectedEpoch)`. `rotateSigners` bumps epoch → invalidates BOTH paths. CLI/MCP get `EpochChanged(expected, current)` decoded automatically in 0.6.
 - **MCP server caches addresses at process start** — after a contract redeploy + `pnpm build`, restart Claude (and re-run `claude mcp add ... @latest`) before testing the MCP path.
 - Testnet only — Story mainnet hasn't deployed CDR yet. `cdr --network mainnet` throws cleanly.
+
+## Project
+
+<p align="center">
+  <a href="https://cdrkit.xyz">
+    <img src="https://raw.githubusercontent.com/Blockchain-Oracle/cdr-kit/main/assets/links-card.svg" alt="cdr-kit links — docs, npm, GitHub, Story Protocol, build.usecdr.dev" width="100%">
+  </a>
+</p>
+
+- **Docs + dashboard** · [cdrkit.xyz](https://cdrkit.xyz)
+- **npm org** · [@cdr-kit](https://www.npmjs.com/org/cdr-kit)
+- **GitHub** · [Blockchain-Oracle/cdr-kit](https://github.com/Blockchain-Oracle/cdr-kit)
+- **Story Protocol** · [story.foundation](https://www.story.foundation)
+- **Hackathon** · [build.usecdr.dev](https://build.usecdr.dev)
+

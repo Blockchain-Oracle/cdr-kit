@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>cdr-kit · key outputs &amp; links</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  * { margin: 0; box-sizing: border-box; }
+  body { background: var(--paper-2); }
+  .frame { width: 1280px; position: relative; overflow: hidden; background: var(--paper); font-family: var(--sans); padding: 44px 56px 40px; }
+  .frame::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0.55;
+    background-image: linear-gradient(to right, var(--line) 1px, transparent 1px), linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+    background-size: 56px 56px;
+    -webkit-mask-image: radial-gradient(ellipse 70% 80% at 14% 12%, #000 0%, transparent 70%); mask-image: radial-gradient(ellipse 70% 80% at 14% 12%, #000 0%, transparent 70%); }
+  .frame::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(640px 420px at 96% 8%, var(--primary-soft), transparent 60%); }
+  .inner { position: relative; z-index: 2; }
+
+  .top { display: flex; align-items: flex-start; justify-content: space-between; gap: 40px; margin-bottom: 30px; }
+  .brand { display: inline-flex; align-items: center; gap: 13px; margin-bottom: 16px; }
+  .brand .word { font-family: var(--mono); font-weight: 700; font-size: 27px; letter-spacing: -0.03em; color: var(--ink); white-space: nowrap; }
+  .brand .word b { color: var(--primary); }
+  .tagline { font-family: var(--display); font-size: 25px; font-weight: 700; letter-spacing: -0.025em; color: var(--ink); line-height: 1.12; max-width: 460px; }
+  .tagline .am { color: var(--primary); }
+  .subline { font-size: 14.5px; color: var(--ink-2); margin-top: 12px; max-width: 440px; line-height: 1.5; }
+  .live { display: inline-flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 12px; color: var(--signal); border: 1px solid var(--signal-line); background: var(--signal-soft); border-radius: 999px; padding: 5px 12px; margin-top: 18px; }
+  .live .d { width: 7px; height: 7px; border-radius: 50%; background: var(--signal); }
+
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; min-width: 430px; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-md); padding: 16px 16px; box-shadow: var(--sh-1); }
+  .stat .num { font-family: var(--display); font-size: 30px; font-weight: 800; letter-spacing: -0.03em; color: var(--ink); line-height: 1; }
+  .stat .num .u { font-size: 14px; color: var(--primary); font-weight: 700; }
+  .stat .lbl { font-size: 12px; color: var(--ink-2); margin-top: 7px; line-height: 1.3; }
+
+  .links-h { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin: 8px 0 14px; display: flex; align-items: center; gap: 9px; }
+  .links-h .tick { color: var(--primary); }
+  .links { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  .link { display: flex; flex-direction: column; gap: 10px; background: var(--card); border: 1px solid var(--line); border-radius: var(--r-md); padding: 16px 16px; box-shadow: var(--sh-1); }
+  .link .ic { width: 26px; height: 26px; color: var(--ink); }
+  .link .ic svg { width: 26px; height: 26px; }
+  .link .lname { font-size: 14px; font-weight: 600; color: var(--ink); }
+  .link .lurl { font-family: var(--mono); font-size: 11px; color: var(--primary); word-break: break-all; line-height: 1.35; }
+</style>
+</head>
+<body>
+  <div class="frame">
+    <div class="inner">
+      <div class="top">
+        <div>
+          <div class="brand">
+            <svg width="40" height="40" viewBox="0 0 32 32" fill="none"><line x1="1.5" y1="16" x2="30.5" y2="16" stroke="var(--ink)" stroke-width="2.6" stroke-linecap="round"/><rect x="7" y="7" width="18" height="18" rx="5.2" stroke="var(--ink)" stroke-width="2.6"/><circle cx="16" cy="16" r="2.8" fill="var(--primary)"/></svg>
+            <span class="word">cdr<b>-</b>kit</span>
+          </div>
+          <div class="tagline">Ship private, paid,<br><span class="am">license-gated</span> data on Story.</div>
+          <div class="subline">The wagmi-style toolkit for Confidential Data Rails — one install per surface, free and MIT.</div>
+          <span class="live"><span class="d"></span>Live on Aeneid testnet · v0.7.1</span>
+        </div>
+        <div class="stats">
+          <div class="stat"><div class="num">15</div><div class="lbl">npm packages</div></div>
+          <div class="stat"><div class="num">9</div><div class="lbl">condition contracts</div></div>
+          <div class="stat"><div class="num">34</div><div class="lbl">agent tools</div></div>
+          <div class="stat"><div class="num">11</div><div class="lbl">Claude Code skills</div></div>
+          <div class="stat"><div class="num">5</div><div class="lbl">scaffolder templates</div></div>
+          <div class="stat"><div class="num">MIT</div><div class="lbl">license · free</div></div>
+        </div>
+      </div>
+
+      <div class="links-h"><span class="tick">▚</span>Outputs &amp; links</div>
+      <div class="links">
+        <div class="link">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1.5A10.5 10.5 0 0 0 8.7 22c.5.1.7-.2.7-.5v-1.8c-2.9.6-3.5-1.4-3.5-1.4-.5-1.2-1.2-1.5-1.2-1.5-.9-.6.1-.6.1-.6 1 .1 1.6 1 1.6 1 .9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.6-1.4-2.3-.3-4.7-1.2-4.7-5.1 0-1.1.4-2 1-2.7-.1-.3-.5-1.3.1-2.7 0 0 .9-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .6 1.4.2 2.4.1 2.7.7.7 1 1.6 1 2.7 0 3.9-2.4 4.8-4.7 5.1.4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10.5 10.5 0 0 0 12 1.5z"/></svg></span>
+          <div class="lname">GitHub</div>
+          <div class="lurl">github.com/Blockchain-Oracle/cdr-kit</div>
+        </div>
+        <div class="link">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 5h20v13H12v2H7v-2H2V5zm2 2v9h3V9h2v7h2V7H4zm9 0v9h3V9h2v7h1V7h-6z"/></svg></span>
+          <div class="lname">npm org</div>
+          <div class="lurl">npmjs.com/org/cdr-kit</div>
+        </div>
+        <div class="link">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M13 3v5h5M8 13h8M8 17h6"/></svg></span>
+          <div class="lname">Docs</div>
+          <div class="lurl">cdrkit.xyz</div>
+        </div>
+        <div class="link">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8l-4 4 4 4M17 8l4 4-4 4M14 4l-4 16"/></svg></span>
+          <div class="lname">Hackathon</div>
+          <div class="lurl">build.usecdr.dev</div>
+        </div>
+        <div class="link">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M5 7l14 10M19 7L5 17"/></svg></span>
+          <div class="lname">Story Protocol</div>
+          <div class="lurl">story.foundation</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
