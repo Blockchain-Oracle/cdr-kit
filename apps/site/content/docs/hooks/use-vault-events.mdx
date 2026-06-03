@@ -1,6 +1,21 @@
 ---
 title: useVaultEvents
-description: Live VaultCreated event feed.
+description: "Live subscription to VaultCreated events on the factory. Returns events accumulated since mount — pair with useDiscoverVaults for backfill + live."
+importLine: 'import { useVaultEvents } from "@cdr-kit/react"'
+breadcrumb: ["@cdr-kit/react", "Hooks", "useVaultEvents"]
+prev:
+  href: /docs/hooks/use-vault
+  label: useVault
+next:
+  href: /docs/hooks/use-creator-vaults
+  label: useCreatorVaults
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Signature
+
+<CodePanel title="type" language="ts" code={`function useVaultEvents(): {
+  tokenId: bigint;
+  uuid: number;
+  ipId: Hex;
+  creator: Hex;
+}[];`} />

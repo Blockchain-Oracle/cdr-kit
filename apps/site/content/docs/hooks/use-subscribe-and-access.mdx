@@ -1,6 +1,28 @@
 ---
 title: useSubscribeAndAccess
-description: Full subscribe → access two-step flow.
+description: "The full 2-step flow — pay (real subscribe tx) then access (threshold read). Five status values; design the paying and collecting-partials states legibly."
+importLine: 'import { useSubscribeAndAccess } from "@cdr-kit/react"'
+breadcrumb: ["@cdr-kit/react", "Hooks", "useSubscribeAndAccess"]
+prev:
+  href: /docs/hooks/use-access-vault
+  label: useAccessVault
+next:
+  href: /docs/hooks/use-create-vault
+  label: useCreateVault
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Signature
+
+<CodePanel title="type" language="ts" code={`function useSubscribeAndAccess(
+  uuid: number,
+  subscriptionCondition?: Hex,
+): {
+  run: (p: {
+    periods: bigint;
+    maxPricePerPeriod: bigint;
+    value: bigint;
+    accessAuxData?: Hex;
+  }) => Promise<Uint8Array>;
+  status: "idle" | "paying" | "collecting-partials" | "ready" | "error";
+  data?: Uint8Array;
+};`} />

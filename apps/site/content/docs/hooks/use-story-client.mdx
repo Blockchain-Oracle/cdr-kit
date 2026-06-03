@@ -1,6 +1,36 @@
 ---
 title: useStoryClient
-description: Lazy-loaded Story SDK client bound to wagmi wallet.
+description: "Lazy-load and memoize a StoryClient from @story-protocol/core-sdk bound to the connected wagmi wallet. Returns undefined until the wallet connects and the lazy import resolves."
+importLine: 'import { useStoryClient } from "@cdr-kit/react"'
+breadcrumb: ["@cdr-kit/react", "Hooks", "useStoryClient"]
+prev:
+  href: /docs/hooks/use-storage-backend
+  label: useStorageBackend
+next:
+  href: /docs/hooks/use-register-ip
+  label: useRegisterIp
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Signature
+
+<CodePanel title="type" language="ts" code={`function useStoryClient(chainId?: number): StoryClient | undefined;`} />
+
+## Example
+
+<CodePanel title="tsx" language="tsx" code={`import { useStoryClient } from "@cdr-kit/react";
+
+function Publish() {
+  const client = useStoryClient();              // bound to the connected wagmi wallet
+  if (!client) return <p>connect a wallet to publish</p>;
+  // client is the StoryClient from @story-protocol/core-sdk —
+  // pass it to useRegisterIp, useMintLicenseToken, etc.
+  return <RegisterButton client={client} />;
+}`} />
+
+## Lazy-loaded peer dep
+
+<p><code>@cdr-kit/story</code> is an optional peer dep on <code>@cdr-kit/react</code> — the hook does a dynamic <code>import("@cdr-kit/story")</code> on first call, so dashboards that never publish IP don't pay the bundle cost. If the peer dep isn't installed, the hook throws with a clear install hint.</p>
+
+## Custom chain
+
+<p>The default <code>chainId</code> is 1315 (Story Aeneid). Pass an explicit value to bind the client to a different chain (e.g. Story mainnet once it ships).</p>

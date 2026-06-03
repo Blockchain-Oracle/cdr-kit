@@ -1,6 +1,31 @@
 ---
 title: useAccessVault
-description: Read + decrypt a CDR vault.
+description: "Imperative access to one vault. Returns a discriminated status + the decrypted bytes when ready. The state machine behind <VaultGate> and <Vault>."
+importLine: 'import { useAccessVault } from "@cdr-kit/react"'
+breadcrumb: ["@cdr-kit/react", "Hooks", "useAccessVault"]
+prev:
+  href: /docs/components/empty-vaults
+  label: EmptyVaults
+next:
+  href: /docs/hooks/use-subscribe-and-access
+  label: useSubscribeAndAccess
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Signature
+
+<CodePanel title="type" language="ts" code={`function useAccessVault(uuid: number): {
+  access: (accessAuxData?: Hex) => Promise<Uint8Array>;
+  status: "idle" | "collecting-partials" | "ready" | "error";
+  data?: Uint8Array;
+  error?: CdrError;
+  progress?: { collected: number; threshold: number };  // mock-mode only
+};`} />
+
+## States
+
+<ul>
+  <li><code>idle</code> — initial; call <code>access()</code> to begin.</li>
+  <li><code>collecting-partials</code> — the ~15s threshold read.</li>
+  <li><code>ready</code> — <code>data</code> populated.</li>
+  <li><code>error</code> — see <code>error</code> for the typed reason.</li>
+</ul>

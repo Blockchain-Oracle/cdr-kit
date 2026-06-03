@@ -1,6 +1,21 @@
 ---
 title: useMultiSigStatus
-description: Polling status for MultiSigCondition.
+description: "Reads the configured signers + threshold + epoch for a MultiSigCondition vault. Sigs themselves live off-chain — combine this with your own collection state to render approval progress."
+importLine: 'import { useMultiSigStatus } from "@cdr-kit/react"'
+breadcrumb: ["@cdr-kit/react", "Hooks", "useMultiSigStatus"]
+prev:
+  href: /docs/hooks/use-time-window-state
+  label: useTimeWindowState
+next:
+  href: /docs/hooks/use-escrow-state
+  label: useEscrowState
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Signature
+
+<CodePanel title="type" language="ts" code={`function useMultiSigStatus(uuid: number, address?: Hex): {
+  signers: readonly Hex[];
+  threshold: number;
+  epoch: bigint;
+  isLoading: boolean;
+};`} />

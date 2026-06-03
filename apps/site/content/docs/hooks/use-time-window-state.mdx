@@ -1,6 +1,28 @@
 ---
 title: useTimeWindowState
-description: Real-time TimeWindowCondition status.
+description: "Reads a TimeWindowCondition vault's [startTs, endTs] window + ticks a 1-second client-side timer to surface opensInMs/closesInMs."
+importLine: 'import { useTimeWindowState } from "@cdr-kit/react"'
+breadcrumb: ["@cdr-kit/react", "Hooks", "useTimeWindowState"]
+prev:
+  href: /docs/hooks/use-dead-man-timer
+  label: useDeadManTimer
+next:
+  href: /docs/hooks/use-multi-sig-status
+  label: useMultiSigStatus
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Signature
+
+<CodePanel title="type" language="ts" code={`function useTimeWindowState(uuid: number, address?: Hex): {
+  startTs?: bigint;
+  endTs?: bigint;      // 0 = open-ended after startTs
+  blockBased?: boolean;
+  isOpen: boolean;
+  opensInMs: number;    // 0 if already open or unconfigured
+  closesInMs: number;   // 0 if open-ended or already closed
+  isLoading: boolean;
+};`} />
+
+## Block-based windows
+
+<p>For <code>blockBased: true</code> windows, <code>opensInMs</code>/<code>closesInMs</code> return <code>0</code> — <code>block.number</code> isn't ticked client-side. Read the raw block bounds from the result object.</p>

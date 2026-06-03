@@ -1,6 +1,28 @@
 ---
 title: useEscrowState
-description: Buyer/seller state for ConditionalEscrowCondition.
+description: "The buyer-side state machine for ConditionalEscrowCondition: listing + paid status + delivery + timeout countdown, plus the two write actions (pay, confirmDelivery)."
+importLine: 'import { useEscrowState } from "@cdr-kit/react"'
+breadcrumb: ["@cdr-kit/react", "Hooks", "useEscrowState"]
+prev:
+  href: /docs/hooks/use-multi-sig-status
+  label: useMultiSigStatus
+next:
+  href: /docs/hooks/use-storage-backend
+  label: useStorageBackend
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Signature
+
+<CodePanel title="type" language="ts" code={`function useEscrowState(uuid: number, buyer: Hex | undefined, address?: Hex): {
+  seller?: Hex;
+  price?: bigint;
+  timeoutSecs?: bigint;
+  arbiter?: Hex;
+  paidAt: bigint;       // 0 = unpaid
+  delivered: boolean;
+  timeoutAt?: bigint;
+  timeoutInMs: number;
+  pay: () => Promise<Hex>;
+  confirmDelivery: () => Promise<Hex>;
+  isLoading: boolean;
+};`} />

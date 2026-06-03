@@ -1,6 +1,23 @@
 ---
 title: useCdrWallet
-description: Thin wagmi wrapper for connect/disconnect.
+description: "Lightweight wallet connect for the simple path: pairs with <CdrProvider>'s built-in injected connector. Bring your own wallet stack (Privy / RainbowKit) for the rich path."
+importLine: 'import { useCdrWallet } from "@cdr-kit/react"'
+breadcrumb: ["@cdr-kit/react", "Hooks", "useCdrWallet"]
+prev:
+  href: /docs/hooks/use-creator-vaults
+  label: useCreatorVaults
+next:
+  href: /docs/agent-kit
+  label: Agent kit
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Signature
+
+<CodePanel title="type" language="ts" code={`function useCdrWallet(): {
+  address?: Hex;
+  isConnected: boolean;
+  isConnecting: boolean;
+  error: Error | null;
+  connect: () => void;
+  disconnect: () => void;
+};`} />

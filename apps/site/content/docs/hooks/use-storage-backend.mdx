@@ -1,6 +1,29 @@
 ---
 title: useStorageBackend
-description: Factory hook for storage providers.
+description: "Config-driven CdrStorageProvider factory. A dashboard switches backends at runtime by passing a JSON config (Pinata / Supabase / IPFS / read-only gateway / in-memory)."
+importLine: 'import { useStorageBackend } from "@cdr-kit/react"'
+breadcrumb: ["@cdr-kit/react", "Hooks", "useStorageBackend"]
+prev:
+  href: /docs/hooks/use-escrow-state
+  label: useEscrowState
+next:
+  href: /docs/contracts
+  label: Condition library
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Signature
+
+<CodePanel title="type" language="ts" code={`type StorageBackendConfig =
+  | { kind: "memory" }
+  | { kind: "pinata"; jwt: string; gatewayUrl?: string }
+  | { kind: "supabase"; supabaseUrl: string; key: string; bucket: string;
+      pathPrefix?: string; bucketIsPublic?: boolean }
+  | { kind: "gateway"; gatewayUrl: string }
+  | { kind: "ipfs"; addUrl: string; gatewayUrl: string;
+      headers?: Record<string, string> };
+
+function useStorageBackend(config: StorageBackendConfig | undefined): CdrStorageProvider | undefined;`} />
+
+## Memoization
+
+<p>The provider instance is memoized on <code>config</code> identity. Pass a stable config object (typically from your environment variables, not a fresh literal every render).</p>

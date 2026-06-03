@@ -1,6 +1,93 @@
 ---
 title: usePublish
-description: One-shot register + attach + vault + write secret.
+description: "Render-side wrapper for agent.publish() — the agent-as-publisher one-shot that collapses register-IP + register-PIL-terms + attach-terms + create-license-gated-vault + write-encrypted-data into a single call."
+importLine: 'import { usePublish } from "@cdr-kit/react"'
+breadcrumb: ["@cdr-kit/react", "Hooks", "usePublish"]
+prev:
+  href: /docs/hooks/use-attach-license-terms
+  label: useAttachLicenseTerms
+next:
+  href: /docs/storage
+  label: Storage adapters
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Signature
+
+<CodePanel title="type" language="ts" code={`function usePublish(): {
+  publish: (
+    agent: { publish: (p: PublishParams) => Promise<PublishResult> },
+    params: PublishParams,
+  ) => Promise<PublishResult>;
+  isLoading: boolean;
+  error?: Error;
+  result?: PublishResult;
+};
+
+interface PublishParams {
+  data: Uint8Array;
+  spgNftContract: Hex;
+  pilTerms: unknown;        // PILFlavor.commercialUse({...}) etc.
+  ipMetadata?: { ipMetadataURI?: string; ipMetadataHash?: Hex; nftMetadataURI?: string; nftMetadataHash?: Hex; };
+}
+
+interface PublishResult {
+  ipId: Hex;
+  tokenId: bigint;
+  licenseTermsId: bigint;
+  vaultUuid: number;
+  vaultTxHash: Hex;
+  ipRegisterTxHash: Hex;
+  writeTxHash: Hex;
+}`} />
+
+## Example
+
+<CodePanel title="tsx" language="tsx" code={`import { CdrAgent } from "@cdr-kit/agent";
+import { PILFlavor } from "@cdr-kit/story";
+import { usePublish } from "@cdr-kit/react";
+import { useAccount, useWalletClient } from "wagmi";
+
+function PublishButton({ secret }: { secret: string }) {
+  const { data: walletClient } = useWalletClient();
+  const { publish, isLoading, result, error } = usePublish();
+
+  const onClick = async () => {
+    if (!walletClient) return;
+    const agent = new CdrAgent({
+      privateKey: "0x...", // server-side; in browser, pass walletClient.account
+      network: "aeneid",
+    });
+    await publish(agent, {
+      data: new TextEncoder().encode(secret),
+      spgNftContract: "0xYourSpgCollection",
+      pilTerms: PILFlavor.commercialUse({
+        defaultMintingFee: 1_000_000_000_000_000_000n,
+        commercialRevShare: 5,
+      }),
+    });
+  };
+
+  return (
+    <>
+      <button disabled={isLoading} onClick={onClick}>
+        {isLoading ? "publishing…" : "publish + license-gate"}
+      </button>
+      {result && (
+        <pre>
+{\`ipId:          \${result.ipId}
+licenseTermsId: \${result.licenseTermsId}
+vaultUuid:      \${result.vaultUuid}\`}
+        </pre>
+      )}
+      {error && <span>{error.message}</span>}
+    </>
+  );
+}`} />
+
+## Why does it take an `agent` argument?
+
+<p><code>agent.publish()</code> needs a wallet client + private key for the multi-step orchestration (4 contract writes across IP-registry, PIL-template, CDR-precompile). The React hook stays headless — you construct the <code>CdrAgent</code> however your app does (server-side env, browser RPC over the connected wallet) and the hook handles loading/error/result state around it.</p>
+
+## Buyer flow
+
+<p>After <code>publish</code> resolves, share <code>{`{ ipId, licenseTermsId, vaultUuid }`}</code> with the buyer (URL param, QR, on-chain event). They call <code>agent.wrapIp</code> → <code>agent.approveWip</code> → <code>useMintLicenseToken.mint</code> → <code>agent.accessLicenseGated</code> to pay + decrypt. See <a href="/docs/story#buyer">/docs/story</a> for the full buyer code.</p>

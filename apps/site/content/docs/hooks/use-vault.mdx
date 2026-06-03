@@ -1,6 +1,21 @@
 ---
 title: useVault
-description: Read vault info from factory by uuid.
+description: "Resolve a vault's on-chain metadata from its uuid via the CdrKitVault factory (token id, IP id, creator, license terms id)."
+importLine: 'import { useVault } from "@cdr-kit/react"'
+breadcrumb: ["@cdr-kit/react", "Hooks", "useVault"]
+prev:
+  href: /docs/hooks/use-discover-vaults
+  label: useDiscoverVaults
+next:
+  href: /docs/hooks/use-vault-events
+  label: useVaultEvents
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Signature
+
+<CodePanel title="type" language="ts" code={`function useVault(uuid: number): {
+  tokenId?: bigint;
+  info?: { /* factory getVaultInfo struct */ };
+  isLoading: boolean;
+  error?: Error;
+};`} />

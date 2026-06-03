@@ -1,6 +1,29 @@
 ---
 title: useDeadManTimer
-description: Countdown + poke for DeadManSwitchCondition.
+description: "Live countdown to DeadManSwitchCondition.unlockAt + a creator-only poke() action. The data source for <HeartbeatTimer>."
+importLine: 'import { useDeadManTimer } from "@cdr-kit/react"'
+breadcrumb: ["@cdr-kit/react", "Hooks", "useDeadManTimer"]
+prev:
+  href: /docs/hooks/use-cdr-wallet
+  label: useCdrWallet
+next:
+  href: /docs/hooks/use-time-window-state
+  label: useTimeWindowState
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Signature
+
+<CodePanel title="type" language="ts" code={`function useDeadManTimer(uuid: number, address?: Hex): {
+  unlocksAt?: bigint;
+  duration?: bigint;
+  blockBased?: boolean;
+  remainingMs: number;
+  isUnlocked: boolean;
+  isCritical: boolean;   // < 25% of duration left
+  poke: () => Promise<Hex>;
+  isLoading: boolean;
+};`} />
+
+## Address override
+
+<p>The default reads from <code>aeneid.deadManSwitchCondition</code>. Pass <code>address</code> to point at a custom deployment (e.g. mainnet once it ships).</p>

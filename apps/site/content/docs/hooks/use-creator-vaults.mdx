@@ -1,6 +1,21 @@
 ---
 title: useCreatorVaults
-description: List vaults created by an address.
+description: "Returns the token ids owned by a given creator address — wraps the factory's getCreatorVaults(address). Standard wagmi useReadContract result shape."
+importLine: 'import { useCreatorVaults } from "@cdr-kit/react"'
+breadcrumb: ["@cdr-kit/react", "Hooks", "useCreatorVaults"]
+prev:
+  href: /docs/hooks/use-vault-events
+  label: useVaultEvents
+next:
+  href: /docs/hooks/use-cdr-wallet
+  label: useCdrWallet
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Signature
+
+<CodePanel title="type" language="ts" code={`function useCreatorVaults(creator?: Hex): {
+  data?: readonly bigint[];
+  isLoading: boolean;
+  error?: Error;
+  // …plus the rest of wagmi's useReadContract return
+};`} />

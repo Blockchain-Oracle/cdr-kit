@@ -1,6 +1,25 @@
 ---
 title: useCreateVault
-description: Create a new CDR vault via the factory.
+description: "Seller-side: call the CdrKitVault factory to mint the NFT, register the IP asset, allocate the CDR slot, and configure the read condition — in one transaction."
+importLine: 'import { useCreateVault } from "@cdr-kit/react"'
+breadcrumb: ["@cdr-kit/react", "Hooks", "useCreateVault"]
+prev:
+  href: /docs/hooks/use-subscribe-and-access
+  label: useSubscribeAndAccess
+next:
+  href: /docs/hooks/use-discover-vaults
+  label: useDiscoverVaults
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Signature
+
+<CodePanel title="type" language="ts" code={`function useCreateVault(): (params: {
+  readConditionAddr: Hex;
+  readConfig: Hex;
+  childConditions?: Hex[];
+  childConfigs?: Hex[];
+  licenseTermsId?: bigint;
+  value?: bigint;
+  gas?: bigint;
+  vault?: Hex;
+}) => Promise<Hash>;`} />
