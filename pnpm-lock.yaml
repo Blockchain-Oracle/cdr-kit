@@ -309,6 +309,40 @@ importers:
         specifier: ^2.1.8
         version: 2.1.9(@types/node@22.19.19)(happy-dom@15.11.7)(lightningcss@1.32.0)(msw@2.14.6(@types/node@22.19.19)(typescript@5.9.3))(terser@5.48.0)
 
+  packages/forms:
+    dependencies:
+      consola:
+        specifier: ^3.2.3
+        version: 3.4.2
+    devDependencies:
+      '@cdr-kit/agent':
+        specifier: workspace:*
+        version: link:../agent
+      '@cdr-kit/contracts':
+        specifier: workspace:*
+        version: link:../contracts
+      '@cdr-kit/core':
+        specifier: workspace:*
+        version: link:../core
+      '@cdr-kit/react':
+        specifier: workspace:*
+        version: link:../react
+      '@types/react':
+        specifier: ^19.2.0
+        version: 19.2.15
+      react:
+        specifier: ^19.2.0
+        version: 19.2.4
+      tsdown:
+        specifier: ^0.22.0
+        version: 0.22.0(publint@0.3.21)(tsx@4.22.3)(typescript@5.9.3)
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+      viem:
+        specifier: ^2.51.3
+        version: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)
+
   packages/goat:
     dependencies:
       '@cdr-kit/agent':
