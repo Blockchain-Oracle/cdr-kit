@@ -120,7 +120,7 @@ describe("create-cdr-kit-app scaffold", () => {
     expect(providers).not.toContain("createMockCdrKit");
   });
 
-  it("writes the forms template (CdrForm + StorageProviderPicker + API routes)", () => {
+  it("writes the forms template — Pinata adapter wired through lib/storage.ts", () => {
     base = mkdtempSync(join(tmpdir(), "cdrkit-"));
     const target = join(base, "my-forms");
     scaffold(target, { template: "forms" });
@@ -133,6 +133,8 @@ describe("create-cdr-kit-app scaffold", () => {
       "app/api/results/route.ts",
       "app/providers.tsx",
       "app/header.tsx",
+      "lib/storage.ts",
+      ".env.local.example",
       "README.md",
     ]) {
       expect(existsSync(join(target, f)), `${f} should exist`).toBe(true);
@@ -148,12 +150,32 @@ describe("create-cdr-kit-app scaffold", () => {
     expect(page).toContain("CdrForm");
     expect(page).toContain("CdrField");
     expect(page).toContain("CdrSubmitButton");
-    expect(page).toContain("StorageProviderPicker");
+    // Picker is gone — storage adapter is a server concern, not a respondent UX choice.
+    expect(page).not.toContain("StorageProviderPicker");
     expect(page).not.toContain("createMockCdrKit");
+
+    const storage = readFileSync(join(target, "lib/storage.ts"), "utf8");
+    expect(storage).toContain("createPinataStorage");
+    expect(storage).toContain("PINATA_JWT");
+    // Other 5 adapters documented inline as swap options:
+    for (const f of [
+      "createSupabaseStorage",
+      "createIpfsStorage",
+      "createS3Storage",
+      "createStorachaStorage",
+      "createHeliaStorage",
+    ]) {
+      expect(storage).toContain(f);
+    }
 
     const respond = readFileSync(join(target, "app/api/respond/route.ts"), "utf8");
     expect(respond).toContain("storeFormSubmission");
     expect(respond).toContain("@cdr-kit/forms/server");
+    expect(respond).toContain("getStorage");
+
+    const env = readFileSync(join(target, ".env.local.example"), "utf8");
+    expect(env).toContain("WALLET_PRIVATE_KEY");
+    expect(env).toContain("PINATA_JWT");
   });
 
   it("rejects an unknown template", () => {

@@ -1,6 +1,26 @@
 ---
 title: LangChain adapter
-description: createReactAgent integration.
+description: "Returns LangChain StructuredToolInterface[] — drop into createReactAgent or any LangChain agent constructor."
+importLine: 'import { getLangChainTools } from "@cdr-kit/langchain"'
+breadcrumb: ["@cdr-kit", "Agent kit", "LangChain"]
+prev:
+  href: /docs/agent-kit/openai
+  label: OpenAI / Anthropic
+next:
+  href: /docs/agent-kit/agentkit
+  label: Coinbase AgentKit
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Usage
+
+<CodePanel title="langchain-agent.ts" code={`import { ChatOpenAI } from "@langchain/openai";
+import { createReactAgent } from "@langchain/langgraph/prebuilt";
+import { CdrAgent } from "@cdr-kit/agent";
+import { getLangChainTools } from "@cdr-kit/langchain";
+
+const cdr = new CdrAgent({ privateKey, apiUrl });
+const agent = createReactAgent({
+  llm: new ChatOpenAI({ model: "gpt-4o" }),
+  tools: getLangChainTools(cdr),
+});
+const res = await agent.invoke({ messages: [{ role: "user", content: "Read vault 4200." }] });`} />

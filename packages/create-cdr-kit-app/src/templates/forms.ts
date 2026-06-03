@@ -1,6 +1,5 @@
 import { dedent } from "../util.js";
 import {
-  ENV_LOCAL_EXAMPLE,
   GITIGNORE,
   NEXT_CONFIG_TS,
   NEXT_ENV_DTS,
@@ -13,19 +12,20 @@ import {
 import type { Template } from "./types.js";
 
 /**
- * Encrypted forms template — `@cdr-kit/forms` end-to-end. Builder side stores a
- * platform-wallet-signed CDR vault per submission; respondent side never holds
- * a wallet. Provider picker lets builders pick which storage backend the
- * encrypted blob lands in (Pinata / Storacha / Supabase / IPFS / CDR gateway).
+ * Encrypted forms template — `@cdr-kit/forms` end-to-end with a real
+ * `CdrStorageProvider` adapter wired into the server route. Default adapter:
+ * Pinata (single JWT env var, easiest signup). Swap to Supabase / S3 /
+ * Storacha / IPFS / Helia by changing the factory call in `/api/respond/route.ts`
+ * — every option is documented in comments.
  */
 export const FORMS: Template = {
   name: "forms",
   description:
-    "Encrypted forms — CdrForm + StorageProviderPicker, server stores per-submission CDR vault on Aeneid.",
+    "Encrypted forms — CdrForm + Pinata storage adapter, server stores per-submission CDR vault on Aeneid.",
   postInstall: [
     "pnpm install",
     "cp .env.local.example .env.local",
-    "# add a funded Aeneid WALLET_PRIVATE_KEY",
+    "# add WALLET_PRIVATE_KEY and PINATA_JWT (or swap to another adapter)",
     "pnpm dev   # http://localhost:3000",
   ],
   files: [
@@ -110,7 +110,7 @@ export const FORMS: Template = {
                 <Link href="/results">Results</Link>
               </nav>
               <div className="header-actions">
-                <CdrNetworkChip />
+                <CdrNetworkChip mode="live" />
                 <ConnectButton accountStatus="address" chainStatus="icon" />
               </div>
             </header>
@@ -123,14 +123,13 @@ export const FORMS: Template = {
       content: dedent(`
         "use client";
 
-        import { useState } from "react";
-        import { CdrForm, CdrField, CdrSubmitButton, StorageProviderPicker, type StorageProviderId } from "@cdr-kit/forms";
+        import { CdrForm, CdrField, CdrSubmitButton } from "@cdr-kit/forms";
 
-        async function encryptOnServer(fields: Record<string, unknown>, providerId: StorageProviderId): Promise<number> {
+        async function encryptOnServer(fields: Record<string, unknown>): Promise<number> {
           const res = await fetch("/api/respond", {
             method: "POST",
             headers: { "content-type": "application/json" },
-            body: JSON.stringify({ fields, providerId }),
+            body: JSON.stringify({ fields }),
           });
           if (!res.ok) throw new Error(\`submit failed: \${res.status}\`);
           const data = await res.json();
@@ -138,25 +137,18 @@ export const FORMS: Template = {
         }
 
         export default function Page() {
-          const [provider, setProvider] = useState<StorageProviderId>("cdr");
-
           return (
             <section className="form-stage">
               <article className="form-card">
                 <p className="eyebrow">survey · encrypted on-chain</p>
                 <h1 className="form-title">How was your week?</h1>
                 <p className="form-lede">
-                  Your answers are encrypted client-to-server, written to a fresh CDR vault on
-                  Aeneid, and only the form creator can decrypt. No wallet required to submit.
+                  Your answers are encrypted server-side, uploaded to the configured storage adapter,
+                  and only the form creator can decrypt. No wallet required to submit.
                 </p>
 
-                <div className="picker-section">
-                  <p className="picker-label">Where should encrypted blobs land?</p>
-                  <StorageProviderPicker value={provider} onChange={setProvider} />
-                </div>
-
                 <CdrForm
-                  onEncrypt={(fields) => encryptOnServer(fields, provider)}
+                  onEncrypt={(fields) => encryptOnServer(fields)}
                   onSuccess={(uuid) => console.info(\`stored at vault \${uuid}\`)}
                 >
                   <CdrField name="mood" label="Mood (1–10)" type="number" required />
@@ -232,13 +224,45 @@ export const FORMS: Template = {
       `),
     },
     {
+      path: "lib/storage.ts",
+      content: dedent(`
+        import { createPinataStorage } from "@cdr-kit/core";
+        // 5 other adapters available — swap createPinataStorage(...) below for any of:
+        //   createSupabaseStorage  ({ url, key, bucket })             — Postgres + S3 storage
+        //   createIpfsStorage      ({ addUrl, gatewayUrl, headers? }) — any IPFS HTTP API
+        //   createS3Storage        ({ endpoint, region, accessKey, secretKey, bucket }) — S3 / R2 / B2
+        //   createStorachaStorage  ({ agentDelegation, spaceDid })    — web3.storage / w3up
+        //   createHeliaStorage     ({ helia? })                       — self-hosted Helia node
+
+        /**
+         * Single source of truth for the storage adapter — imported by both
+         * /api/respond and /api/results so writes + reads round-trip the same way.
+         * Keys come from .env.local (never committed; see .env.local.example).
+         */
+        export function getStorage() {
+          const jwt = process.env.PINATA_JWT;
+          if (!jwt) {
+            throw new Error(
+              "Missing PINATA_JWT in .env.local. Get one free at https://app.pinata.cloud/developers/api-keys",
+            );
+          }
+          return createPinataStorage({
+            jwt,
+            gatewayUrl: process.env.PINATA_GATEWAY_URL ?? "https://gateway.pinata.cloud",
+          });
+        }
+      `),
+    },
+    {
       path: "app/api/respond/route.ts",
       content: dedent(`
         import { NextResponse } from "next/server";
         import { storeFormSubmission } from "@cdr-kit/forms/server";
+        import { getStorage } from "../../../lib/storage";
 
         /** Platform-wallet pattern: respondent never holds a wallet. The server signs
-         *  every submission with its own funded Aeneid key. */
+         *  every submission with its own funded Aeneid key and uploads the encrypted
+         *  blob through the configured storage adapter. */
         export async function POST(req: Request) {
           const pk = process.env.WALLET_PRIVATE_KEY as \`0x\${string}\` | undefined;
           if (!pk) {
@@ -247,14 +271,16 @@ export const FORMS: Template = {
 
           const { fields } = await req.json();
           try {
-            const { vaultId } = await storeFormSubmission(fields, {
+            const storage = getStorage();
+            const { vaultId, cid } = await storeFormSubmission(fields, {
               privateKey: pk,
+              storage,
               rpcUrl: "https://aeneid.storyrpc.io",
             });
 
-            // In production, also persist { vaultId, submittedAt } in your DB
-            // alongside the form id so /api/results can list them later.
-            return NextResponse.json({ vaultId });
+            // In production, persist { vaultId, cid, submittedAt } in your DB alongside
+            // the form id so /api/results can list them later.
+            return NextResponse.json({ vaultId, cid });
           } catch (e) {
             return NextResponse.json({ error: String((e as Error).message ?? e) }, { status: 500 });
           }
@@ -266,10 +292,11 @@ export const FORMS: Template = {
       content: dedent(`
         import { NextResponse } from "next/server";
         import { readFormSubmission } from "@cdr-kit/forms/server";
+        import { getStorage } from "../../../lib/storage";
 
-        /** Demo: decrypts known sample vault IDs. In production you'd pull this
-         *  list from your DB (the IDs you stored from /api/respond) for the
-         *  authenticated form creator only. */
+        /** Demo: decrypts known vault IDs from an in-memory list. In production
+         *  you'd pull this list from your DB (the IDs you stored from
+         *  /api/respond) for the authenticated form creator only. */
         const SAMPLE_VAULT_IDS: number[] = [];
 
         export async function GET() {
@@ -278,10 +305,12 @@ export const FORMS: Template = {
             return NextResponse.json({ error: "Server missing WALLET_PRIVATE_KEY" }, { status: 500 });
           }
 
+          const storage = getStorage();
           const items = await Promise.all(
             SAMPLE_VAULT_IDS.map(async (vaultId) => {
               const { fields, submittedAt } = await readFormSubmission(vaultId, {
                 privateKey: pk,
+                storage,
                 rpcUrl: "https://aeneid.storyrpc.io",
               });
               return { vaultId, fields, submittedAt };
@@ -338,8 +367,6 @@ export const FORMS: Template = {
           -webkit-background-clip: text; background-clip: text; color: transparent;
         }
         .form-lede { font-size: 0.98rem; line-height: 1.6; color: var(--cdr-ui-muted, oklch(72% 0.01 90)); margin: 0 0 28px; }
-        .picker-section { margin: 0 0 24px; padding-bottom: 24px; border-bottom: 1px dashed var(--cdr-ui-border); }
-        .picker-label { font-size: 0.86rem; color: var(--cdr-ui-muted); margin: 0 0 12px; }
 
         .result-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 16px; }
         .result-item {
@@ -368,7 +395,7 @@ export const FORMS: Template = {
 
         \`\`\`bash
         pnpm install
-        cp .env.local.example .env.local      # add WALLET_PRIVATE_KEY=0x...
+        cp .env.local.example .env.local      # add WALLET_PRIVATE_KEY + PINATA_JWT
         pnpm dev                              # http://localhost:3000
         \`\`\`
 
@@ -377,24 +404,62 @@ export const FORMS: Template = {
         - The respondent fills \`<CdrField>\`s and clicks \`<CdrSubmitButton>\`.
         - \`<CdrForm onEncrypt={...}>\` posts the fields to \`/api/respond\`.
         - The route calls \`storeFormSubmission()\` from \`@cdr-kit/forms/server\`,
-          which signs with the platform wallet (your \`WALLET_PRIVATE_KEY\`) and
-          allocates a fresh CDR vault per submission.
-        - The vault UUID is returned; persist it to your DB alongside the form ID.
-        - The creator decrypts via \`readFormSubmission()\` from the same server module.
+          which signs with the platform wallet (your \`WALLET_PRIVATE_KEY\`),
+          uploads the encrypted blob through the configured storage adapter
+          (Pinata by default — see \`lib/storage.ts\`), and allocates a fresh
+          CDR vault per submission.
+        - The vault UUID + CID is returned; persist it to your DB alongside the
+          form ID so the creator can decrypt via \`readFormSubmission()\`.
 
-        Respondents **never hold a wallet**. Gas + signature is the platform's burden.
+        Respondents **never hold a wallet**. Gas + signature + storage cost is
+        the platform's burden.
 
-        ## Picking a storage provider
+        ## Swapping the storage adapter
 
-        \`<StorageProviderPicker>\` lets a form builder pick where the encrypted
-        blob lands — Pinata, Storacha (Filecoin), Supabase Storage, self-hosted
-        IPFS / Helia, or the default CDR Gateway. The picker emits a
-        \`StorageProviderId\`; wire it into the server route to swap backends.
+        Edit \`lib/storage.ts\`. Five other adapters are documented inline:
+
+        - \`createSupabaseStorage({ url, key, bucket })\` — Postgres-backed
+        - \`createIpfsStorage({ addUrl, gatewayUrl })\` — any IPFS HTTP API
+        - \`createS3Storage({ endpoint, region, accessKey, secretKey, bucket })\` — AWS S3 / R2 / B2
+        - \`createStorachaStorage({ agentDelegation, spaceDid })\` — web3.storage / w3up
+        - \`createHeliaStorage()\` — self-hosted Helia node
+
+        Whatever you pick, make sure \`/api/respond\` and \`/api/results\` use the
+        same adapter — that's why both routes import \`getStorage()\` from one place.
 
         Full docs: <https://cdr-kit.dev/docs/forms>
       `),
     },
     { path: ".gitignore", content: GITIGNORE },
-    { path: ".env.local.example", content: ENV_LOCAL_EXAMPLE },
+    {
+      path: ".env.local.example",
+      content: dedent(`
+        # ====== REQUIRED ======
+        # Funded Aeneid testnet wallet (chain ID 1315) — pays for vault creation + writes.
+        # Get testnet IP at https://aeneid.faucet.story.foundation/
+        WALLET_PRIVATE_KEY=0x_your_aeneid_testnet_private_key
+
+        # Pinata JWT for IPFS pinning. Free signup at https://app.pinata.cloud/developers/api-keys
+        PINATA_JWT=eyJ...
+        # PINATA_GATEWAY_URL=https://your-gateway.mypinata.cloud  # optional
+
+        # ====== OPTIONAL — only needed for WalletConnect-protocol wallets ======
+        # NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=
+
+        # ====== ALTERNATIVES — uncomment if you swap the adapter in lib/storage.ts ======
+        # SUPABASE_URL=https://xxxx.supabase.co
+        # SUPABASE_SERVICE_ROLE_KEY=
+        # SUPABASE_BUCKET=cdr-blobs
+
+        # IPFS_ADD_URL=http://localhost:5001/api/v0/add
+        # IPFS_GATEWAY_URL=http://localhost:8080
+
+        # S3_ENDPOINT=https://s3.amazonaws.com
+        # S3_REGION=us-east-1
+        # S3_ACCESS_KEY=
+        # S3_SECRET_KEY=
+        # S3_BUCKET=
+      `),
+    },
   ],
 };

@@ -1,6 +1,34 @@
 ---
 title: ConditionalEscrowCondition
-description: Escrow with delivery confirmation.
+description: "Buyer pays → confirms delivery → seller paid + buyer reads. Optional arbiter can refund. Seller can claimAfterTimeout(buyer) if the buyer goes silent."
+importLine: "address = 0x7fcDe02DB7c14fD3587aB2fED064a1D8355b7584"
+breadcrumb: ["@cdr-kit/contracts", "Conditions", "ConditionalEscrowCondition"]
+prev:
+  href: /docs/contracts/dead-man-switch-condition
+  label: DeadManSwitchCondition
+next:
+  href: /docs/contracts/multi-sig-condition
+  label: MultiSigCondition
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Config shape
+
+<PropsTable rows={[
+  { name: "seller", type: "address", required: true, description: "Receives funds on confirmDelivery / claimAfterTimeout." },
+  { name: "price", type: "uint128", required: true, description: "Listing price in wei (native IP)." },
+  { name: "timeoutSecs", type: "uint64", required: true, description: "Seconds after paidAt before the seller can claim unilaterally." },
+  { name: "arbiter", type: "address", required: true, description: "Optional dispute resolver. address(0) = no refund path." },
+]} />
+
+## Flow
+
+<ol>
+  <li><code>pay(uuid)</code> — buyer escrows the price (excess refunded same tx).</li>
+  <li><code>confirmDelivery(uuid)</code> — buyer signs off → seller paid + buyer reads.</li>
+  <li><code>claimAfterTimeout(uuid, buyer)</code> — seller only, after <code>paidAt + timeoutSecs</code>.</li>
+  <li><code>arbiterRefund(uuid, buyer)</code> — arbiter only; resets paidAt and refunds the buyer.</li>
+</ol>
+
+## Intrinsic CDR limitation
+
+<p>CDR has no confidential compute — once a buyer reads, they hold plaintext forever. The dispute path can revoke future access but cannot "un-read." Document this in your buyer UX.</p>

@@ -287,3 +287,54 @@
 .docs-live-title { font-size: 0.96rem; font-weight: 700; margin: 0 0 6px; color: var(--ink, oklch(94% 0.01 90)); }
 .docs-live-sub { font-size: 0.84rem; line-height: 1.5; color: var(--ink-2, oklch(70% 0.01 90)); margin: 0 0 14px; }
 .docs-live-card [data-rk] { display: inline-block; }
+
+/* M2: components gallery grid — "at a glance" tiles for /docs/components */
+[data-components-gallery] { display: flex; flex-direction: column; gap: 48px; margin-top: 8px; }
+[data-gallery-section-head] { margin: 0 0 18px; }
+[data-gallery-section-head] h3 { margin: 0 0 4px; font-size: 1.05rem; font-weight: 700; letter-spacing: -0.01em; }
+[data-gallery-hint] { margin: 0; font-size: 0.86rem; color: var(--ink-2, oklch(70% 0.012 90)); }
+[data-gallery-grid] {
+  display: grid; gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+[data-gallery-tile] {
+  display: flex; flex-direction: column;
+  min-height: 130px;
+  padding: 14px 16px 12px;
+  background: var(--paper, oklch(17% 0.012 90));
+  border: 1px solid var(--line, oklch(22% 0.012 90));
+  border-radius: 12px;
+  text-decoration: none; color: inherit;
+  transition: border-color 120ms ease, transform 120ms ease, box-shadow 120ms ease;
+}
+[data-gallery-tile]:hover {
+  border-color: color-mix(in oklab, var(--accent, oklch(78% 0.16 70)) 50%, var(--line));
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px -8px color-mix(in oklab, oklch(0% 0 0) 50%, transparent);
+}
+[data-tile-preview] {
+  flex: 1;
+  display: grid; place-items: center;
+  padding: 10px 6px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  background: color-mix(in oklab, var(--paper-2, oklch(20% 0.012 90)) 60%, transparent);
+  min-height: 48px;
+  text-align: center;
+}
+[data-tile-headless] {
+  font-family: ui-monospace, monospace;
+  font-size: 0.74rem;
+  line-height: 1.4;
+  color: var(--ink-3, oklch(56% 0.01 90));
+}
+[data-tile-meta] { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; min-width: 0; }
+[data-tile-label] {
+  font-family: ui-monospace, monospace; font-size: 0.82rem; font-weight: 600;
+  color: var(--ink, oklch(94% 0.01 90));
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+[data-tile-import] {
+  font-family: ui-monospace, monospace; font-size: 0.66rem;
+  color: var(--ink-3, oklch(56% 0.01 90)); white-space: nowrap;
+}

@@ -1,6 +1,28 @@
 ---
 title: TimeWindowCondition
-description: Time-windowed access condition.
+description: "Read access is allowed only during [startTs, endTs]. endTs == 0 means open-ended (release-on-date pattern). Block-based mode (blockBased: true) is preferred for short horizons."
+importLine: "address = 0x67911435F262e7e4EC4F7FEB4e868a67b9dd90b1"
+breadcrumb: ["@cdr-kit/contracts", "Conditions", "TimeWindowCondition"]
+prev:
+  href: /docs/contracts/cdr-kit-vault
+  label: CdrKitVault
+next:
+  href: /docs/contracts/dead-man-switch-condition
+  label: DeadManSwitchCondition
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Config shape
+
+<PropsTable rows={[
+  { name: "startTs", type: "uint64", required: true, description: "Start timestamp (or block number if blockBased)." },
+  { name: "endTs", type: "uint64", required: true, description: "End (0 = open-ended)." },
+  { name: "blockBased", type: "bool", required: true, description: "true = interpret startTs/endTs as block.number; false = block.timestamp." },
+]} />
+
+## Agent presets
+
+<ul>
+  <li><code>releaseOnDate(startTs)</code> → <code>(startTs, 0, false)</code> — open-ended after a date.</li>
+  <li><code>availableDuring(startTs, endTs)</code> → <code>(startTs, endTs, false)</code> — bounded window.</li>
+  <li><code>releaseAfterBlocks(blockNum)</code> → <code>(0, blockNum, true)</code> — block-based release.</li>
+</ul>

@@ -1,6 +1,21 @@
 ---
 title: Coinbase AgentKit adapter
-description: getCdrActionProvider for AgentKit.
+description: "Coinbase AgentKit ActionProvider exposing the three CDR tools as on-chain actions."
+importLine: 'import { cdrActionProvider } from "@cdr-kit/agentkit"'
+breadcrumb: ["@cdr-kit", "Agent kit", "Coinbase AgentKit"]
+prev:
+  href: /docs/agent-kit/langchain
+  label: LangChain
+next:
+  href: /docs/agent-kit/goat
+  label: GOAT SDK
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Usage
+
+<CodePanel title="agentkit.ts" code={`import { CdrAgent } from "@cdr-kit/agent";
+import { cdrActionProvider } from "@cdr-kit/agentkit";
+
+const agent = new CdrAgent({ privateKey, apiUrl });
+// Slot into Coinbase AgentKit's action providers:
+const provider = cdrActionProvider(agent);`} />

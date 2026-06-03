@@ -1,6 +1,30 @@
 ---
 title: DeadManSwitchCondition
-description: Dead-man switch with creator poke.
+description: "Auto-unlock to heir(s) (or public) if the creator stops calling poke() within duration. The wallet-recovery / estate-planning / leak-on-disappearance primitive Story docs reference."
+importLine: "address = 0x37226f97e184843aB0b8d4f08A55969801B97766"
+breadcrumb: ["@cdr-kit/contracts", "Conditions", "DeadManSwitchCondition"]
+prev:
+  href: /docs/contracts/time-window-condition
+  label: TimeWindowCondition
+next:
+  href: /docs/contracts/conditional-escrow-condition
+  label: ConditionalEscrowCondition
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Config shape
+
+<PropsTable rows={[
+  { name: "duration", type: "uint64", required: true, description: "Heartbeat window length (seconds OR blocks). Must be > 0." },
+  { name: "heirs", type: "address[]", required: true, description: "Allowed readers post-unlock if publicAfterUnlock = false. Empty array forces publicAfterUnlock to true." },
+  { name: "blockBased", type: "bool", required: true, description: "true = interpret duration as block count." },
+  { name: "creatorCanReadWhileLocked", type: "bool", required: true, description: "Creator reads their own vault pre-unlock (default true via agent helper)." },
+  { name: "publicAfterUnlock", type: "bool", required: true, description: "true = anyone reads post-unlock; false = restricted to heirs." },
+]} />
+
+## The trapdoor
+
+<p>Post-unlock, the creator gets NO special treatment. If <code>publicAfterUnlock = false</code> AND the creator isn't in <code>heirs</code>, they lose read access permanently at unlock — by design. <code>agent.createDeadManVault</code> defaults <code>creatorCanReadWhileLocked = true</code> and recommends adding the creator to <code>heirs</code> for post-unlock access.</p>
+
+## poke()
+
+<p>Creator-only. Cannot be called after <code>unlockAt</code> (one-way trapdoor — reviving would let a late-poking creator block heirs forever). Most operational risk is forgetting to poke; consider a self-hosted cron or Gelato Automate for long durations.</p>

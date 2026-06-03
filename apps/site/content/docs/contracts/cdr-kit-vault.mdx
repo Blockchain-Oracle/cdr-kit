@@ -1,6 +1,30 @@
 ---
-title: CdrKitVault
-description: Factory contract that allocates + configures vaults atomically.
+title: CdrKitVault (factory)
+description: "The atomic factory: createVault mints the vault NFT, registers it as a Story IP asset, allocates the CDR slot, configures the read condition, and (optionally) attaches PIL license terms — all in one transaction."
+importLine: "address = 0xac592f165D8dD1f27A087bdB39c0b2f619FF6C8C"
+breadcrumb: ["@cdr-kit/contracts", "CdrKitVault"]
+prev:
+  href: /docs/contracts/creator-write-condition
+  label: CreatorWriteCondition
+next:
+  href: /docs/scaffolder
+  label: npm create cdr-kit
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## createVault signature
+
+<CodePanel title="CdrKitVault.sol" code={`function createVault(
+  address readConditionAddr,
+  bytes calldata readConfig,
+  address[] calldata childConditions,
+  bytes[] calldata childConfigs,
+  uint256 licenseTermsId
+) external payable returns (uint32 uuid, uint256 tokenId, address ipId);`} />
+
+## Events
+
+<p>Emits <code>VaultCreated(tokenId, uuid, ipId, creator, licenseTermsId)</code> — read the <code>uuid</code> from the tx receipt; never predict it (global counter).</p>
+
+## Gas note
+
+<p>The factory nests a CDR precompile call (<code>allocate</code>) whose gas <code>eth_estimateGas</code> underestimates. Always set an explicit gas limit (<code>3_000_000</code> is the SDK default).</p>

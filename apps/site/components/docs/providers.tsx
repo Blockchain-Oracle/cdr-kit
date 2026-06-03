@@ -43,10 +43,3 @@ export function DocsLiveProvider({ children }: { children: ReactNode }) {
     </CdrConfigProvider>
   );
 }
-
-/**
- * @deprecated Mock providers are gone for 0.7.0. This alias keeps existing demo
- *   TSX files compiling during the T1-E migration window; once the migration is
- *   done the alias goes away and all callers must use DocsLiveProvider directly.
- */
-export const DocsMockProvider = DocsLiveProvider;

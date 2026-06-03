@@ -95,7 +95,7 @@ export const BLOG: Template = {
                 <span>cdr-kit blog</span>
               </div>
               <div className="header-actions">
-                <CdrNetworkChip />
+                <CdrNetworkChip mode="live" />
                 <ConnectButton accountStatus="address" chainStatus="icon" />
               </div>
             </header>

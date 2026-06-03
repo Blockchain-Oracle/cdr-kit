@@ -1,6 +1,94 @@
 ---
 title: MCP server
-description: stdio MCP server for Claude Desktop and friends.
+description: "One stdio binary that plugs into Claude Desktop, Cursor, Windsurf, and any MCP host. Exposes the full CDR surface — discover, subscribe, access, audit, publish, plus 4 advanced-condition vault creators and 4 Story IP wrappers — as 21 tools backed by the agent's own auto-generated wallet."
+breadcrumb: ["@cdr-kit", "Agent kit", "MCP server"]
+prev:
+  href: /docs/agent-kit/goat
+  label: GOAT SDK
+next:
+  href: /docs/cli
+  label: "CLI: cdr"
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Install
+
+<CodePanel title="terminal" language="bash" code={`# Recommended: get the CLI (gives you cdr + cdr mcp + cdr skill install)
+$ npm install -g @cdr-kit/cli
+
+# Alternative: just the MCP wrapper (used by claude mcp add)
+$ npm install -g @cdr-kit/mcp`} />
+
+## Add to Claude Desktop (one command)
+
+<p>If you have Claude Code installed, the cleanest path is:</p>
+
+<CodePanel title="terminal" language="bash" code={`$ claude mcp add cdr-kit npx @cdr-kit/mcp`} />
+
+<p>This registers <code>npx @cdr-kit/mcp</code> as the <code>cdr-kit</code> server. The first run auto-generates a wallet at <code>~/.config/cdr-kit/wallet.json</code> (chmod 600) and prints the address + faucet URL to stderr. Fund it with <code>cdr fund</code> before calling write/subscribe tools.</p>
+
+## Manual config (Claude Desktop / Cursor / Windsurf)
+
+Paste this into your host's MCP config. Paths: Claude Desktop uses `~/Library/Application Support/Claude/claude_desktop_config.json`. Cursor uses `~/.cursor/mcp.json`. Windsurf uses `~/.codeium/windsurf/mcp_config.json`.
+
+<CodePanel title="mcp config" language="json" code={`{
+  "mcpServers": {
+    "cdr-kit": {
+      "command": "npx",
+      "args": ["-y", "@cdr-kit/mcp"],
+      "env": {
+        "CDR_PRIVATE_KEY": "0x_your_aeneid_testnet_key_here",
+        "CDR_NETWORK": "aeneid"
+      }
+    }
+  }
+}`} />
+
+<p><code>CDR_PRIVATE_KEY</code> is optional — if omitted, the wallet is auto-generated and loaded from disk on every run.</p>
+
+## Tools (13)
+
+<p>All tools come from a single source of truth in <code>@cdr-kit/tools</code>. Adapter packages (Vercel AI / OpenAI / LangChain / AgentKit / GOAT) iterate the same list, so every adapter gets all 13 automatically.</p>
+
+<table className="props">
+  <thead>
+    <tr><th>Tool</th><th>Group</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>cdr_discover_vaults</code></td><td>Discover + read</td><td>Scan recent VaultCreated events; returns uuid, ipId, creator per vault.</td></tr>
+    <tr><td><code>cdr_subscribe_and_access</code></td><td>Discover + read</td><td>Pay the subscription, then read + decrypt — one composite call.</td></tr>
+    <tr><td><code>cdr_access_vault</code></td><td>Discover + read</td><td>Read + decrypt a vault the agent is already entitled to.</td></tr>
+    <tr><td><code>cdr_access_license_gated</code></td><td>Discover + read</td><td>Read a license-gated vault by presenting a Story license token the agent owns.</td></tr>
+    <tr><td><code>cdr_get_vault_info</code></td><td>Introspection</td><td>Resolve uuid → tokenId, ipId, creator, licenseTermsId. View-only.</td></tr>
+    <tr><td><code>cdr_creator_vaults</code></td><td>Introspection</td><td>List every vault a given creator has minted. View-only.</td></tr>
+    <tr><td><code>cdr_check_entitlement</code></td><td>Introspection</td><td>Is the agent (or any address) currently subscribed? Returns paidUntil + isEntitled. View-only.</td></tr>
+    <tr><td><code>cdr_estimate_cost</code></td><td>Introspection</td><td>Subscription plan: pricePerPeriod, period, payee, mode. View-only.</td></tr>
+    <tr><td><code>cdr_list_subscriptions</code></td><td>Introspection</td><td>Every vault the agent is currently subscribed to (active paidUntil).</td></tr>
+    <tr><td><code>cdr_get_fees</code></td><td>Introspection</td><td>CDR allocate / write / read fees + operational threshold. View-only, no wallet needed.</td></tr>
+    <tr><td><code>cdr_create_vault</code></td><td>Author / publish</td><td>Mint NFT + register IP + allocate slot + configure read condition — one tx.</td></tr>
+    <tr><td><code>cdr_write_vault_data</code></td><td>Author / publish</td><td>Encrypt a small (&lt;1KB) UTF-8 string and write it to a vault.</td></tr>
+    <tr><td><code>cdr_upload_file</code></td><td>Author / publish</td><td>Encrypt + IPFS-pin + allocate + write — for any &gt;1KB payload.</td></tr>
+    <tr><td><code>cdr_create_time_window_vault</code></td><td>Advanced conditions (0.5)</td><td>Create a Story CDR vault gated by an absolute time (or block) window.</td></tr>
+    <tr><td><code>cdr_create_dead_man_vault</code></td><td>Advanced conditions (0.5)</td><td>Create a dead-man-switch vault — auto-unlocks to heirs if the creator stops poke()-ing.</td></tr>
+    <tr><td><code>cdr_create_escrow_vault</code></td><td>Advanced conditions (0.5)</td><td>Create a buyer-pays-then-confirms-delivery escrow vault with optional arbiter.</td></tr>
+    <tr><td><code>cdr_create_multi_sig_vault</code></td><td>Advanced conditions (0.5)</td><td>Create an N-of-M multi-sig vault — both off-chain EIP-712 sigs AND on-chain approve() paths supported. First-of-kind in the CDR ecosystem.</td></tr>
+    <tr><td><code>cdr_approve_multi_sig</code></td><td>Advanced conditions (0.5)</td><td>Safe-style on-chain approval — agent calls approve(uuid). Dashboards read currentApprovalsCount(uuid).</td></tr>
+    <tr><td><code>cdr_register_ip</code></td><td>Story IP (0.5)</td><td>Register an NFT as a Story IP asset (fresh-mint via SPG).</td></tr>
+    <tr><td><code>cdr_attach_license_terms</code></td><td>Story IP (0.5)</td><td>Attach PIL license terms to a Story IP asset (required before minting license tokens).</td></tr>
+    <tr><td><code>cdr_mint_license_token</code></td><td>Story IP (0.5)</td><td>Mint Story license tokens against an IP asset's licenseTermsId.</td></tr>
+    <tr><td><code>cdr_publish_data</code></td><td>Story IP (0.5)</td><td>Agent-as-publisher one-shot: register IP + attach commercial terms + create license-gated CDR vault + write encrypted secret. The highest-DX win for autonomous data sellers.</td></tr>
+  </tbody>
+</table>
+
+## Env reference
+
+<table className="props">
+  <thead><tr><th>Var</th><th>Default</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>CDR_PRIVATE_KEY</code></td><td>(auto-generated)</td><td>Agent's wallet. Overrides the disk file at <code>~/.config/cdr-kit/wallet.json</code>.</td></tr>
+    <tr><td><code>CDR_NETWORK</code></td><td>aeneid</td><td>aeneid (default) or mainnet (throws — not yet deployed).</td></tr>
+    <tr><td><code>CDR_RPC_URL</code></td><td>network's canonical RPC</td><td>Override the JSON-RPC endpoint (use a paid RPC for production).</td></tr>
+    <tr><td><code>CDR_API_URL</code></td><td>network's canonical Story-API REST</td><td>Override the Story-API base URL.</td></tr>
+    <tr><td><code>LOG_LEVEL</code></td><td>info</td><td>pino level: trace, debug, info, warn, error.</td></tr>
+    <tr><td><code>PRIVATE_KEY</code></td><td>(deprecated)</td><td>Old name for <code>CDR_PRIVATE_KEY</code>. Still honored in 0.4 with a deprecation warning; removed in 0.5.</td></tr>
+  </tbody>
+</table>

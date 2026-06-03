@@ -23,7 +23,13 @@ type StoryMod = typeof import("@cdr-kit/story");
 let storyModulePromise: Promise<StoryMod> | null = null;
 async function loadStoryModule(): Promise<StoryMod> {
   if (!storyModulePromise) {
-    storyModulePromise = import("@cdr-kit/story").catch(() => {
+    // Hide the literal specifier from build-time static resolution. Turbopack
+    // and Vite both try to resolve any `import("@cdr-kit/story")` at compile
+    // time and fail the build when the optional peer isn't installed. Routing
+    // through `new Function("s", ...)` makes the specifier opaque to the
+    // analyzer. CLAUDE.md pattern — same as the storage-adapter ecosystem.
+    const dynImport = new Function("s", "return import(s)") as (s: string) => Promise<StoryMod>;
+    storyModulePromise = dynImport("@cdr-kit/story").catch(() => {
       storyModulePromise = null;
       throw new Error(
         "@cdr-kit/story is required for Story IP hooks. Install: pnpm add @cdr-kit/story @story-protocol/core-sdk",

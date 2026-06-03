@@ -98,7 +98,7 @@ export const DATA_MARKETPLACE: Template = {
                 <a href="/seller">Seller</a>
               </nav>
               <div className="header-actions">
-                <CdrNetworkChip />
+                <CdrNetworkChip mode="live" />
                 <ConnectButton accountStatus="address" chainStatus="icon" />
               </div>
             </header>
@@ -164,7 +164,9 @@ export const DATA_MARKETPLACE: Template = {
             <section className="discovery"><CdrSpinner /> <span className="loading-text">Scanning VaultCreated events…</span></section>
           );
           if (error) return (
-            <section className="discovery"><CdrError>{String(error.message ?? error)}</CdrError></section>
+            <section className="discovery">
+              <CdrError title="Discovery failed" message={String(error.message ?? error)} />
+            </section>
           );
           if (!vaults?.length) return (
             <section className="discovery"><p className="empty">No vaults yet on this RPC. Try the seller template to create one.</p></section>
@@ -175,9 +177,16 @@ export const DATA_MARKETPLACE: Template = {
               <h2 className="discovery-h">Live vaults</h2>
               <div className="grid">
                 {vaults.slice(0, 12).map((v) => (
-                  <VaultCard key={v.uuid} uuid={v.uuid} creator={v.creator}>
+                  <div key={v.uuid} className="vault-cell">
+                    <VaultCard
+                      uuid={v.uuid}
+                      condition="subscription"
+                      title={\`Vault #\${v.uuid}\`}
+                      description={\`Created by \${v.creator.slice(0, 8)}…\`}
+                      price="5 $IP"
+                    />
                     <SubscribeButton uuid={v.uuid} priceWei={5n * 10n ** 18n} priceLabel="5 $IP" />
-                  </VaultCard>
+                  </div>
                 ))}
               </div>
             </section>

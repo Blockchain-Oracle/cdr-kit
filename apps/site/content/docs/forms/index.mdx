@@ -1,7 +1,7 @@
 ---
 title: "@cdr-kit/forms"
-description: Encrypted form submissions on Story Aeneid. Multi-provider storage picker, whole-form CDR encryption, platform-wallet pattern — respondents never hold a wallet.
-importLine: 'import { CdrForm, CdrField, CdrSubmitButton, StorageProviderPicker } from "@cdr-kit/forms"'
+description: Encrypted form submissions on Story Aeneid. Pick one of six CdrStorageProvider adapters, wire it once in your server route, and respondents never hold a wallet.
+importLine: 'import { CdrForm, CdrField, CdrSubmitButton } from "@cdr-kit/forms"'
 breadcrumb: ["@cdr-kit/forms", "Overview"]
 prev:
   href: /docs/agent-kit/mcp
@@ -11,15 +11,13 @@ next:
   label: Introduction
 ---
 
-The encrypted-forms primitive. Drop `<CdrForm>` + a few `<CdrField>`s into any page; each submission gets its own CDR vault on Aeneid. Only the form creator can decrypt. Respondents never connect a wallet — gas + signature is the server's burden via the platform-wallet pattern (extracted from [Confide](https://github.com/Blockchain-Oracle/confide)).
+Drop `<CdrForm>` + a few `<CdrField>`s into any page; each submission gets its own CDR vault on Aeneid. Only the form creator can decrypt. Respondents never connect a wallet — gas + signature + storage upload are the server's burden (the platform-wallet pattern, extracted from [Confide](https://github.com/Blockchain-Oracle/confide)).
+
+Storage adapter selection is a developer concern: you wire one of the six `CdrStorageProvider` factories from `@cdr-kit/core` into your server route once, with credentials from env vars. The respondent UI never sees a "pick a storage backend" choice — that would be a UX smell.
 
 ## Install
 
-<CodePanel code={`pnpm add @cdr-kit/forms`} language="bash" />
-
-If you don't have CDR wired up yet, also install the React peer:
-
-<CodePanel code={`pnpm add @cdr-kit/forms @cdr-kit/react @cdr-kit/core`} language="bash" />
+<CodePanel code={`pnpm add @cdr-kit/forms @cdr-kit/agent @cdr-kit/core`} language="bash" />
 
 ## Client quickstart
 
@@ -34,7 +32,7 @@ export function Survey() {
       onEncrypt={async (fields) => {
         const r = await fetch("/api/respond", {
           method: "POST",
-          body: JSON.stringify(fields),
+          body: JSON.stringify({ fields }),
         });
         const { vaultId } = await r.json();
         return vaultId;
@@ -53,49 +51,50 @@ export function Survey() {
 
 ## Server quickstart
 
+The server route is where you wire your storage adapter. Here it's Pinata:
+
 <CodePanel code={`// app/api/respond/route.ts
 import { NextResponse } from "next/server";
+import { createPinataStorage } from "@cdr-kit/core";
 import { storeFormSubmission } from "@cdr-kit/forms/server";
 
 export async function POST(req: Request) {
-  const fields = await req.json();
-  const { vaultId } = await storeFormSubmission(fields, {
+  const { fields } = await req.json();
+
+  const storage = createPinataStorage({
+    jwt: process.env.PINATA_JWT!,
+    gatewayUrl: process.env.PINATA_GATEWAY_URL ?? "https://gateway.pinata.cloud",
+  });
+
+  const { vaultId, cid } = await storeFormSubmission(fields, {
     privateKey: process.env.WALLET_PRIVATE_KEY as \`0x\${string}\`,
+    storage,
     rpcUrl: "https://aeneid.storyrpc.io",
   });
-  return NextResponse.json({ vaultId });
+
+  return NextResponse.json({ vaultId, cid });
 }`} language="tsx" />
 
-`storeFormSubmission()` allocates a fresh CDR vault on Aeneid (your platform wallet signs), encrypts the JSON-serialized fields, and returns the UUID. Store it in your DB alongside the form id so you can list + decrypt later.
-
-To read the submission back:
+To read the submission back, use the same storage adapter:
 
 <CodePanel code={`import { readFormSubmission } from "@cdr-kit/forms/server";
 
 const { fields, submittedAt } = await readFormSubmission(vaultId, {
   privateKey: process.env.WALLET_PRIVATE_KEY,
+  storage,    // same adapter as the write
 });`} language="tsx" />
 
-## Multi-provider storage picker
+## The six storage adapters
 
-`<StorageProviderPicker>` is a presentational React component that lets form builders pick which storage backend the encrypted blob lands in. The picker emits a `StorageProviderId` you wire into your server route.
-
-<CodePanel code={`import { useState } from "react";
-import { StorageProviderPicker, type StorageProviderId } from "@cdr-kit/forms";
-
-function Builder() {
-  const [provider, setProvider] = useState<StorageProviderId>("cdr");
-  return <StorageProviderPicker value={provider} onChange={setProvider} />;
-}`} language="tsx" />
-
-Bundled providers (logos included):
+`@cdr-kit/core` ships six `CdrStorageProvider` factories. Pick the one that matches your existing infra; swap by changing the factory call in your server route — no other code changes required.
 
 <PropsTable rows={[
-  { name: "pinata", type: "StorageProviderId", description: "Pinata — IPFS pinning service." },
-  { name: "storacha", type: "StorageProviderId", description: "Storacha (web3.storage)." },
-  { name: "supabase", type: "StorageProviderId", description: "Supabase Postgres + Storage." },
-  { name: "ipfs", type: "StorageProviderId", description: "Self-hosted IPFS / Helia." },
-  { name: "cdr", type: "StorageProviderId", description: "Default Story-hosted CDR Gateway." },
+  { name: "createPinataStorage", type: "(opts: { jwt, gatewayUrl? }) => CdrStorageProvider", description: "Hosted IPFS pinning. Free signup at pinata.cloud. Simplest setup — one JWT env var." },
+  { name: "createSupabaseStorage", type: "(opts: { url, key, bucket }) => CdrStorageProvider", description: "Postgres-backed object storage. Best if you already use Supabase Auth/DB." },
+  { name: "createIpfsStorage", type: "(opts: { addUrl, gatewayUrl, headers? }) => CdrStorageProvider", description: "Any IPFS-compatible HTTP API (kubo, your own gateway, etc.)." },
+  { name: "createS3Storage", type: "(opts: { endpoint, region, accessKey, secretKey, bucket }) => CdrStorageProvider", description: "AWS S3, Cloudflare R2, Backblaze B2 — anything S3-compatible." },
+  { name: "createStorachaStorage", type: "(opts: { agentDelegation, spaceDid }) => CdrStorageProvider", description: "web3.storage / w3up — Filecoin-backed permanence. Needs w3up CLI for setup." },
+  { name: "createHeliaStorage", type: "(opts?: { helia? }) => CdrStorageProvider", description: "Self-hosted in-process Helia node. Good for local dev, no third-party deps." },
 ]} />
 
 ## `<CdrField>` types
@@ -138,8 +137,8 @@ function MyForm() {
 
 ## Scaffolder
 
-A working end-to-end forms app is one command away:
+A working end-to-end forms app — Pinata wired, `/api/respond` + `/api/results` routes, dark premium layout — is one command away:
 
 <CodePanel code={`pnpm create cdr-kit-app my-forms --template forms`} language="bash" />
 
-The generated app includes the public survey, the creator-side results page, the `/api/respond` and `/api/results` routes, the StorageProviderPicker integration, and a dark premium layout matching cdr-kit.dev. See [the scaffolder docs](/docs/scaffolder) for other templates.
+The generated app's `lib/storage.ts` is the single source of truth for which adapter is wired; comments inline show how to swap to any of the other five. See [the scaffolder docs](/docs/scaffolder) for other templates.
