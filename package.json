@@ -15,11 +15,6 @@
     "check:publish": "turbo run build && pnpm -r --filter \"./packages/*\" exec publint",
     "release": "turbo run build && changeset publish"
   },
-  "pnpm": {
-    "overrides": {
-      "@cdr-kit/forms": "workspace:*"
-    }
-  },
   "devDependencies": {
     "@changesets/cli": "^2.31.0",
     "publint": "^0.3.21",
