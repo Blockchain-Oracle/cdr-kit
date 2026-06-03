@@ -1,0 +1,104 @@
+---
+title: StorageProviderPicker
+description: Admin-side chip-pill picker for the storage backend that routes encrypted form submissions. Real brand marks for Supabase / IPFS / Cloudflare, cdr-kit-authored shapes for the rest. Not for respondent UIs.
+importLine: 'import { StorageProviderPicker } from "@cdr-kit/forms"'
+breadcrumb: ["@cdr-kit/forms", "Components", "StorageProviderPicker"]
+prev:
+  href: /docs/components/empty-vaults
+  label: EmptyVaults
+next:
+  href: /docs/forms
+  label: "@cdr-kit/forms"
+---
+
+## Live preview
+
+<Demo badge={<Badge>mock kit</Badge>} preview={<StorageProviderPickerDemo />} code={`import { StorageProviderPicker, type StorageProviderId } from "@cdr-kit/forms";
+import { useState } from "react";
+
+export function StorageSetup() {
+  const [provider, setProvider] = useState<StorageProviderId>("pinata");
+  return <StorageProviderPicker value={provider} onChange={setProvider} />;
+}`} />
+
+<p>
+  A horizontal chip-pill row over a brand-colored detail card. Click any provider to see its name,
+  description, and the exact <code>@cdr-kit/core</code> factory call that builds the matching adapter.
+</p>
+
+## Where to use it
+
+<Callout type="warn">
+  This component is an <b>admin/setup affordance</b>. Render it in your dashboard, an onboarding wizard,
+  or a settings page — wherever <i>you</i> decide which backend your platform stores form submissions in.
+  Do <b>not</b> render it on the public form your respondents fill out: they should never see (or pick)
+  the storage backend.
+</Callout>
+
+The picker's value (a `StorageProviderId`) maps 1:1 to one of the 8 `Create*Storage` factories shipped
+by `@cdr-kit/core`. Your server route reads it (typically from your DB, where you persist the choice)
+and constructs the matching adapter:
+
+<CodePanel title="ts" language="ts" code={`// app/api/respond/route.ts
+import { storeFormSubmission } from "@cdr-kit/forms/server";
+import {
+  createPinataStorage,
+  createSupabaseStorage,
+  createS3Storage,
+  // ... etc
+} from "@cdr-kit/core";
+import type { StorageProviderId } from "@cdr-kit/forms";
+
+const choice = await db.getPlatformStorageProvider() as StorageProviderId;
+const storage =
+  choice === "pinata"   ? createPinataStorage({ jwt: process.env.PINATA_JWT! }) :
+  choice === "supabase" ? createSupabaseStorage({ supabaseUrl: ..., key: ..., bucket: "cdr" }) :
+  choice === "s3"       ? createS3Storage({ bucket: ..., region: ..., accessKeyId: ..., secretAccessKey: ... }) :
+  /* ... */              null;
+
+const { vaultId, cid } = await storeFormSubmission(fields, {
+  privateKey: process.env.PLATFORM_WALLET_PRIVATE_KEY as \`0x\${string}\`,
+  storage,
+});`} />
+
+## Props
+
+<PropsTable rows={[
+  { name: "value", type: "StorageProviderId | undefined", description: 'Currently-selected provider id. Pass undefined for "none chosen".' },
+  { name: "onChange", type: "(id: StorageProviderId) => void", required: true, description: "Fires when the user clicks a chip." },
+  { name: "include", type: "readonly StorageProviderId[]", description: "Restrict + order the visible providers. Default: all 8." },
+  { name: "heading", type: "ReactNode | null", defaultValue: '"Storage backend"', description: "Visible eyebrow heading above the chips. Pass null to hide." },
+  { name: "showDetail", type: "boolean", defaultValue: "true", description: "Show the brand-colored detail card under the chips for the selected provider. Set false for a compact toolbar-only mode." },
+  { name: "className", type: "string", description: "Forwarded to the root container." },
+  { name: "style", type: "CSSProperties", description: "Forwarded inline style." },
+]} />
+
+## The `StorageProviderId` union
+
+<PropsTable rows={[
+  { name: "pinata", type: "StorageProviderId", description: "Hosted IPFS pinning. Brand mark by cdr-kit (red)." },
+  { name: "supabase", type: "StorageProviderId", description: "Postgres + Object Storage. Real CC0 brand mark (green)." },
+  { name: "storacha", type: "StorageProviderId", description: "UCAN pinning / Filecoin. cdr-kit mark (amber)." },
+  { name: "ipfs", type: "StorageProviderId", description: "Self-hosted Kubo / generic. Real CC0 brand mark (teal)." },
+  { name: "s3", type: "StorageProviderId", description: "AWS S3 / Cloudflare R2 / S3-compatible. cdr-kit bucket mark (orange)." },
+  { name: "helia", type: "StorageProviderId", description: "Browser-embedded IPFS via @helia/unixfs. cdr-kit mark (green)." },
+  { name: "gateway", type: "StorageProviderId", description: "Read-only IPFS gateway. cdr-kit mark (violet)." },
+  { name: "memory", type: "StorageProviderId", description: "In-process for tests + CI. cdr-kit mark (slate)." },
+]} />
+
+## Subset + ordering
+
+If your platform only supports a couple of backends, pass `include` to constrain — the picker honours the
+order of the array:
+
+<CodePanel title="tsx" language="tsx" code={`<StorageProviderPicker
+  value={value}
+  onChange={onChange}
+  include={["pinata", "supabase", "s3"]}
+/>`} />
+
+## Hide the detail card
+
+For a compact toolbar mode, set `showDetail={false}`:
+
+<CodePanel title="tsx" language="tsx" code={`<StorageProviderPicker value={value} onChange={onChange} showDetail={false} />`} />

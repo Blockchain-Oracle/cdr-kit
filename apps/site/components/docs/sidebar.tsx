@@ -35,6 +35,7 @@ export const SIDEBAR: SideGroup[] = [
       { href: "/docs/components/cdr-inspector", label: "CdrInspector" },
       { href: "/docs/components/cdr-skeleton", label: "CdrSkeleton" },
       { href: "/docs/components/empty-vaults", label: "EmptyVaults" },
+      { href: "/docs/components/storage-provider-picker", label: "StorageProviderPicker", tag: "forms" },
     ],
   },
   {

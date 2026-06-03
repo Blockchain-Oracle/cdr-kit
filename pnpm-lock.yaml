@@ -971,7 +971,7 @@ packages:
         optional: true
 
   '@cdr-kit/forms@file:../../../../../tmp/cdr-final/cdr-kit-forms-0.7.2.tgz':
-    resolution: {integrity: sha512-g0AEc4PSfp68h35ukEsKWCxK0s0K8/sXDe59puyvWBm23elVoGtleC7tTy6FJfH5vem92KmsV8nIE0Ffn0hbqQ==, tarball: file:../../../../../tmp/cdr-final/cdr-kit-forms-0.7.2.tgz}
+    resolution: {integrity: sha512-fqt27wPwAlzGeWV5zMdAp9XnxGixjDlxpSgXTkmNLZWFkNu1ZTAcnZZBFv4tGc2CqA8EEUWEB8Cpi4DgeWPB/Q==, tarball: file:../../../../../tmp/cdr-final/cdr-kit-forms-0.7.2.tgz}
     version: 0.7.2
     engines: {node: '>=20'}
     peerDependencies:

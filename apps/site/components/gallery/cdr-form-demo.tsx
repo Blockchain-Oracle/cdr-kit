@@ -1,26 +1,35 @@
 "use client";
 
 import { useState } from "react";
-import { CdrForm, CdrField, CdrSubmitButton, StorageProviderPicker, type StorageProviderId } from "@cdr-kit/forms";
+import {
+  CdrForm,
+  CdrField,
+  CdrSubmitButton,
+  StorageProviderPicker,
+  type StorageProviderId,
+} from "@cdr-kit/forms";
 import "@cdr-kit/forms/styles.css";
 import "./cdr-form-demo.css";
 
 /**
- * Forms gallery demo. Premium landing-page-quality surface:
- * - Two-pane layout: form on the left, storage-provider picker on the right
- * - Mock `onEncrypt` returns a deterministic uuid after a short delay
- * - Success state shows the vault-id chip + tx hash placeholder
+ * Forms gallery demo. Two-pane surface that matches the landing hero's polish.
  *
- * Uses the same `@cdr-kit/react-ui` token system as the rest of the docs site
- * (--cdr-ui-*) so the visual lines up with the landing hero / vault-gate demo.
+ *   ┌─ Survey form ───────────────┬─ Storage backend picker ─────────────┐
+ *   │ How was your week?          │ pinata · supabase · storacha · ipfs  │
+ *   │  · 3 fields                 │ · s3 · helia · gateway · memory      │
+ *   │  · gradient submit          │ + brand-colored detail card with     │
+ *   │  · success state with vault │   the matching factory snippet       │
+ *   └─────────────────────────────┴──────────────────────────────────────┘
+ *
+ * The picker is the actual `<StorageProviderPicker>` export — visually
+ * dogfooded inside the docs so you see the same surface you'll ship.
  */
 export function CdrFormDemo() {
   const [vaultId, setVaultId] = useState<number | null>(null);
   const [provider, setProvider] = useState<StorageProviderId>("pinata");
 
   async function mockEncrypt(): Promise<number> {
-    await new Promise((r) => setTimeout(r, 1500));
-    // Deterministic-ish uuid so the success state always looks the same in screenshots.
+    await new Promise((r) => setTimeout(r, 1400));
     return 5614;
   }
 
@@ -31,8 +40,8 @@ export function CdrFormDemo() {
           <span className="cfd-eyebrow">survey · whole-form encryption</span>
           <h4 className="cfd-title">How was your week?</h4>
           <p className="cfd-sub">
-            Each submission lands in its own CDR vault on Aeneid. Respondents don&apos;t connect a wallet —
-            the server signs.
+            Each submission lands in its own CDR vault on Aeneid. Respondents don&apos;t connect a wallet — the
+            server signs.
           </p>
         </div>
 
@@ -44,19 +53,15 @@ export function CdrFormDemo() {
               vault <b>#{vaultId}</b>
             </p>
             <p className="cfd-result-sub">
-              Fields serialized to JSON, encrypted by the CDR precompile, persisted on-chain. Only the
-              form owner&apos;s wallet can decrypt.
+              Fields serialized to JSON, encrypted by the CDR precompile, persisted on-chain. Only the form
+              owner&apos;s wallet can decrypt.
             </p>
             <button type="button" className="cfd-reset" onClick={() => setVaultId(null)}>
               ↺ try again
             </button>
           </div>
         ) : (
-          <CdrForm
-            onEncrypt={mockEncrypt}
-            onSuccess={(uuid) => setVaultId(uuid)}
-            className="cdr-forms-form"
-          >
+          <CdrForm onEncrypt={mockEncrypt} onSuccess={(uuid) => setVaultId(uuid)} className="cdr-forms-form">
             <CdrField name="mood" label="Mood (1–10)" type="number" required />
             <CdrField name="highlight" label="Highlight of the week" placeholder="What stood out?" required />
             <CdrField name="notes" label="Anything else?" type="textarea" placeholder="Optional" />
@@ -75,9 +80,6 @@ export function CdrFormDemo() {
           </p>
         </div>
         <StorageProviderPicker value={provider} onChange={setProvider} heading={null} />
-        <div className="cfd-picker-foot">
-          <code>storage = create{provider[0]!.toUpperCase() + provider.slice(1)}Storage(...)</code>
-        </div>
       </aside>
     </div>
   );
