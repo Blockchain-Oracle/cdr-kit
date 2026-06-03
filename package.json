@@ -11,7 +11,7 @@
     "typecheck": "turbo run typecheck",
     "wagmi": "pnpm --filter @cdr-kit/contracts run wagmi",
     "check:publish": "turbo run build && pnpm -r --filter \"./packages/*\" exec publint",
-    "release": "turbo run build && changeset publish"
+    "release": "turbo run build --filter='./packages/*' && changeset publish"
   },
   "devDependencies": {
     "@changesets/cli": "^2.31.0",
