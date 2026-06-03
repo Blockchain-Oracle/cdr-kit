@@ -1,6 +1,6 @@
 {
   "name": "@cdr-kit/mcp",
-  "version": "0.5.2",
+  "version": "0.7.0",
   "description": "Stdio MCP server for Story CDR — wrapper around @cdr-kit/cli so `npx @cdr-kit/mcp` Just Works in any MCP host.",
   "type": "module",
   "bin": {

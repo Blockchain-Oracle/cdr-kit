@@ -58,17 +58,24 @@ export default async function Page({ params }: Props) {
 
   // Raw MDX for the per-page Copy button. Server-read once; passed as a string
   // to the client component so there's no extra fetch round-trip. The MDX file
-  // path is derived from the URL: /docs/components/x → content/docs/components/x.mdx;
-  // /docs → content/docs/index.mdx.
+  // path is derived from the URL — try both <rel>.mdx (leaf pages) and
+  // <rel>/index.mdx (section index pages like /docs/components).
   let rawMarkdown = "";
-  try {
-    const rel = page.url.replace(/^\/docs\/?/, "") || "index";
-    const mdxPath = join(process.cwd(), "content/docs", `${rel}.mdx`);
-    rawMarkdown = readFileSync(mdxPath, "utf-8");
-  } catch (err) {
-    // Surface but don't crash — the page itself is already rendered via fumadocs
-    // page.data.body; the Copy button just degrades to an empty payload.
-    console.warn(`[docs] Failed to read raw MDX for ${page.url}:`, (err as Error).message);
+  const rel = page.url.replace(/^\/docs\/?/, "") || "index";
+  const candidates = [
+    join(process.cwd(), "content/docs", `${rel}.mdx`),
+    join(process.cwd(), "content/docs", rel, "index.mdx"),
+  ];
+  for (const path of candidates) {
+    try {
+      rawMarkdown = readFileSync(path, "utf-8");
+      break;
+    } catch {
+      // try next candidate
+    }
+  }
+  if (!rawMarkdown) {
+    console.warn(`[docs] No MDX source found for ${page.url} (tried: ${candidates.join(", ")})`);
   }
 
   return (

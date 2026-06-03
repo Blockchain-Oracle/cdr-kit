@@ -22,18 +22,27 @@ export async function GET() {
     chunks.push(`\nSource: https://cdr-kit.dev${page.url}\n\n`);
 
     // Read the raw MDX file for the body — page.data.body is a compiled React
-    // component, not text. Derive file path from URL: /docs/x/y → content/docs/x/y.mdx;
-    // /docs → content/docs/index.mdx.
-    try {
-      const rel = page.url.replace(/^\/docs\/?/, "") || "index";
-      const mdxPath = join(process.cwd(), "content/docs", `${rel}.mdx`);
-      const raw = readFileSync(mdxPath, "utf-8");
+    // component, not text. Try both <rel>.mdx (leaves) and <rel>/index.mdx
+    // (section index pages like /docs/components).
+    const rel = page.url.replace(/^\/docs\/?/, "") || "index";
+    const candidates = [
+      join(process.cwd(), "content/docs", `${rel}.mdx`),
+      join(process.cwd(), "content/docs", rel, "index.mdx"),
+    ];
+    let raw = "";
+    for (const path of candidates) {
+      try {
+        raw = readFileSync(path, "utf-8");
+        break;
+      } catch {
+        // try next
+      }
+    }
+    if (raw) {
       // Strip frontmatter — content between first two `---` lines
       const body = raw.replace(/^---\n[\s\S]*?\n---\n/, "").trim();
       chunks.push(body);
       chunks.push("\n\n---\n\n");
-    } catch {
-      // skip pages we can't read; the index in llms.txt still covers them
     }
   }
 
