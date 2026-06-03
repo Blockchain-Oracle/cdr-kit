@@ -1,6 +1,38 @@
 ---
-title: TimeWindowBadge
-description: Open/upcoming/closed indicator for time-window vaults.
+title: "<TimeWindowBadge>"
+description: "Status badge for TimeWindowCondition-gated vaults: opens in 3d 4h, closes in 2h 15m, or closed. Ticks every second client-side, no extra RPC traffic after the first read."
+importLine: 'import { TimeWindowBadge } from "@cdr-kit/react"'
+breadcrumb: ["@cdr-kit/react", "Components", "TimeWindowBadge"]
+prev:
+  href: /docs/components/heartbeat-timer
+  label: HeartbeatTimer
+next:
+  href: /docs/components/multi-sig-approval-tracker
+  label: MultiSigApprovalTracker
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Live preview
+
+<Demo preview={<TimeWindowBadgeDemo />} code={`import { TimeWindowBadge } from "@cdr-kit/react";
+
+<TimeWindowBadge uuid={5101} />
+
+// Render-prop for custom presentation:
+<TimeWindowBadge uuid={5101}>
+  {({ isOpen, opensInMs, closesInMs }) =>
+    isOpen
+      ? <span>open · closes in {Math.floor(closesInMs / 60_000)}m</span>
+      : <span>opens in {Math.floor(opensInMs / 3_600_000)}h</span>
+  }
+</TimeWindowBadge>`} badge={<Badge>cycles</Badge>} />
+
+## Props
+
+<PropsTable rows={[
+  { name: "uuid", type: "number", required: true, description: "TimeWindowCondition-gated vault uuid." },
+  { name: "children", type: "(state: TimeWindowState) => ReactNode", description: "Optional render-prop. Receives { startTs, endTs, blockBased, isOpen, opensInMs, closesInMs, isLoading }." },
+]} />
+
+## Block-based windows
+
+<p>For windows configured with <code>blockBased: true</code>, the client-side <code>opensInMs</code>/<code>closesInMs</code> return <code>0</code> — block.number can't be ticked client-side cheaply. Render the raw block bounds from the state object instead.</p>

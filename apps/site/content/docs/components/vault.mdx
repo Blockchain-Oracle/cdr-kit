@@ -1,6 +1,28 @@
 ---
 title: Vault
-description: Compound component with Unlocked/Locked/Loading slots.
+description: "Compound component — Clerk's SignedIn / SignedOut pattern adapted to CDR. A single access drives the shared state; Vault.Locked, Vault.Loading, and Vault.Unlocked render against it."
+importLine: 'import { Vault } from "@cdr-kit/react"'
+breadcrumb: ["@cdr-kit/react", "Components", "Vault"]
+prev:
+  href: /docs/components/vault-gate
+  label: VaultGate
+next:
+  href: /docs/components/cdr-inspector
+  label: CdrInspector
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Usage
+
+<CodePanel title="SignalView.tsx" code={`<Vault uuid={4200} auto>
+  <Vault.Locked>   <SubscribeButton /> </Vault.Locked>
+  <Vault.Loading>  <CdrSkeleton lines={3} /> </Vault.Loading>
+  <Vault.Unlocked> {(data) => <SignalView bytes={data} />} </Vault.Unlocked>
+</Vault>`} />
+
+## Slots
+
+<ul>
+  <li><code>Vault.Locked</code> — status is <code>idle</code> or <code>error</code>.</li>
+  <li><code>Vault.Loading</code> — status is <code>paying</code> or <code>collecting-partials</code>. Optional render-prop receives <code>{`{ collected, threshold }`}</code>.</li>
+  <li><code>Vault.Unlocked</code> — status is <code>ready</code>. Render-prop receives the decrypted bytes.</li>
+</ul>

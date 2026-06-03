@@ -259,3 +259,31 @@
   color: oklch(72% 0.18 145);
   border-color: color-mix(in oklab, oklch(72% 0.18 145) 60%, var(--line));
 }
+
+/* T2-C: docs Demo live overlay — frosted backdrop with a connect-wallet CTA
+ * shown over the preview when the user has no wallet or is on the wrong chain. */
+.docs-live-wrap { position: relative; }
+.docs-live-overlay {
+  position: absolute; inset: 0; z-index: 5;
+  display: grid; place-items: center;
+  border-radius: inherit;
+  background: color-mix(in oklab, var(--paper, oklch(17% 0.012 90)) 70%, transparent);
+  backdrop-filter: blur(10px) saturate(140%);
+}
+.docs-live-card {
+  text-align: center;
+  padding: 18px 22px;
+  max-width: 320px;
+  background: color-mix(in oklab, var(--paper, oklch(17% 0.012 90)) 92%, transparent);
+  border: 1px solid var(--line, oklch(22% 0.012 90));
+  border-radius: 12px;
+  box-shadow: 0 20px 40px -16px color-mix(in oklab, oklch(0% 0 0) 60%, transparent);
+}
+.docs-live-eyebrow {
+  font-family: ui-monospace, monospace; font-size: 0.66rem;
+  color: var(--accent, oklch(78% 0.16 70));
+  letter-spacing: 0.10em; text-transform: uppercase; margin: 0 0 8px;
+}
+.docs-live-title { font-size: 0.96rem; font-weight: 700; margin: 0 0 6px; color: var(--ink, oklch(94% 0.01 90)); }
+.docs-live-sub { font-size: 0.84rem; line-height: 1.5; color: var(--ink-2, oklch(70% 0.01 90)); margin: 0 0 14px; }
+.docs-live-card [data-rk] { display: inline-block; }
