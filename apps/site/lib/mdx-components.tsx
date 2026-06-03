@@ -21,6 +21,8 @@ import { TimeWindowBadgeDemo } from "@/components/docs/demos/time-window-badge-d
 import { MultiSigApprovalTrackerDemo } from "@/components/docs/demos/multi-sig-approval-tracker-demo";
 import { MultiSigSignerDemo } from "@/components/docs/demos/multi-sig-signer-demo";
 import { EscrowDeliveryConfirmDemo } from "@/components/docs/demos/escrow-delivery-confirm-demo";
+import { CdrErrorDemo } from "@/components/docs/demos/cdr-error-demo";
+import { ComponentsGalleryDemo } from "@/components/docs/demos/components-gallery-demo";
 import {
   CdrInspectorDemo,
   CdrSkeletonDemo,
@@ -49,6 +51,8 @@ export function getMDXComponents(): MDXComponents {
     MultiSigApprovalTrackerDemo,
     MultiSigSignerDemo,
     EscrowDeliveryConfirmDemo,
+    CdrErrorDemo,
+    ComponentsGalleryDemo,
     CdrInspectorDemo,
     CdrSkeletonDemo,
     EmptyVaultsDemo,
