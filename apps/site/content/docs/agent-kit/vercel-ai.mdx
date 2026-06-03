@@ -1,6 +1,28 @@
 ---
 title: Vercel AI SDK adapter
-description: getVercelAITools for the AI SDK.
+description: "Returns a ToolSet for generateText / streamText. The model autonomously picks the three CDR tools and drives the loop."
+importLine: 'import { getVercelAITools } from "@cdr-kit/vercel-ai"'
+breadcrumb: ["@cdr-kit", "Agent kit", "Vercel AI SDK"]
+prev:
+  href: /docs/agent-kit
+  label: CdrAgent
+next:
+  href: /docs/agent-kit/openai
+  label: OpenAI / Anthropic
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Usage
+
+<CodePanel title="agent.ts" code={`import { generateText, stepCountIs } from "ai";
+import { anthropic } from "@ai-sdk/anthropic";
+import { CdrAgent } from "@cdr-kit/agent";
+import { getVercelAITools } from "@cdr-kit/vercel-ai";
+
+const agent = new CdrAgent({ privateKey, apiUrl });
+
+const { text } = await generateText({
+  model: anthropic("claude-sonnet-4-6"),
+  tools: getVercelAITools(agent),
+  stopWhen: stepCountIs(8),
+  prompt: "Find a CDR vault, subscribe if needed, and tell me the signal.",
+});`} />

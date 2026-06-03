@@ -1,6 +1,20 @@
 ---
 title: GOAT SDK adapter
-description: GOAT plugin wiring.
+description: "GOAT SDK plugin exposing the CDR tools to any GOAT-enabled agent stack."
+importLine: 'import { cdrPlugin } from "@cdr-kit/goat"'
+breadcrumb: ["@cdr-kit", "Agent kit", "GOAT SDK"]
+prev:
+  href: /docs/agent-kit/agentkit
+  label: Coinbase AgentKit
+next:
+  href: /docs/agent-kit/mcp
+  label: MCP server
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Usage
+
+<CodePanel title="goat.ts" code={`import { CdrAgent } from "@cdr-kit/agent";
+import { cdrPlugin } from "@cdr-kit/goat";
+
+const agent = new CdrAgent({ privateKey, apiUrl });
+const plugin = cdrPlugin(agent); // pass into GOAT's getOnChainTools`} />

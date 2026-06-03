@@ -1,6 +1,40 @@
 ---
 title: CdrAgent
-description: Autonomous agent surface for CDR operations.
+description: "Autonomous agent client: discover vaults on the factory, subscribe from its own wallet, decrypt, and use the data — no human in the loop. The headless object every framework adapter wraps."
+importLine: 'import { CdrAgent } from "@cdr-kit/agent"'
+breadcrumb: ["@cdr-kit", "Agent kit"]
+prev:
+  href: /docs/hooks/use-cdr-wallet
+  label: useCdrWallet
+next:
+  href: /docs/agent-kit/vercel-ai
+  label: Vercel AI SDK
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Usage
+
+<CodePanel title="agent-demo.ts" code={`import { CdrAgent } from "@cdr-kit/agent";
+
+const agent = new CdrAgent({
+  privateKey: process.env.PRIVATE_KEY,
+  apiUrl: process.env.CDR_API_URL,
+});
+
+const vaults = await agent.discover();
+const bytes = await agent.subscribeAndAccess({
+  uuid: vaults[0].uuid,
+  periods: 1n,
+  maxPricePerPeriod: 5n * 10n ** 18n,
+  value: 5n * 10n ** 18n,
+});`} />
+
+## Framework adapters
+
+<ul>
+  <li><a href="/docs/agent-kit/vercel-ai"><code>@cdr-kit/vercel-ai</code></a> — <code>generateText</code> tools</li>
+  <li><a href="/docs/agent-kit/openai"><code>@cdr-kit/openai</code></a> — OpenAI / Anthropic JSON-schema tools</li>
+  <li><a href="/docs/agent-kit/langchain"><code>@cdr-kit/langchain</code></a> — <code>StructuredTool</code>s</li>
+  <li><a href="/docs/agent-kit/agentkit"><code>@cdr-kit/agentkit</code></a> — Coinbase AgentKit <code>ActionProvider</code></li>
+  <li><a href="/docs/agent-kit/goat"><code>@cdr-kit/goat</code></a> — GOAT SDK plugin</li>
+  <li><a href="/docs/agent-kit/mcp"><code>@cdr-kit/mcp</code></a> — MCP server</li>
+</ul>

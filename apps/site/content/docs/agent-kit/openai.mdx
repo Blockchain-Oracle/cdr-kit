@@ -1,6 +1,29 @@
 ---
 title: OpenAI / Anthropic adapter
-description: Tool-call loop for OpenAI/Anthropic.
+description: "JSON-Schema tools[] + a dispatch router for OpenAI Chat Completions / Anthropic Messages. Works with either provider."
+importLine: 'import { getOpenAITools } from "@cdr-kit/openai"'
+breadcrumb: ["@cdr-kit", "Agent kit", "OpenAI / Anthropic"]
+prev:
+  href: /docs/agent-kit/vercel-ai
+  label: Vercel AI SDK
+next:
+  href: /docs/agent-kit/langchain
+  label: LangChain
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Usage
+
+<CodePanel title="openai-agent.ts" code={`import OpenAI from "openai";
+import { CdrAgent } from "@cdr-kit/agent";
+import { getOpenAITools } from "@cdr-kit/openai";
+
+const agent = new CdrAgent({ privateKey, apiUrl });
+const { tools, dispatch } = getOpenAITools(agent);
+
+const openai = new OpenAI();
+const res = await openai.chat.completions.create({
+  model: "gpt-4o",
+  tools, // JSON-schema tool definitions
+  messages: [{ role: "user", content: "Find and read vault 4200." }],
+});
+// route tool calls back through dispatch(name, args)`} />
