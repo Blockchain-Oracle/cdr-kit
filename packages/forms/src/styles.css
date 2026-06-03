@@ -1,0 +1,120 @@
+/* @cdr-kit/forms — opt-in default theme.
+ *   import "@cdr-kit/forms/styles.css";
+ * Tokens are --cdr-forms-* on [data-cdr-form] roots; override to theme. Light is default,
+ * dark via [data-theme="dark"]. No Tailwind, no animation libraries. */
+
+:where([data-cdr-form], [data-cdr-forms-providers]) {
+  --cdr-forms-bg: oklch(0.992 0.004 95);
+  --cdr-forms-card: oklch(1 0 0);
+  --cdr-forms-fg: oklch(0.235 0.013 65);
+  --cdr-forms-muted: oklch(0.55 0.012 70);
+  --cdr-forms-line: oklch(0.905 0.006 85);
+  --cdr-forms-line-2: oklch(0.86 0.007 85);
+  --cdr-forms-primary: oklch(0.52 0.20 268);
+  --cdr-forms-primary-soft: oklch(0.52 0.20 268 / 0.10);
+  --cdr-forms-primary-line: oklch(0.52 0.20 268 / 0.32);
+  --cdr-forms-on-primary: oklch(0.99 0.004 95);
+  --cdr-forms-danger: oklch(0.57 0.20 26);
+  --cdr-forms-radius: 9px;
+  --cdr-forms-radius-sm: 5px;
+  --cdr-forms-font: system-ui, -apple-system, sans-serif;
+}
+
+[data-theme="dark"] :where([data-cdr-form], [data-cdr-forms-providers]) {
+  --cdr-forms-bg: oklch(0.175 0.008 265);
+  --cdr-forms-card: oklch(0.215 0.009 265);
+  --cdr-forms-fg: oklch(0.955 0.004 95);
+  --cdr-forms-muted: oklch(0.66 0.012 250);
+  --cdr-forms-line: oklch(0.30 0.010 265);
+  --cdr-forms-line-2: oklch(0.37 0.012 265);
+  --cdr-forms-primary: oklch(0.66 0.18 268);
+  --cdr-forms-primary-soft: oklch(0.66 0.18 268 / 0.16);
+  --cdr-forms-primary-line: oklch(0.66 0.18 268 / 0.40);
+  --cdr-forms-on-primary: oklch(0.16 0.01 265);
+  --cdr-forms-danger: oklch(0.70 0.18 26);
+}
+
+/* ----- form root + field shell ----- */
+.cdr-forms-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  font-family: var(--cdr-forms-font);
+  color: var(--cdr-forms-fg);
+}
+.cdr-forms-field { display: flex; flex-direction: column; gap: 6px; }
+.cdr-forms-label { font-size: 0.85rem; font-weight: 600; color: var(--cdr-forms-fg); display: inline-flex; gap: 4px; }
+.cdr-forms-required { color: var(--cdr-forms-danger); }
+.cdr-forms-hint { font-size: 0.78rem; color: var(--cdr-forms-muted); margin: 0; }
+
+/* ----- inputs ----- */
+.cdr-forms-input {
+  font: inherit;
+  color: var(--cdr-forms-fg);
+  background: var(--cdr-forms-card);
+  border: 1px solid var(--cdr-forms-line);
+  border-radius: var(--cdr-forms-radius-sm);
+  padding: 9px 12px;
+  width: 100%;
+  outline: none;
+  transition: border-color .14s ease, box-shadow .14s ease;
+}
+.cdr-forms-input:focus-visible {
+  border-color: var(--cdr-forms-primary-line);
+  box-shadow: 0 0 0 3px var(--cdr-forms-primary-soft);
+}
+.cdr-forms-input--textarea { min-height: 96px; resize: vertical; font-family: var(--cdr-forms-font); }
+.cdr-forms-input--select { appearance: none; padding-right: 32px; background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%); background-position: calc(100% - 16px) calc(50% - 2px), calc(100% - 11px) calc(50% - 2px); background-size: 5px 5px; background-repeat: no-repeat; }
+
+.cdr-forms-radiogroup { display: flex; flex-direction: column; gap: 8px; }
+.cdr-forms-radio, .cdr-forms-checkbox { display: inline-flex; align-items: center; gap: 8px; font-size: 0.9rem; cursor: pointer; }
+
+/* ----- submit button ----- */
+.cdr-forms-submit {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: var(--cdr-forms-font); font-weight: 600; font-size: 0.95rem;
+  padding: 11px 18px;
+  border-radius: var(--cdr-forms-radius);
+  border: 1px solid transparent;
+  background: var(--cdr-forms-primary); color: var(--cdr-forms-on-primary);
+  cursor: pointer; line-height: 1;
+  transition: background-color .16s ease, transform .12s ease, opacity .16s ease;
+}
+.cdr-forms-submit:active { transform: translateY(1px); }
+.cdr-forms-submit:disabled { opacity: 0.6; cursor: default; }
+.cdr-forms-submit[data-completed] { background: oklch(0.58 0.15 152); }
+
+/* ----- storage-provider picker grid ----- */
+.cdr-forms-providers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  font-family: var(--cdr-forms-font);
+}
+.cdr-forms-provider {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 13px;
+  background: var(--cdr-forms-card);
+  border: 1px solid var(--cdr-forms-line);
+  border-radius: var(--cdr-forms-radius);
+  color: var(--cdr-forms-fg);
+  cursor: pointer; text-align: left;
+  transition: border-color .14s ease, background-color .14s ease, box-shadow .14s ease;
+}
+.cdr-forms-provider:hover { border-color: var(--cdr-forms-line-2); }
+.cdr-forms-provider:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--cdr-forms-primary-soft); border-color: var(--cdr-forms-primary-line); }
+.cdr-forms-provider[data-selected] {
+  border-color: var(--cdr-forms-primary-line);
+  background: var(--cdr-forms-primary-soft);
+}
+.cdr-forms-provider-logo {
+  display: inline-grid; place-items: center;
+  width: 32px; height: 32px;
+  flex-shrink: 0;
+  border-radius: 7px;
+  overflow: hidden;
+}
+.cdr-forms-provider-logo svg { display: block; width: 100%; height: 100%; }
+.cdr-forms-provider-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.cdr-forms-provider-label { font-size: 0.92rem; font-weight: 600; }
+.cdr-forms-provider-desc { font-size: 0.74rem; color: var(--cdr-forms-muted); }
