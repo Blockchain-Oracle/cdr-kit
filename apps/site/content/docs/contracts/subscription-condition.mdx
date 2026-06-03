@@ -1,6 +1,22 @@
 ---
 title: SubscriptionCondition
-description: Pay-per-period access condition.
+description: "Recurring paid access. The buyer calls subscribe(uuid, periods, maxPricePerPeriod) with the right value; subsequent reads pass until the subscription expires."
+importLine: "address = 0xB75Cc6571ac7E0ee30A519192740fc471e187458"
+breadcrumb: ["@cdr-kit/contracts", "Conditions", "SubscriptionCondition"]
+prev:
+  href: /docs/contracts
+  label: Condition library
+next:
+  href: /docs/contracts/tier-gate-condition
+  label: TierGateCondition
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Config shape
+
+<PropsTable rows={[
+  { name: "pricePerPeriod", type: "uint256", required: true, description: "Price in wei per subscription period." },
+  { name: "period", type: "uint256", required: true, description: "Period length in seconds." },
+  { name: "payee", type: "address", required: true, description: "Where subscription value is routed." },
+  { name: "mode", type: "uint8", required: true, description: "0 = native IP, 1 = WIP royalty routing." },
+  { name: "licensorIpId", type: "address", description: "Required in royalty mode; 0x0 in native mode." },
+]} />

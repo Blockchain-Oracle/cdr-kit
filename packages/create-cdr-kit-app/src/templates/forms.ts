@@ -138,7 +138,7 @@ export const FORMS: Template = {
         }
 
         export default function Page() {
-          const [provider, setProvider] = useState<StorageProviderId>("gateway");
+          const [provider, setProvider] = useState<StorageProviderId>("cdr");
 
           return (
             <section className="form-stage">

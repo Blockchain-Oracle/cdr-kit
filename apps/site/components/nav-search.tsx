@@ -1,23 +1,35 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useDocsSearch } from "fumadocs-core/search/client";
 
 /**
  * Compact docs search button → dialog. Hits `/api/search` (Orama, via fumadocs).
- * The visual style matches the rest of the cdr-kit nav — same icon-btn pattern,
- * dark popover with the same border/radius tokens.
  *
- * Keyboard: Cmd/Ctrl+K opens, Esc closes, ArrowUp/Down navigates results, Enter follows.
+ * We fetch the endpoint directly with a 120ms debounce instead of going through
+ * fumadocs' `useDocsSearch` — the hook silently returned no data even when the
+ * underlying API returned 5 results, which made it ship-broken.
+ *
+ * Keyboard: Cmd/Ctrl+K opens, Esc closes, ArrowUp/Down navigates, Enter follows.
  */
+
+interface SearchResult {
+  id: string;
+  type: "page" | "heading" | "text";
+  content: string;
+  url: string;
+  breadcrumbs?: string[];
+}
+
 export function NavSearch() {
   const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState<SearchResult[]>([]);
   const [focused, setFocused] = useState(0);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const { search, setSearch, query } = useDocsSearch({ type: "fetch" });
+  const debounceRef = useRef<number | undefined>(undefined);
 
-  // Cmd/Ctrl+K to open
+  // Cmd/Ctrl+K opens; Esc closes
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
@@ -31,12 +43,38 @@ export function NavSearch() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // Focus input when opening
+  // Focus input on open
   useEffect(() => {
     if (open) setTimeout(() => inputRef.current?.focus(), 10);
   }, [open]);
 
-  const results = query.data === "empty" || !query.data ? [] : query.data;
+  // Debounced search
+  const runSearch = useCallback((q: string) => {
+    if (!q.trim()) {
+      setResults([]);
+      return;
+    }
+    fetch(`/api/search?query=${encodeURIComponent(q)}`)
+      .then((r) => r.json())
+      .then((data: SearchResult[] | { error?: string }) => {
+        if (Array.isArray(data)) {
+          // Strip <mark> tags for clean display (server marks the matched substring)
+          setResults(data.slice(0, 10));
+        } else {
+          setResults([]);
+        }
+      })
+      .catch(() => setResults([]));
+  }, []);
+
+  useEffect(() => {
+    window.clearTimeout(debounceRef.current);
+    debounceRef.current = window.setTimeout(() => runSearch(query), 120);
+    return () => window.clearTimeout(debounceRef.current);
+  }, [query, runSearch]);
+
+  // Strip <mark>/</mark> for clean display
+  const clean = (s: string) => s.replace(/<\/?mark>/g, "");
 
   return (
     <>
@@ -64,12 +102,19 @@ export function NavSearch() {
               </svg>
               <input
                 ref={inputRef}
-                value={search}
-                onChange={(e) => { setSearch(e.target.value); setFocused(0); }}
+                value={query}
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  setFocused(0);
+                }}
                 onKeyDown={(e) => {
-                  if (e.key === "ArrowDown") { e.preventDefault(); setFocused((i) => Math.min(i + 1, results.length - 1)); }
-                  else if (e.key === "ArrowUp") { e.preventDefault(); setFocused((i) => Math.max(i - 1, 0)); }
-                  else if (e.key === "Enter" && results[focused]) {
+                  if (e.key === "ArrowDown") {
+                    e.preventDefault();
+                    setFocused((i) => Math.min(i + 1, results.length - 1));
+                  } else if (e.key === "ArrowUp") {
+                    e.preventDefault();
+                    setFocused((i) => Math.max(i - 1, 0));
+                  } else if (e.key === "Enter" && results[focused]) {
                     window.location.href = results[focused]!.url;
                   }
                 }}
@@ -79,10 +124,10 @@ export function NavSearch() {
               <kbd className="nav-search-esckbd">esc</kbd>
             </div>
             <div className="nav-search-results">
-              {results.length === 0 && search && (
-                <p className="nav-search-empty">No matches for &ldquo;{search}&rdquo;.</p>
+              {results.length === 0 && query && (
+                <p className="nav-search-empty">No matches for &ldquo;{query}&rdquo;.</p>
               )}
-              {results.length === 0 && !search && (
+              {results.length === 0 && !query && (
                 <p className="nav-search-hint">Type to search the docs.</p>
               )}
               {results.map((r, i) => (
@@ -93,8 +138,10 @@ export function NavSearch() {
                   onMouseEnter={() => setFocused(i)}
                   onClick={() => setOpen(false)}
                 >
-                  <span className="nav-search-title">{r.content}</span>
-                  <span className="nav-search-url">{r.url}</span>
+                  <span className="nav-search-title">{clean(r.content)}</span>
+                  <span className="nav-search-url">
+                    {r.breadcrumbs ? r.breadcrumbs.join(" › ") : r.url}
+                  </span>
                 </Link>
               ))}
             </div>

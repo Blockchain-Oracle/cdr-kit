@@ -84,7 +84,7 @@ const { fields, submittedAt } = await readFormSubmission(vaultId, {
 import { StorageProviderPicker, type StorageProviderId } from "@cdr-kit/forms";
 
 function Builder() {
-  const [provider, setProvider] = useState<StorageProviderId>("gateway");
+  const [provider, setProvider] = useState<StorageProviderId>("cdr");
   return <StorageProviderPicker value={provider} onChange={setProvider} />;
 }`} language="tsx" />
 
@@ -92,10 +92,10 @@ Bundled providers (logos included):
 
 <PropsTable rows={[
   { name: "pinata", type: "StorageProviderId", description: "Pinata — IPFS pinning service." },
-  { name: "storacha", type: "StorageProviderId", description: "Storacha (w3up / Filecoin)." },
+  { name: "storacha", type: "StorageProviderId", description: "Storacha (web3.storage)." },
   { name: "supabase", type: "StorageProviderId", description: "Supabase Postgres + Storage." },
   { name: "ipfs", type: "StorageProviderId", description: "Self-hosted IPFS / Helia." },
-  { name: "gateway", type: "StorageProviderId", description: "Default CDR gateway (no extra setup)." },
+  { name: "cdr", type: "StorageProviderId", description: "Default Story-hosted CDR Gateway." },
 ]} />
 
 ## `<CdrField>` types

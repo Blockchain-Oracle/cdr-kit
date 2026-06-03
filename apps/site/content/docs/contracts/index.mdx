@@ -1,6 +1,53 @@
 ---
-title: Condition library
-description: 9 deployed condition contracts on Aeneid.
+title: Condition standard library
+description: "A tested Solidity standard library + a factory (CdrKitVault) that mints, registers IP, allocates the CDR slot, and configures the read condition in one transaction. All deployed to Aeneid testnet (chain id 1315)."
+importLine: 'import { aeneid } from "@cdr-kit/contracts"'
+breadcrumb: ["@cdr-kit", "Contracts"]
+prev:
+  href: /docs/agent-kit/mcp
+  label: MCP server
+next:
+  href: /docs/contracts/subscription-condition
+  label: SubscriptionCondition
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Library
+
+<ul>
+  <li><a href="/docs/contracts/subscription-condition"><code>SubscriptionCondition</code></a></li>
+  <li><a href="/docs/contracts/tier-gate-condition"><code>TierGateCondition</code></a></li>
+  <li><a href="/docs/contracts/composable-condition"><code>ComposableCondition</code></a></li>
+  <li><a href="/docs/contracts/open-condition"><code>OpenCondition</code></a></li>
+  <li><a href="/docs/contracts/creator-write-condition"><code>CreatorWriteCondition</code></a></li>
+  <li><a href="/docs/contracts/time-window-condition"><code>TimeWindowCondition</code></a></li>
+  <li><a href="/docs/contracts/dead-man-switch-condition"><code>DeadManSwitchCondition</code></a></li>
+  <li><a href="/docs/contracts/conditional-escrow-condition"><code>ConditionalEscrowCondition</code></a></li>
+  <li><a href="/docs/contracts/multi-sig-condition"><code>MultiSigCondition</code></a></li>
+  <li><a href="/docs/contracts/cdr-kit-vault"><code>CdrKitVault</code></a> — the factory</li>
+</ul>
+
+## Condition interface
+
+<p>Conditions are pure <code>view</code> functions the validator network calls at read/write time. The 4-param signature:</p>
+
+<CodePanel title="ICdrCondition.sol" code={`function checkReadCondition(
+  uint32 uuid,
+  bytes accessAuxData,
+  bytes conditionData,
+  address caller
+) external view returns (bool);`} />
+
+## Deployed (Aeneid)
+
+<ul style={{ fontFamily: "var(--mono)", fontSize: "0.82rem" }}>
+  <li>CdrKitVault: <code>0xac592f165D8dD1f27A087bdB39c0b2f619FF6C8C</code></li>
+  <li>SubscriptionCondition: <code>0xB75Cc6571ac7E0ee30A519192740fc471e187458</code></li>
+  <li>TierGateCondition: <code>0xdA704Faf61b2FFB37205d7Eb8C1D26BD3090455f</code></li>
+  <li>ComposableCondition: <code>0x74F2f94e7867b07ECDFbcc667050CBec1dE2800B</code></li>
+  <li>OpenCondition: <code>0x36fB2e2d10efd1E905b7779A684F34B9c775b62B</code></li>
+  <li>CreatorWriteCondition: <code>0x85CEB332445ca1d3D1975d6929cA6BED25195b2F</code></li>
+  <li>TimeWindowCondition: <code>0x67911435F262e7e4EC4F7FEB4e868a67b9dd90b1</code></li>
+  <li>DeadManSwitchCondition: <code>0x37226f97e184843aB0b8d4f08A55969801B97766</code></li>
+  <li>ConditionalEscrowCondition: <code>0x7fcDe02DB7c14fD3587aB2fED064a1D8355b7584</code></li>
+  <li>MultiSigCondition: <code>0x3A0Cf72f167A2c1f5a7A5025eb36219f28C20FCd</code></li>
+</ul>
