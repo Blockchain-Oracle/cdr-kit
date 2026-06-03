@@ -16,7 +16,7 @@ next:
 <CodePanel title="agent-demo.ts" code={`import { CdrAgent } from "@cdr-kit/agent";
 
 const agent = new CdrAgent({
-  privateKey: process.env.PRIVATE_KEY,
+  privateKey: process.env.PRIVATE_KEY as \`0x\${string}\`,
   apiUrl: process.env.CDR_API_URL,
 });
 

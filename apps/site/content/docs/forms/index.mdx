@@ -80,7 +80,7 @@ To read the submission back, use the same storage adapter:
 <CodePanel code={`import { readFormSubmission } from "@cdr-kit/forms/server";
 
 const { fields, submittedAt } = await readFormSubmission(vaultId, {
-  privateKey: process.env.WALLET_PRIVATE_KEY,
+  privateKey: process.env.WALLET_PRIVATE_KEY as \`0x\${string}\`,
   storage,    // same adapter as the write
 });`} language="tsx" />
 
@@ -90,10 +90,10 @@ const { fields, submittedAt } = await readFormSubmission(vaultId, {
 
 <PropsTable rows={[
   { name: "createPinataStorage", type: "(opts: { jwt, gatewayUrl? }) => CdrStorageProvider", description: "Hosted IPFS pinning. Free signup at pinata.cloud. Simplest setup — one JWT env var." },
-  { name: "createSupabaseStorage", type: "(opts: { url, key, bucket }) => CdrStorageProvider", description: "Postgres-backed object storage. Best if you already use Supabase Auth/DB." },
+  { name: "createSupabaseStorage", type: "(opts: { supabaseUrl, key, bucket, pathPrefix?, bucketIsPublic? }) => CdrStorageProvider", description: "Postgres-backed object storage. Best if you already use Supabase Auth/DB. Service-role or anon key." },
   { name: "createIpfsStorage", type: "(opts: { addUrl, gatewayUrl, headers? }) => CdrStorageProvider", description: "Any IPFS-compatible HTTP API (kubo, your own gateway, etc.)." },
-  { name: "createS3Storage", type: "(opts: { endpoint, region, accessKey, secretKey, bucket }) => CdrStorageProvider", description: "AWS S3, Cloudflare R2, Backblaze B2 — anything S3-compatible." },
-  { name: "createStorachaStorage", type: "(opts: { agentDelegation, spaceDid }) => CdrStorageProvider", description: "web3.storage / w3up — Filecoin-backed permanence. Needs w3up CLI for setup." },
+  { name: "createS3Storage", type: "(opts: { bucket, region, accessKeyId, secretAccessKey, endpoint?, pathPrefix?, forcePathStyle? }) => CdrStorageProvider", description: "AWS S3, Cloudflare R2, Backblaze B2 — anything S3-compatible. Lazy-loads @aws-sdk/client-s3." },
+  { name: "createStorachaStorage", type: "(opts: { key, spaceDid, proof, gatewayUrl? }) => CdrStorageProvider", description: "Storacha / web3.storage UCAN-pinning. key + proof via w3 CLI. Lazy-loads @storacha/client." },
   { name: "createHeliaStorage", type: "(opts?: { helia? }) => CdrStorageProvider", description: "Self-hosted in-process Helia node. Good for local dev, no third-party deps." },
 ]} />
 

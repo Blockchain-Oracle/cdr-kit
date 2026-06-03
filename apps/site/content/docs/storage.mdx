@@ -99,29 +99,29 @@ if (shouldUseFile(content, limit)) {
 
 // Works against AWS S3, Cloudflare R2, MinIO, or any S3-compatible store.
 // Lazy-loads @aws-sdk/client-s3 via dynamic import — install it yourself.
-const storage = await createS3Storage({
+const storage = createS3Storage({
   bucket: "cdr-secrets",
   region: "auto",                                     // R2: "auto"; AWS: "us-east-1" etc.
   endpoint: "https://<acct>.r2.cloudflarestorage.com", // omit for AWS
   accessKeyId: process.env.S3_ACCESS_KEY_ID!,
   secretAccessKey: process.env.S3_SECRET_ACCESS_KEY!,
-  publicUrlBase: "https://<acct>.r2.dev/cdr-secrets",  // for browser-readable downloads
-  prefix: "cdr/",
+  pathPrefix: "cdr/",                                  // optional, default "cdr/"
+  forcePathStyle: true,                                // R2/MinIO: true; AWS: omit
 });`} />
 
 ## createStorachaStorage
 
-<p>UCAN-backed pinning service. Lazy-loads <code>@web3-storage/w3up-client</code>; install it yourself. The agent address must be authorized for the Space via a base64 UCAN proof.</p>
+<p>UCAN-backed pinning service. Lazy-loads <code>@storacha/client</code>; install it yourself. The agent address must be authorized for the Space via a base64 UCAN proof.</p>
 
 <CodePanel title="ts" language="ts" code={`import { createStorachaStorage } from "@cdr-kit/core";
 
-// Storacha-server (UCAN-backed pinning over @web3-storage/w3up-client).
-// Install: pnpm add @web3-storage/w3up-client
-const storage = await createStorachaStorage({
-  key: process.env.STORACHA_KEY!,
+// Storacha — UCAN-backed pinning over @storacha/client.
+// Install: pnpm add @storacha/client
+const storage = createStorachaStorage({
+  key: process.env.STORACHA_KEY!,         // \`w3 key create\`
   spaceDid: process.env.STORACHA_SPACE_DID!,
-  proof: process.env.STORACHA_PROOF!,    // base64 UCAN delegation
-  gatewayUrl: "https://w3s.link",         // optional, default w3s.link
+  proof: process.env.STORACHA_PROOF!,     // \`w3 delegation create\` (base64 UCAN)
+  gatewayUrl: "https://w3s.link",          // optional, default w3s.link
 });`} />
 
 ## createHeliaStorage
@@ -133,6 +133,5 @@ const storage = await createStorachaStorage({
 // Browser-side embedded IPFS via Helia — no remote pinner, the user is the node.
 // Install: pnpm add helia @helia/unixfs
 // Pin @peculiar/webcrypto: 1.7.0 in pnpm.overrides (Helia's wasm setup is fragile).
-const storage = await createHeliaStorage({
-  gatewayUrl: "https://ipfs.io",  // optional, only used by downloadFile if user is offline
-});`} />
+// Pass an existing Helia instance via { helia } to reuse, or leave empty to spawn one.
+const storage = createHeliaStorage();`} />

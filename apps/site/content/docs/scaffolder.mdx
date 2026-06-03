@@ -45,9 +45,10 @@ $ npm create cdr-kit my-mcp -- --template mcp-server`} />
 
 ## starter template
 
-<p><b>starter</b> — Two-file Node TypeScript script that runs <code>createMockCdrKit()</code> + <code>accessVault()</code> end-to-end. Good for verifying the kit works in your env or for backend-only CDR work.</p>
+<p><b>starter</b> — Two-file Node TypeScript script that runs <code>new CdrAgent()</code> + create/write/access end-to-end against real Aeneid testnet. Good for verifying the kit works in your env or for backend-only CDR work.</p>
 
 <CodePanel title="tree" language="bash" code={`my-app/
-├── src/index.ts          # mock CDR end-to-end in ~10 lines
-├── package.json          # @cdr-kit/core@^0.3.0 + consola
+├── src/index.ts          # real Aeneid create + write + access in ~25 lines
+├── .env.example          # WALLET_PRIVATE_KEY for the testnet wallet
+├── package.json          # @cdr-kit/agent@^0.7.0 + @cdr-kit/contracts + @cdr-kit/core + consola + dotenv
 └── README.md`} />

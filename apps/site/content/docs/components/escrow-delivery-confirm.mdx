@@ -19,8 +19,8 @@ next:
 
 // Render-prop for the dashboard:
 <EscrowDeliveryConfirm uuid={8812} buyer={connectedAddress}>
-  {({ paid, delivered, timeoutInMs, confirmDelivery, pay }) => (
-    paid === 0n
+  {({ paidAt, delivered, timeoutInMs, confirmDelivery, pay }) => (
+    paidAt === 0n
       ? <button onClick={() => pay()}>Pay listing price</button>
       : delivered
         ? <span>delivered ✓</span>

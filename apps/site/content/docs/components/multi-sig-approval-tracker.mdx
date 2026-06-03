@@ -27,7 +27,7 @@ next:
 <PropsTable rows={[
   { name: "uuid", type: "number", required: true, description: "MultiSigCondition-gated vault uuid." },
   { name: "signedBy", type: "readonly Hex[]", defaultValue: "[]", description: "Off-chain set of signers who have produced a sig (the contract stores no approvals — this comes from your sig-collection UI)." },
-  { name: "children", type: "(state) => ReactNode", description: "Render-prop. Receives { signers, threshold, epoch, signedCount, isReady, isLoading }." },
+  { name: "children", type: "(state) => ReactNode", description: "Render-prop. Receives { signers, threshold, epoch, onChainApprovals, onChainCount, offChainCount, isReady, isLoading } — dual-path semantics: either onChainCount OR offChainCount independently reaching threshold passes the read." },
 ]} />
 
 ## Epoch rotation

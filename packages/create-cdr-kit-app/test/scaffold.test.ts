@@ -30,9 +30,10 @@ describe("create-cdr-kit-app scaffold", () => {
     const index = readFileSync(join(target, "src", "index.ts"), "utf8");
     // 0.7 ships real Aeneid; no mock anywhere
     expect(index).not.toContain("createMockCdrKit");
-    expect(index).toContain("createCdrAgent");
+    expect(index).toContain("new CdrAgent");
     expect(index).toContain("aeneid.storyrpc.io");
     expect(index).toContain("WALLET_PRIVATE_KEY");
+    expect(index).toContain("getCreatorVaults");
   });
 
   it("refuses to overwrite an existing path", () => {

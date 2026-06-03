@@ -54,7 +54,7 @@ function PublishButton({ secret }: { secret: string }) {
   const onClick = async () => {
     if (!walletClient) return;
     const agent = new CdrAgent({
-      privateKey: "0x...", // server-side; in browser, pass walletClient.account
+      privateKey: "0x..." as \`0x\${string}\`, // server-side; in browser, pass walletClient.account
       network: "aeneid",
     });
     await publish(agent, {

@@ -55,7 +55,8 @@ export const STARTER: Template = {
       path: "src/index.ts",
       content: dedent(`
         import "dotenv/config";
-        import { createCdrAgent } from "@cdr-kit/agent";
+        import { CdrAgent } from "@cdr-kit/agent";
+        import { aeneid } from "@cdr-kit/contracts";
         import { consola } from "consola";
 
         const privateKey = process.env.WALLET_PRIVATE_KEY as \`0x\${string}\` | undefined;
@@ -65,20 +66,32 @@ export const STARTER: Template = {
           process.exit(1);
         }
 
-        const agent = createCdrAgent({ privateKey, rpcUrl: "https://aeneid.storyrpc.io" });
+        const agent = new CdrAgent({ privateKey, rpcUrl: "https://aeneid.storyrpc.io" });
+        if (!agent.address) throw new Error("agent has no wallet address");
 
         const secret = new TextEncoder().encode("hello from cdr-kit on real Aeneid");
 
         consola.start("creating real CDR vault on Aeneid…");
-        const { uuid, txHash } = await agent.createVault({});
-        consola.success(\`vault uuid=\${uuid}  tx=\${txHash}\`);
+        const txHash = await agent.createVault({
+          readConditionAddr: aeneid.openCondition as \`0x\${string}\`,
+          readConfig: "0x",
+        });
+        consola.info(\`  tx=\${txHash}\`);
+
+        // createVault returns just the tx hash; the uuid is in the VaultCreated event.
+        // Read it off the latest vault this wallet owns.
+        const owned = await agent.getCreatorVaults(agent.address);
+        const latest = owned[owned.length - 1];
+        if (!latest) throw new Error("createVault confirmed but no vault visible on-chain yet");
+        const uuid = latest.uuid;
+        consola.success(\`vault uuid=\${uuid}\`);
 
         consola.start("writing encrypted data via CDR precompile…");
         await agent.writeVaultData({ uuid, dataKey: secret });
         consola.success("write confirmed");
 
         consola.start("reading + decrypting (threshold-decrypt over the network)…");
-        const bytes = await agent.readVaultData({ uuid });
+        const bytes = await agent.access(uuid);
         consola.success(\`decrypted: \${new TextDecoder().decode(bytes)}\`);
       `),
     },
