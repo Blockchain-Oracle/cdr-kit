@@ -8,6 +8,12 @@ export interface DocSection {
   content: ReactNode;
 }
 
+/** Right-rail TOC item — either derived from `sections` or supplied directly (e.g. from fumadocs MDX heading scan). */
+export interface DocTocItem {
+  id: string;
+  label: string;
+}
+
 export interface DocPageData {
   breadcrumb: string[];
   title: string;
@@ -20,8 +26,16 @@ export interface DocPageData {
   next?: { href: string; label: string };
 }
 
-/** The canonical anatomy: breadcrumb → title row → lede → import badge → optional callout → sections → prev/next. */
-export function DocPage({ data }: { data: DocPageData }) {
+/** The canonical anatomy: breadcrumb → title row → lede → import badge → optional callout → sections → prev/next.
+ *  Pass `tocItems` to override the right-rail TOC (e.g. from MDX heading scan); otherwise derived from sections. */
+export function DocPage({
+  data,
+  tocItems,
+}: {
+  data: DocPageData;
+  tocItems?: DocTocItem[];
+}) {
+  const items = tocItems ?? data.sections.filter((s) => s.title).map((s) => ({ id: s.id, label: s.title }));
   return (
     <>
       <main className="doc">
@@ -36,13 +50,13 @@ export function DocPage({ data }: { data: DocPageData }) {
         {data.callout}
         {data.sections.map((s) => (
           <section key={s.id}>
-            <H2 id={s.id}>{s.title}</H2>
+            {s.title && <H2 id={s.id}>{s.title}</H2>}
             {s.content}
           </section>
         ))}
         <PrevNext prev={data.prev} next={data.next} />
       </main>
-      <Toc items={data.sections.map((s) => ({ id: s.id, label: s.title }))} />
+      <Toc items={items} />
     </>
   );
 }

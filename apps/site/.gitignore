@@ -19,3 +19,6 @@ yarn-debug.log*
 .env.local
 .env*.local
 .source
+
+# T1 migration temp backup of TSX docs pages
+_docs_old_tsx_backup/
