@@ -17,7 +17,7 @@
   },
   "pnpm": {
     "overrides": {
-      "@cdr-kit/forms": "file:/tmp/cdr-final/cdr-kit-forms-0.7.2.tgz"
+      "@cdr-kit/forms": "workspace:*"
     }
   },
   "devDependencies": {

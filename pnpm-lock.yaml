@@ -5,7 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  '@cdr-kit/forms': file:/tmp/cdr-final/cdr-kit-forms-0.7.2.tgz
+  '@cdr-kit/forms': workspace:*
 
 importers:
 
@@ -51,8 +51,8 @@ importers:
         specifier: npm:@cdr-kit/core@^0.7.1
         version: 0.7.1(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))
       '@cdr-kit/forms':
-        specifier: file:/tmp/cdr-final/cdr-kit-forms-0.7.2.tgz
-        version: file:../../../../../tmp/cdr-final/cdr-kit-forms-0.7.2.tgz(@cdr-kit/core@0.7.1(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)))(@cdr-kit/react@0.7.0(6de358cb6f95ccf1289d564c5e284e08))(react@19.2.4)
+        specifier: workspace:*
+        version: link:../../packages/forms
       '@cdr-kit/react':
         specifier: npm:@cdr-kit/react@^0.7.0
         version: 0.7.0(6de358cb6f95ccf1289d564c5e284e08)
@@ -968,18 +968,6 @@ packages:
       '@storacha/client':
         optional: true
       helia:
-        optional: true
-
-  '@cdr-kit/forms@file:../../../../../tmp/cdr-final/cdr-kit-forms-0.7.2.tgz':
-    resolution: {integrity: sha512-An/Pslg+6gkgCeXHSMpK149kDQpgq+eo5yVM9+vfWP+Tz7y6jpMdPOtR183ncbmN7u4jLxDv4xdQCJHVp3hz1w==, tarball: file:../../../../../tmp/cdr-final/cdr-kit-forms-0.7.2.tgz}
-    version: 0.7.2
-    engines: {node: '>=20'}
-    peerDependencies:
-      '@cdr-kit/core': '>=0.6.0'
-      '@cdr-kit/react': '>=0.6.0'
-      react: '>=18'
-    peerDependenciesMeta:
-      '@cdr-kit/core':
         optional: true
 
   '@cdr-kit/react-ui@0.7.0':
@@ -9879,14 +9867,6 @@ snapshots:
       helia: 5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10)
     transitivePeerDependencies:
       - '@filoz/synapse-sdk'
-
-  '@cdr-kit/forms@file:../../../../../tmp/cdr-final/cdr-kit-forms-0.7.2.tgz(@cdr-kit/core@0.7.1(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)))(@cdr-kit/react@0.7.0(6de358cb6f95ccf1289d564c5e284e08))(react@19.2.4)':
-    dependencies:
-      '@cdr-kit/react': 0.7.0(6de358cb6f95ccf1289d564c5e284e08)
-      consola: 3.4.2
-      react: 19.2.4
-    optionalDependencies:
-      '@cdr-kit/core': 0.7.1(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))
 
   '@cdr-kit/react-ui@0.7.0(@cdr-kit/core@0.7.1(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)))(@cdr-kit/react@0.7.0(6de358cb6f95ccf1289d564c5e284e08))(@radix-ui/react-popover@1.1.15(@types/react-dom@19.2.3(@types/react@19.2.15))(@types/react@19.2.15)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
     dependencies:
