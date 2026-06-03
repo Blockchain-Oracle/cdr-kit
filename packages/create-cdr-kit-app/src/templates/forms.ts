@@ -25,7 +25,7 @@ export const FORMS: Template = {
   postInstall: [
     "pnpm install",
     "cp .env.local.example .env.local",
-    "# add WALLET_PRIVATE_KEY and PINATA_JWT (or swap to another adapter)",
+    "# add WALLET_PRIVATE_KEY (Pinata/Supabase/etc only needed for >1KB payloads)",
     "pnpm dev   # http://localhost:3000",
   ],
   files: [
@@ -224,45 +224,29 @@ export const FORMS: Template = {
       `),
     },
     {
-      path: "lib/storage.ts",
-      content: dedent(`
-        import { createPinataStorage } from "@cdr-kit/core";
-        // 5 other adapters available — swap createPinataStorage(...) below for any of:
-        //   createSupabaseStorage  ({ url, key, bucket })             — Postgres + S3 storage
-        //   createIpfsStorage      ({ addUrl, gatewayUrl, headers? }) — any IPFS HTTP API
-        //   createS3Storage        ({ endpoint, region, accessKey, secretKey, bucket }) — S3 / R2 / B2
-        //   createStorachaStorage  ({ agentDelegation, spaceDid })    — web3.storage / w3up
-        //   createHeliaStorage     ({ helia? })                       — self-hosted Helia node
-
-        /**
-         * Single source of truth for the storage adapter — imported by both
-         * /api/respond and /api/results so writes + reads round-trip the same way.
-         * Keys come from .env.local (never committed; see .env.local.example).
-         */
-        export function getStorage() {
-          const jwt = process.env.PINATA_JWT;
-          if (!jwt) {
-            throw new Error(
-              "Missing PINATA_JWT in .env.local. Get one free at https://app.pinata.cloud/developers/api-keys",
-            );
-          }
-          return createPinataStorage({
-            jwt,
-            gatewayUrl: process.env.PINATA_GATEWAY_URL ?? "https://gateway.pinata.cloud",
-          });
-        }
-      `),
-    },
-    {
       path: "app/api/respond/route.ts",
       content: dedent(`
         import { NextResponse } from "next/server";
         import { storeFormSubmission } from "@cdr-kit/forms/server";
-        import { getStorage } from "../../../lib/storage";
 
         /** Platform-wallet pattern: respondent never holds a wallet. The server signs
-         *  every submission with its own funded Aeneid key and uploads the encrypted
-         *  blob through the configured storage adapter. */
+         *  every submission with its own funded Aeneid key.
+         *
+         *  Small payloads (≤1KB — typical form size) write directly through the CDR
+         *  precompile, no IPFS needed. For larger payloads, pass a CdrStorageProvider:
+         *
+         *    import { createPinataStorage } from "@cdr-kit/core";
+         *    const storage = createPinataStorage({ jwt: process.env.PINATA_JWT! });
+         *    await storeFormSubmission(fields, { privateKey: pk, storage, ... });
+         *
+         *  Six adapters ship in @cdr-kit/core:
+         *    createPinataStorage    ({ jwt, gatewayUrl? })
+         *    createSupabaseStorage  ({ supabaseUrl, key, bucket, ... })
+         *    createIpfsStorage      ({ addUrl, gatewayUrl, headers? })
+         *    createS3Storage        ({ bucket, region, accessKeyId, secretAccessKey, ... })
+         *    createStorachaStorage  ({ key, spaceDid, proof, ... })
+         *    createHeliaStorage     ({ helia? })
+         */
         export async function POST(req: Request) {
           const pk = process.env.WALLET_PRIVATE_KEY as \`0x\${string}\` | undefined;
           if (!pk) {
@@ -271,16 +255,14 @@ export const FORMS: Template = {
 
           const { fields } = await req.json();
           try {
-            const storage = getStorage();
-            const { vaultId, cid } = await storeFormSubmission(fields, {
+            const { vaultId, cid, txHashes } = await storeFormSubmission(fields, {
               privateKey: pk,
-              storage,
               rpcUrl: "https://aeneid.storyrpc.io",
             });
 
             // In production, persist { vaultId, cid, submittedAt } in your DB alongside
             // the form id so /api/results can list them later.
-            return NextResponse.json({ vaultId, cid });
+            return NextResponse.json({ vaultId, cid, txHashes });
           } catch (e) {
             return NextResponse.json({ error: String((e as Error).message ?? e) }, { status: 500 });
           }
@@ -292,7 +274,6 @@ export const FORMS: Template = {
       content: dedent(`
         import { NextResponse } from "next/server";
         import { readFormSubmission } from "@cdr-kit/forms/server";
-        import { getStorage } from "../../../lib/storage";
 
         /** Demo: decrypts known vault IDs from an in-memory list. In production
          *  you'd pull this list from your DB (the IDs you stored from
@@ -305,12 +286,13 @@ export const FORMS: Template = {
             return NextResponse.json({ error: "Server missing WALLET_PRIVATE_KEY" }, { status: 500 });
           }
 
-          const storage = getStorage();
+          // For small-payload submissions, no \`storage\` adapter is needed —
+          // CDR's threshold-decrypt reads the payload directly. If the original
+          // write used a CdrStorageProvider (large payload), pass it here too.
           const items = await Promise.all(
             SAMPLE_VAULT_IDS.map(async (vaultId) => {
               const { fields, submittedAt } = await readFormSubmission(vaultId, {
                 privateKey: pk,
-                storage,
                 rpcUrl: "https://aeneid.storyrpc.io",
               });
               return { vaultId, fields, submittedAt };
@@ -439,26 +421,17 @@ export const FORMS: Template = {
         # Get testnet IP at https://aeneid.faucet.story.foundation/
         WALLET_PRIVATE_KEY=0x_your_aeneid_testnet_private_key
 
-        # Pinata JWT for IPFS pinning. Free signup at https://app.pinata.cloud/developers/api-keys
-        PINATA_JWT=eyJ...
-        # PINATA_GATEWAY_URL=https://your-gateway.mypinata.cloud  # optional
-
-        # ====== OPTIONAL — only needed for WalletConnect-protocol wallets ======
+        # ====== OPTIONAL — WalletConnect-protocol wallets ======
         # NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=
 
-        # ====== ALTERNATIVES — uncomment if you swap the adapter in lib/storage.ts ======
-        # SUPABASE_URL=https://xxxx.supabase.co
-        # SUPABASE_SERVICE_ROLE_KEY=
-        # SUPABASE_BUCKET=cdr-blobs
-
-        # IPFS_ADD_URL=http://localhost:5001/api/v0/add
-        # IPFS_GATEWAY_URL=http://localhost:8080
-
-        # S3_ENDPOINT=https://s3.amazonaws.com
-        # S3_REGION=us-east-1
-        # S3_ACCESS_KEY=
-        # S3_SECRET_KEY=
-        # S3_BUCKET=
+        # ====== OPTIONAL — external storage (only for >1KB payloads) ======
+        # Small submissions (typical form: 3-5 fields ≈ few hundred bytes) write directly
+        # through the CDR precompile. You only need a storage adapter for large payloads.
+        # If you do need one, see app/api/respond/route.ts for the import + wiring snippet.
+        # Pinata: PINATA_JWT=eyJ...
+        # Supabase: SUPABASE_URL=https://xxxx.supabase.co + SUPABASE_SERVICE_ROLE_KEY= + SUPABASE_BUCKET=cdr-blobs
+        # S3:      S3_ENDPOINT= + S3_REGION= + S3_ACCESS_KEY_ID= + S3_SECRET_ACCESS_KEY= + S3_BUCKET=
+        # IPFS:    IPFS_ADD_URL=http://localhost:5001/api/v0/add + IPFS_GATEWAY_URL=http://localhost:8080
       `),
     },
   ],

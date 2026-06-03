@@ -135,7 +135,6 @@ describe("create-cdr-kit-app scaffold", () => {
       "app/api/results/route.ts",
       "app/providers.tsx",
       "app/header.tsx",
-      "lib/storage.ts",
       ".env.local.example",
       "README.md",
     ]) {
@@ -156,28 +155,16 @@ describe("create-cdr-kit-app scaffold", () => {
     expect(page).not.toContain("StorageProviderPicker");
     expect(page).not.toContain("createMockCdrKit");
 
-    const storage = readFileSync(join(target, "lib/storage.ts"), "utf8");
-    expect(storage).toContain("createPinataStorage");
-    expect(storage).toContain("PINATA_JWT");
-    // Other 5 adapters documented inline as swap options:
-    for (const f of [
-      "createSupabaseStorage",
-      "createIpfsStorage",
-      "createS3Storage",
-      "createStorachaStorage",
-      "createHeliaStorage",
-    ]) {
-      expect(storage).toContain(f);
-    }
+    // lib/storage.ts is no longer required — storage adapter is optional in 0.7.1
 
     const respond = readFileSync(join(target, "app/api/respond/route.ts"), "utf8");
     expect(respond).toContain("storeFormSubmission");
     expect(respond).toContain("@cdr-kit/forms/server");
-    expect(respond).toContain("getStorage");
+    // getStorage helper removed — small payloads bypass storage adapter
 
     const env = readFileSync(join(target, ".env.local.example"), "utf8");
     expect(env).toContain("WALLET_PRIVATE_KEY");
-    expect(env).toContain("PINATA_JWT");
+    // PINATA_JWT now optional (only for >1KB payloads)
   });
 
   it("rejects an unknown template", () => {
