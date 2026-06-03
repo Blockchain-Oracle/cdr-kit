@@ -115,7 +115,7 @@ export const PAYWALL: Template = {
             <section className="paywall-stage">
               <article className="paywall-card">
                 <div className="card-meta">
-                  <ConditionBadge tone="subscription">Subscription</ConditionBadge>
+                  <ConditionBadge kind="subscription">Subscription</ConditionBadge>
                   <IpPrice wei={PRICE_WEI} period="month" />
                 </div>
                 <h1 className="card-title">This week's signal</h1>
