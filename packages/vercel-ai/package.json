@@ -1,6 +1,6 @@
 {
   "name": "@cdr-kit/vercel-ai",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "Vercel AI SDK adapter for cdr-kit — getVercelAITools(agent).",
   "type": "module",
   "sideEffects": false,

@@ -1,6 +1,6 @@
 {
   "name": "@cdr-kit/forms",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "Encrypted form submission components for CDR — multi-provider storage, platform wallet, whole-form encryption.",
   "type": "module",
   "sideEffects": [
