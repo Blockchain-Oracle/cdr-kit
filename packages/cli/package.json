@@ -1,6 +1,6 @@
 {
   "name": "@cdr-kit/cli",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "The cdr CLI + MCP server factory + auto-wallet + Claude Code skill installer. One binary, three surfaces (CLI / MCP / skill).",
   "type": "module",
   "bin": {

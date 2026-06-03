@@ -1,6 +1,6 @@
 {
   "name": "@cdr-kit/react-ui",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Styled component variants for @cdr-kit/react — ConditionBadge, AccessStepper, SubscribeButton, VaultCard + DX primitives. CSS-variable themed; no Tailwind, no lucide, no framer-motion hard deps.",
   "type": "module",
   "sideEffects": [

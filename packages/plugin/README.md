@@ -2,6 +2,14 @@
 
 > 11 skills + 2 reference docs that teach Claude *how* to design, wire, and debug around Story Confidential Data Rails.
 
+## Use the skills from any agent (Claude Code · Cursor · Copilot · Cline · …)
+
+```
+npx skills add Blockchain-Oracle/cdr-kit
+```
+
+Installs the cdr-kit Agent Skills via [skills.sh](https://skills.sh).
+
 This is the plugin source. It's bundled inside `@cdr-kit/cli` and installed by:
 
 ```bash
