@@ -42,17 +42,17 @@ importers:
   apps/site:
     dependencies:
       '@cdr-kit/contracts':
-        specifier: workspace:*
-        version: link:../../packages/contracts
+        specifier: npm:@cdr-kit/contracts@^0.7.0
+        version: 0.7.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))
       '@cdr-kit/core':
-        specifier: workspace:*
-        version: link:../../packages/core
+        specifier: npm:@cdr-kit/core@^0.7.0
+        version: 0.7.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))
       '@cdr-kit/react':
-        specifier: workspace:*
-        version: link:../../packages/react
+        specifier: npm:@cdr-kit/react@^0.7.0
+        version: 0.7.0(582d3ab56ce2e66f9603d94cc157dde0)
       '@cdr-kit/react-ui':
-        specifier: workspace:*
-        version: link:../../packages/react-ui
+        specifier: npm:@cdr-kit/react-ui@^0.7.0
+        version: 0.7.0(@cdr-kit/core@0.7.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)))(@cdr-kit/react@0.7.0(582d3ab56ce2e66f9603d94cc157dde0))(@radix-ui/react-popover@1.1.15(@types/react-dom@19.2.3(@types/react@19.2.15))(@types/react@19.2.15)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@radix-ui/react-popover':
         specifier: ^1.1.15
         version: 1.1.15(@types/react-dom@19.2.3(@types/react@19.2.15))(@types/react@19.2.15)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -109,17 +109,17 @@ importers:
         specifier: ^2.0.0
         version: 2.0.80(zod@4.4.3)
       '@cdr-kit/agent':
-        specifier: workspace:*
-        version: link:../../packages/agent
+        specifier: npm:@cdr-kit/agent@^0.7.0
+        version: 0.7.0(@cdr-kit/story@0.7.0(@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)))(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
       '@cdr-kit/contracts':
-        specifier: workspace:*
-        version: link:../../packages/contracts
+        specifier: npm:@cdr-kit/contracts@^0.7.0
+        version: 0.7.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
       '@cdr-kit/core':
-        specifier: workspace:*
-        version: link:../../packages/core
+        specifier: npm:@cdr-kit/core@^0.7.0
+        version: 0.7.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
       '@cdr-kit/vercel-ai':
-        specifier: workspace:*
-        version: link:../../packages/vercel-ai
+        specifier: npm:@cdr-kit/vercel-ai@^0.7.0
+        version: 0.7.0(@cdr-kit/story@0.7.0(@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)))(@helia/unixfs@5.1.0(encoding@0.1.13))(ai@6.0.191(zod@4.4.3))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
       ai:
         specifier: ^6.0.191
         version: 6.0.191(zod@4.4.3)
@@ -893,6 +893,89 @@ packages:
 
   '@base-org/account@2.4.0':
     resolution: {integrity: sha512-A4Umpi8B9/pqR78D1Yoze4xHyQaujioVRqqO3d6xuDFw9VRtjg6tK3bPlwE0aW+nVH/ntllCpPa2PbI8Rnjcug==}
+
+  '@cdr-kit/agent@0.7.0':
+    resolution: {integrity: sha512-AnL2NnUKRHThHdLIpIiB9U2zwqCmvhdF4wN6wiJO8CxuZ/6WxBPC5puea/RmqQoBHOQgYHHhjSiurLffhh4FUA==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      '@cdr-kit/story': '>=0.4.0'
+      viem: ^2
+    peerDependenciesMeta:
+      '@cdr-kit/story':
+        optional: true
+
+  '@cdr-kit/contracts@0.7.0':
+    resolution: {integrity: sha512-cLiYkOlmWphEXabD7KhNf2kM9LC92/EhSzVOAeSULLbkPlqh3iaV+2Z15Ml07AJj4xJeL1qRjGlEizCiTPX8rA==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      viem: ^2
+
+  '@cdr-kit/core@0.7.0':
+    resolution: {integrity: sha512-PjGRULfJU9YHUtRezb6f9eJULNV6ZYh/yI2uLXdmQIhaC3pvXRGOpi2oWyUo/BBO3bB/3D8eqwYNM/0JZKLrAg==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      '@aws-sdk/client-s3': '*'
+      '@helia/unixfs': '*'
+      '@storacha/client': '*'
+      helia: '*'
+      viem: ^2
+    peerDependenciesMeta:
+      '@aws-sdk/client-s3':
+        optional: true
+      '@helia/unixfs':
+        optional: true
+      '@storacha/client':
+        optional: true
+      helia:
+        optional: true
+
+  '@cdr-kit/react-ui@0.7.0':
+    resolution: {integrity: sha512-UlNRVDdP9LZd9HhfV/WuJc7aEw5DV2xBP5AncdV376tryrOuC4lepyh92quGiHsqyu+RKQJdSvntiqw1NPBrwA==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      '@cdr-kit/core': '>=0.4.0'
+      '@cdr-kit/react': '>=0.4.0'
+      '@radix-ui/react-popover': '>=1.1.0'
+      react: '>=18'
+      react-dom: '>=18'
+
+  '@cdr-kit/react@0.7.0':
+    resolution: {integrity: sha512-tWa7b5Dupoaa6g9pAPLjm440+CG1QAci3b8UQ+yNOAIZVxXISdTa/OQkAEHYa/rytkqFVOQMiXfnwKx0sJ6Gug==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      '@cdr-kit/agent': '>=0.4.0'
+      '@cdr-kit/story': '>=0.4.0'
+      '@tanstack/react-query': '>=5'
+      react: '>=18'
+      viem: ^2
+      wagmi: '>=2'
+    peerDependenciesMeta:
+      '@cdr-kit/agent':
+        optional: true
+      '@cdr-kit/story':
+        optional: true
+
+  '@cdr-kit/story@0.7.0':
+    resolution: {integrity: sha512-9P3NLgoZn/G3LdZHe+bhG5nk9QSmY+Zk5C3JJsjAlDyBx4p2paGGzUgYv+xLQgxbaKFGRXgPS4Uce8r6gLc1aQ==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      '@story-protocol/core-sdk': ^1.4
+      viem: ^2
+
+  '@cdr-kit/tools@0.7.0':
+    resolution: {integrity: sha512-fc/ZZSdn/ifWw8phwIZ16zo6kBNXUZ8A7i9e/b3hf0z30Y6dOas/JoJ2Giq7FlAffbkFgyG2q186qH9G5HIPBA==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      '@cdr-kit/story': '>=0.4.0'
+    peerDependenciesMeta:
+      '@cdr-kit/story':
+        optional: true
+
+  '@cdr-kit/vercel-ai@0.7.0':
+    resolution: {integrity: sha512-QtPwUBPWQnGX1ICO3h3GRI/2lwA6HBlIyuvteE8JGIjDrd/bnfGlFFEukXA7l4cwiCFyM/ZQHjj5FWPpmXEMSg==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      ai: '>=6'
 
   '@cfworker/json-schema@4.1.1':
     resolution: {integrity: sha512-gAmrUZSGtKc3AiBL71iNWxDsyUC5uMaKKGdvzYsBoTW/xi42JQHl7eKV2OYzCUqvc+D2RCcf7EXY2iCyFIk6og==}
@@ -9620,6 +9703,143 @@ snapshots:
       - utf-8-validate
       - zod
 
+  '@cdr-kit/agent@0.7.0(@cdr-kit/story@0.7.0(@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)))(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))':
+    dependencies:
+      '@cdr-kit/contracts': 0.7.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))
+      '@cdr-kit/core': 0.7.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))
+      pino: 9.14.0
+      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+    optionalDependencies:
+      '@cdr-kit/story': 0.7.0(@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))
+    transitivePeerDependencies:
+      - '@aws-sdk/client-s3'
+      - '@filoz/synapse-sdk'
+      - '@helia/unixfs'
+      - '@storacha/client'
+      - helia
+    optional: true
+
+  '@cdr-kit/agent@0.7.0(@cdr-kit/story@0.7.0(@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)))(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))':
+    dependencies:
+      '@cdr-kit/contracts': 0.7.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+      '@cdr-kit/core': 0.7.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+      pino: 9.14.0
+      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)
+    optionalDependencies:
+      '@cdr-kit/story': 0.7.0(@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+    transitivePeerDependencies:
+      - '@aws-sdk/client-s3'
+      - '@filoz/synapse-sdk'
+      - '@helia/unixfs'
+      - '@storacha/client'
+      - helia
+
+  '@cdr-kit/contracts@0.7.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))':
+    dependencies:
+      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+
+  '@cdr-kit/contracts@0.7.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))':
+    dependencies:
+      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)
+
+  '@cdr-kit/core@0.7.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))':
+    dependencies:
+      '@cdr-kit/contracts': 0.7.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))
+      '@piplabs/cdr-crypto': 0.2.1
+      '@piplabs/cdr-sdk': 0.2.1(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(multiformats@13.4.2)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))
+      multiformats: 13.4.2
+      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      zod: 3.25.76
+    optionalDependencies:
+      '@helia/unixfs': 5.1.0(encoding@0.1.13)
+      helia: 5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10)
+    transitivePeerDependencies:
+      - '@filoz/synapse-sdk'
+
+  '@cdr-kit/core@0.7.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))':
+    dependencies:
+      '@cdr-kit/contracts': 0.7.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+      '@piplabs/cdr-crypto': 0.2.1
+      '@piplabs/cdr-sdk': 0.2.1(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(multiformats@13.4.2)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+      multiformats: 13.4.2
+      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)
+      zod: 3.25.76
+    optionalDependencies:
+      '@helia/unixfs': 5.1.0(encoding@0.1.13)
+      helia: 5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6)
+    transitivePeerDependencies:
+      - '@filoz/synapse-sdk'
+
+  '@cdr-kit/react-ui@0.7.0(@cdr-kit/core@0.7.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)))(@cdr-kit/react@0.7.0(582d3ab56ce2e66f9603d94cc157dde0))(@radix-ui/react-popover@1.1.15(@types/react-dom@19.2.3(@types/react@19.2.15))(@types/react@19.2.15)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
+    dependencies:
+      '@cdr-kit/core': 0.7.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))
+      '@cdr-kit/react': 0.7.0(582d3ab56ce2e66f9603d94cc157dde0)
+      '@radix-ui/react-popover': 1.1.15(@types/react-dom@19.2.3(@types/react@19.2.15))(@types/react@19.2.15)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
+
+  '@cdr-kit/react@0.7.0(582d3ab56ce2e66f9603d94cc157dde0)':
+    dependencies:
+      '@cdr-kit/contracts': 0.7.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))
+      '@cdr-kit/core': 0.7.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))
+      '@tanstack/react-query': 5.100.14(react@19.2.4)
+      react: 19.2.4
+      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      wagmi: 2.19.5(@tanstack/query-core@5.100.14)(@tanstack/react-query@5.100.14(react@19.2.4))(@types/react@19.2.15)(bufferutil@4.1.0)(encoding@0.1.13)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(react@19.2.4)(typescript@5.9.3)(utf-8-validate@5.0.10)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))(zod@3.25.76)
+    optionalDependencies:
+      '@cdr-kit/agent': 0.7.0(@cdr-kit/story@0.7.0(@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)))(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))
+      '@cdr-kit/story': 0.7.0(@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))
+    transitivePeerDependencies:
+      - '@aws-sdk/client-s3'
+      - '@filoz/synapse-sdk'
+      - '@helia/unixfs'
+      - '@storacha/client'
+      - helia
+
+  '@cdr-kit/story@0.7.0(@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))':
+    dependencies:
+      '@cdr-kit/contracts': 0.7.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))
+      '@story-protocol/core-sdk': 1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+    optional: true
+
+  '@cdr-kit/story@0.7.0(@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))':
+    dependencies:
+      '@cdr-kit/contracts': 0.7.0(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+      '@story-protocol/core-sdk': 1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)
+      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)
+    optional: true
+
+  '@cdr-kit/tools@0.7.0(@cdr-kit/story@0.7.0(@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)))(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))':
+    dependencies:
+      '@cdr-kit/agent': 0.7.0(@cdr-kit/story@0.7.0(@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)))(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+      '@cdr-kit/core': 0.7.0(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+      zod: 3.25.76
+      zod-to-json-schema: 3.25.2(zod@3.25.76)
+    optionalDependencies:
+      '@cdr-kit/story': 0.7.0(@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+    transitivePeerDependencies:
+      - '@aws-sdk/client-s3'
+      - '@filoz/synapse-sdk'
+      - '@helia/unixfs'
+      - '@storacha/client'
+      - helia
+      - viem
+
+  '@cdr-kit/vercel-ai@0.7.0(@cdr-kit/story@0.7.0(@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)))(@helia/unixfs@5.1.0(encoding@0.1.13))(ai@6.0.191(zod@4.4.3))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))':
+    dependencies:
+      '@cdr-kit/agent': 0.7.0(@cdr-kit/story@0.7.0(@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)))(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+      '@cdr-kit/tools': 0.7.0(@cdr-kit/story@0.7.0(@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)))(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+      ai: 6.0.191(zod@4.4.3)
+    transitivePeerDependencies:
+      - '@aws-sdk/client-s3'
+      - '@cdr-kit/story'
+      - '@filoz/synapse-sdk'
+      - '@helia/unixfs'
+      - '@storacha/client'
+      - helia
+      - viem
+
   '@cfworker/json-schema@4.1.1': {}
 
   '@chainsafe/as-chacha20poly1305@0.1.0': {}
@@ -11524,6 +11744,47 @@ snapshots:
       uint8arraylist: 2.4.9
       uint8arrays: 5.1.1
 
+  '@libp2p/webrtc@5.2.24(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))':
+    dependencies:
+      '@chainsafe/is-ip': 2.1.0
+      '@chainsafe/libp2p-noise': 16.1.5
+      '@ipshipyard/node-datachannel': 0.26.6
+      '@libp2p/crypto': 5.1.19
+      '@libp2p/interface': 2.11.0
+      '@libp2p/interface-internal': 2.3.19
+      '@libp2p/keychain': 5.2.9
+      '@libp2p/peer-id': 5.1.9
+      '@libp2p/utils': 6.7.2
+      '@multiformats/multiaddr': 12.5.1
+      '@multiformats/multiaddr-matcher': 2.0.2
+      '@peculiar/webcrypto': 1.7.1
+      '@peculiar/x509': 1.14.3
+      any-signal: 4.2.0
+      detect-browser: 5.3.0
+      get-port: 7.2.0
+      interface-datastore: 8.3.2
+      it-length-prefixed: 10.0.2
+      it-protobuf-stream: 2.0.6
+      it-pushable: 3.2.4
+      it-stream-types: 2.0.4
+      main-event: 1.0.4
+      multiformats: 13.4.2
+      p-defer: 4.0.1
+      p-timeout: 6.1.4
+      p-wait-for: 5.0.2
+      progress-events: 1.1.0
+      protons-runtime: 5.6.0
+      race-event: 1.6.1
+      race-signal: 1.1.3
+      react-native-webrtc: 124.0.7(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))
+      uint8-varint: 2.0.5
+      uint8arraylist: 2.4.9
+      uint8arrays: 5.1.1
+    transitivePeerDependencies:
+      - react-native
+      - supports-color
+    optional: true
+
   '@libp2p/webrtc@5.2.24(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@5.0.10))':
     dependencies:
       '@chainsafe/is-ip': 2.1.0
@@ -11564,6 +11825,47 @@ snapshots:
       - react-native
       - supports-color
 
+  '@libp2p/webrtc@5.2.24(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))':
+    dependencies:
+      '@chainsafe/is-ip': 2.1.0
+      '@chainsafe/libp2p-noise': 16.1.5
+      '@ipshipyard/node-datachannel': 0.26.6
+      '@libp2p/crypto': 5.1.19
+      '@libp2p/interface': 2.11.0
+      '@libp2p/interface-internal': 2.3.19
+      '@libp2p/keychain': 5.2.9
+      '@libp2p/peer-id': 5.1.9
+      '@libp2p/utils': 6.7.2
+      '@multiformats/multiaddr': 12.5.1
+      '@multiformats/multiaddr-matcher': 2.0.2
+      '@peculiar/webcrypto': 1.7.1
+      '@peculiar/x509': 1.14.3
+      any-signal: 4.2.0
+      detect-browser: 5.3.0
+      get-port: 7.2.0
+      interface-datastore: 8.3.2
+      it-length-prefixed: 10.0.2
+      it-protobuf-stream: 2.0.6
+      it-pushable: 3.2.4
+      it-stream-types: 2.0.4
+      main-event: 1.0.4
+      multiformats: 13.4.2
+      p-defer: 4.0.1
+      p-timeout: 6.1.4
+      p-wait-for: 5.0.2
+      progress-events: 1.1.0
+      protons-runtime: 5.6.0
+      race-event: 1.6.1
+      race-signal: 1.1.3
+      react-native-webrtc: 124.0.7(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))
+      uint8-varint: 2.0.5
+      uint8arraylist: 2.4.9
+      uint8arrays: 5.1.1
+    transitivePeerDependencies:
+      - react-native
+      - supports-color
+    optional: true
+
   '@libp2p/websockets@9.2.19(bufferutil@4.1.0)(utf-8-validate@5.0.10)':
     dependencies:
       '@libp2p/interface': 2.11.0
@@ -11582,6 +11884,26 @@ snapshots:
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
+
+  '@libp2p/websockets@9.2.19(bufferutil@4.1.0)(utf-8-validate@6.0.6)':
+    dependencies:
+      '@libp2p/interface': 2.11.0
+      '@libp2p/utils': 6.7.2
+      '@multiformats/multiaddr': 12.5.1
+      '@multiformats/multiaddr-matcher': 2.0.2
+      '@multiformats/multiaddr-to-uri': 11.0.2
+      '@types/ws': 8.18.1
+      it-ws: 6.1.5(bufferutil@4.1.0)(utf-8-validate@6.0.6)
+      main-event: 1.0.4
+      p-defer: 4.0.1
+      p-event: 6.0.1
+      progress-events: 1.1.0
+      race-signal: 1.1.3
+      ws: 8.20.1(bufferutil@4.1.0)(utf-8-validate@6.0.6)
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+    optional: true
 
   '@lit-labs/ssr-dom-shim@1.6.0': {}
 
@@ -12213,12 +12535,26 @@ snapshots:
     dependencies:
       viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)
 
+  '@piplabs/cdr-contracts@0.2.1(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))':
+    dependencies:
+      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)
+
   '@piplabs/cdr-crypto@0.2.1':
     dependencies:
       '@ethereumjs/rlp': 10.1.1
       '@noble/ciphers': 2.1.1
       '@noble/curves': 1.6.0
       '@noble/hashes': 2.0.1
+
+  '@piplabs/cdr-sdk@0.2.1(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(multiformats@13.4.2)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))':
+    dependencies:
+      '@piplabs/cdr-contracts': 0.2.1(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))
+      '@piplabs/cdr-crypto': 0.2.1
+      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+    optionalDependencies:
+      '@helia/unixfs': 5.1.0(encoding@0.1.13)
+      helia: 5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10)
+      multiformats: 13.4.2
 
   '@piplabs/cdr-sdk@0.2.1(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(multiformats@13.4.2)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))':
     dependencies:
@@ -12228,6 +12564,16 @@ snapshots:
     optionalDependencies:
       '@helia/unixfs': 5.1.0(encoding@0.1.13)
       helia: 5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10)
+      multiformats: 13.4.2
+
+  '@piplabs/cdr-sdk@0.2.1(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6))(multiformats@13.4.2)(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))':
+    dependencies:
+      '@piplabs/cdr-contracts': 0.2.1(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
+      '@piplabs/cdr-crypto': 0.2.1
+      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)
+    optionalDependencies:
+      '@helia/unixfs': 5.1.0(encoding@0.1.13)
+      helia: 5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6)
       multiformats: 13.4.2
 
   '@privy-io/api-base@1.4.3':
@@ -12504,6 +12850,21 @@ snapshots:
       - supports-color
       - utf-8-validate
 
+  '@react-native/community-cli-plugin@0.85.3(bufferutil@4.1.0)(utf-8-validate@6.0.6)':
+    dependencies:
+      '@react-native/dev-middleware': 0.85.3(bufferutil@4.1.0)(utf-8-validate@6.0.6)
+      debug: 4.4.3
+      invariant: 2.2.4
+      metro: 0.84.4(bufferutil@4.1.0)(utf-8-validate@6.0.6)
+      metro-config: 0.84.4(bufferutil@4.1.0)(utf-8-validate@5.0.10)
+      metro-core: 0.84.4
+      semver: 7.8.1
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+    optional: true
+
   '@react-native/debugger-frontend@0.85.3': {}
 
   '@react-native/debugger-shell@0.85.3':
@@ -12533,6 +12894,26 @@ snapshots:
       - supports-color
       - utf-8-validate
 
+  '@react-native/dev-middleware@0.85.3(bufferutil@4.1.0)(utf-8-validate@6.0.6)':
+    dependencies:
+      '@isaacs/ttlcache': 1.4.1
+      '@react-native/debugger-frontend': 0.85.3
+      '@react-native/debugger-shell': 0.85.3
+      chrome-launcher: 0.15.2
+      chromium-edge-launcher: 0.3.0
+      connect: 3.7.0
+      debug: 4.4.3
+      invariant: 2.2.4
+      nullthrows: 1.1.1
+      open: 7.4.2
+      serve-static: 1.16.3
+      ws: 7.5.11(bufferutil@4.1.0)(utf-8-validate@6.0.6)
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+    optional: true
+
   '@react-native/gradle-plugin@0.85.3': {}
 
   '@react-native/js-polyfills@0.85.3': {}
@@ -12557,6 +12938,16 @@ snapshots:
       react-native: 0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@5.0.10)
     optionalDependencies:
       '@types/react': 19.2.15
+
+  '@react-native/virtualized-lists@0.85.3(@types/react@19.2.15)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(react@19.2.6)':
+    dependencies:
+      invariant: 2.2.4
+      nullthrows: 1.1.1
+      react: 19.2.6
+      react-native: 0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6)
+    optionalDependencies:
+      '@types/react': 19.2.15
+    optional: true
 
   '@reown/appkit-common@1.7.8(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)':
     dependencies:
@@ -14685,6 +15076,21 @@ snapshots:
 
   '@standard-schema/spec@1.1.0': {}
 
+  '@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)':
+    dependencies:
+      '@scure/bip32': 1.7.0
+      abitype: 0.10.3(typescript@5.9.3)(zod@3.25.76)
+      bs58: 6.0.0
+      dotenv: 16.6.1
+      multiformats: 9.9.0
+      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+    transitivePeerDependencies:
+      - bufferutil
+      - typescript
+      - utf-8-validate
+      - zod
+    optional: true
+
   '@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76)':
     dependencies:
       '@scure/bip32': 1.7.0
@@ -14698,6 +15104,21 @@ snapshots:
       - typescript
       - utf-8-validate
       - zod
+
+  '@story-protocol/core-sdk@1.4.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)':
+    dependencies:
+      '@scure/bip32': 1.7.0
+      abitype: 0.10.3(typescript@5.9.3)(zod@4.4.3)
+      bs58: 6.0.0
+      dotenv: 16.6.1
+      multiformats: 9.9.0
+      viem: 2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)
+    transitivePeerDependencies:
+      - bufferutil
+      - typescript
+      - utf-8-validate
+      - zod
+    optional: true
 
   '@swc/helpers@0.5.15':
     dependencies:
@@ -16707,6 +17128,12 @@ snapshots:
       typescript: 5.9.3
       zod: 3.25.76
 
+  abitype@0.10.3(typescript@5.9.3)(zod@4.4.3):
+    optionalDependencies:
+      typescript: 5.9.3
+      zod: 4.4.3
+    optional: true
+
   abitype@1.0.6(typescript@5.9.3)(zod@3.25.76):
     optionalDependencies:
       typescript: 5.9.3
@@ -18426,6 +18853,47 @@ snapshots:
       set-cookie-parser: 3.1.0
     optional: true
 
+  helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10):
+    dependencies:
+      '@chainsafe/libp2p-noise': 16.1.5
+      '@chainsafe/libp2p-yamux': 7.0.4
+      '@helia/block-brokers': 4.2.4
+      '@helia/delegated-routing-v1-http-api-client': 4.2.5
+      '@helia/interface': 5.4.0
+      '@helia/routers': 3.1.3
+      '@helia/utils': 1.4.0
+      '@ipshipyard/libp2p-auto-tls': 1.0.0
+      '@libp2p/autonat': 2.0.38
+      '@libp2p/bootstrap': 11.0.47
+      '@libp2p/circuit-relay-v2': 3.2.24
+      '@libp2p/config': 1.1.32
+      '@libp2p/dcutr': 2.0.38
+      '@libp2p/identify': 3.0.39
+      '@libp2p/interface': 2.11.0
+      '@libp2p/kad-dht': 15.1.11
+      '@libp2p/keychain': 5.2.9
+      '@libp2p/mdns': 11.0.47
+      '@libp2p/mplex': 11.0.47
+      '@libp2p/ping': 2.0.37
+      '@libp2p/tcp': 10.1.19
+      '@libp2p/tls': 2.2.7
+      '@libp2p/upnp-nat': 3.1.22
+      '@libp2p/webrtc': 5.2.24(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))
+      '@libp2p/websockets': 9.2.19(bufferutil@4.1.0)(utf-8-validate@5.0.10)
+      '@multiformats/dns': 1.0.13
+      blockstore-core: 5.0.4
+      datastore-core: 10.0.4
+      interface-datastore: 8.3.2
+      ipns: 10.1.6
+      libp2p: 2.10.0
+      multiformats: 13.4.2
+    transitivePeerDependencies:
+      - bufferutil
+      - react-native
+      - supports-color
+      - utf-8-validate
+    optional: true
+
   helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10):
     dependencies:
       '@chainsafe/libp2p-noise': 16.1.5
@@ -18465,6 +18933,47 @@ snapshots:
       - react-native
       - supports-color
       - utf-8-validate
+
+  helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(utf-8-validate@6.0.6):
+    dependencies:
+      '@chainsafe/libp2p-noise': 16.1.5
+      '@chainsafe/libp2p-yamux': 7.0.4
+      '@helia/block-brokers': 4.2.4
+      '@helia/delegated-routing-v1-http-api-client': 4.2.5
+      '@helia/interface': 5.4.0
+      '@helia/routers': 3.1.3
+      '@helia/utils': 1.4.0
+      '@ipshipyard/libp2p-auto-tls': 1.0.0
+      '@libp2p/autonat': 2.0.38
+      '@libp2p/bootstrap': 11.0.47
+      '@libp2p/circuit-relay-v2': 3.2.24
+      '@libp2p/config': 1.1.32
+      '@libp2p/dcutr': 2.0.38
+      '@libp2p/identify': 3.0.39
+      '@libp2p/interface': 2.11.0
+      '@libp2p/kad-dht': 15.1.11
+      '@libp2p/keychain': 5.2.9
+      '@libp2p/mdns': 11.0.47
+      '@libp2p/mplex': 11.0.47
+      '@libp2p/ping': 2.0.37
+      '@libp2p/tcp': 10.1.19
+      '@libp2p/tls': 2.2.7
+      '@libp2p/upnp-nat': 3.1.22
+      '@libp2p/webrtc': 5.2.24(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))
+      '@libp2p/websockets': 9.2.19(bufferutil@4.1.0)(utf-8-validate@6.0.6)
+      '@multiformats/dns': 1.0.13
+      blockstore-core: 5.0.4
+      datastore-core: 10.0.4
+      interface-datastore: 8.3.2
+      ipns: 10.1.6
+      libp2p: 2.10.0
+      multiformats: 13.4.2
+    transitivePeerDependencies:
+      - bufferutil
+      - react-native
+      - supports-color
+      - utf-8-validate
+    optional: true
 
   hermes-compiler@250829098.0.10: {}
 
@@ -18933,6 +19442,18 @@ snapshots:
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
+
+  it-ws@6.1.5(bufferutil@4.1.0)(utf-8-validate@6.0.6):
+    dependencies:
+      '@types/ws': 8.18.1
+      event-iterator: 2.0.0
+      it-stream-types: 2.0.4
+      uint8arrays: 5.1.1
+      ws: 8.20.1(bufferutil@4.1.0)(utf-8-validate@6.0.6)
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+    optional: true
 
   jayson@4.3.0(bufferutil@4.1.0)(utf-8-validate@6.0.6):
     dependencies:
@@ -19562,6 +20083,27 @@ snapshots:
       - supports-color
       - utf-8-validate
 
+  metro-transform-worker@0.84.4(bufferutil@4.1.0)(utf-8-validate@6.0.6):
+    dependencies:
+      '@babel/core': 7.29.7
+      '@babel/generator': 7.29.7
+      '@babel/parser': 7.29.7
+      '@babel/types': 7.29.7
+      flow-enums-runtime: 0.0.6
+      metro: 0.84.4(bufferutil@4.1.0)(utf-8-validate@6.0.6)
+      metro-babel-transformer: 0.84.4
+      metro-cache: 0.84.4
+      metro-cache-key: 0.84.4
+      metro-minify-terser: 0.84.4
+      metro-source-map: 0.84.4
+      metro-transform-plugins: 0.84.4
+      nullthrows: 1.1.1
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+    optional: true
+
   metro@0.84.4(bufferutil@4.1.0)(utf-8-validate@5.0.10):
     dependencies:
       '@babel/code-frame': 7.29.7
@@ -19607,6 +20149,53 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
+
+  metro@0.84.4(bufferutil@4.1.0)(utf-8-validate@6.0.6):
+    dependencies:
+      '@babel/code-frame': 7.29.7
+      '@babel/core': 7.29.7
+      '@babel/generator': 7.29.7
+      '@babel/parser': 7.29.7
+      '@babel/template': 7.29.7
+      '@babel/traverse': 7.29.7
+      '@babel/types': 7.29.7
+      accepts: 2.0.0
+      ci-info: 2.0.0
+      connect: 3.7.0
+      debug: 4.4.3
+      error-stack-parser: 2.1.4
+      flow-enums-runtime: 0.0.6
+      graceful-fs: 4.2.11
+      hermes-parser: 0.35.0
+      image-size: 1.2.1
+      invariant: 2.2.4
+      jest-worker: 29.7.0
+      jsc-safe-url: 0.2.4
+      lodash.throttle: 4.1.1
+      metro-babel-transformer: 0.84.4
+      metro-cache: 0.84.4
+      metro-cache-key: 0.84.4
+      metro-config: 0.84.4(bufferutil@4.1.0)(utf-8-validate@5.0.10)
+      metro-core: 0.84.4
+      metro-file-map: 0.84.4
+      metro-resolver: 0.84.4
+      metro-runtime: 0.84.4
+      metro-source-map: 0.84.4
+      metro-symbolicate: 0.84.4
+      metro-transform-plugins: 0.84.4
+      metro-transform-worker: 0.84.4(bufferutil@4.1.0)(utf-8-validate@6.0.6)
+      mime-types: 3.0.2
+      nullthrows: 1.1.1
+      serialize-error: 2.1.0
+      source-map: 0.5.7
+      throat: 5.0.0
+      ws: 7.5.11(bufferutil@4.1.0)(utf-8-validate@6.0.6)
+      yargs: 17.7.2
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+    optional: true
 
   micro-ftch@0.3.1: {}
 
@@ -20759,6 +21348,15 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
+  react-devtools-core@6.1.5(bufferutil@4.1.0)(utf-8-validate@6.0.6):
+    dependencies:
+      shell-quote: 1.8.4
+      ws: 7.5.11(bufferutil@4.1.0)(utf-8-validate@6.0.6)
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+    optional: true
+
   react-dom@19.2.4(react@19.2.4):
     dependencies:
       react: 19.2.4
@@ -20768,6 +21366,16 @@ snapshots:
 
   react-is@18.3.1: {}
 
+  react-native-webrtc@124.0.7(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10)):
+    dependencies:
+      base64-js: 1.5.1
+      debug: 4.3.4
+      event-target-shim: 6.0.2
+      react-native: 0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10)
+    transitivePeerDependencies:
+      - supports-color
+    optional: true
+
   react-native-webrtc@124.0.7(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@5.0.10)):
     dependencies:
       base64-js: 1.5.1
@@ -20776,6 +21384,16 @@ snapshots:
       react-native: 0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
       - supports-color
+
+  react-native-webrtc@124.0.7(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6)):
+    dependencies:
+      base64-js: 1.5.1
+      debug: 4.3.4
+      event-target-shim: 6.0.2
+      react-native: 0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6)
+    transitivePeerDependencies:
+      - supports-color
+    optional: true
 
   react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10):
     dependencies:
@@ -20867,6 +21485,52 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
+
+  react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6):
+    dependencies:
+      '@react-native/assets-registry': 0.85.3
+      '@react-native/codegen': 0.85.3(@babel/core@7.29.7)
+      '@react-native/community-cli-plugin': 0.85.3(bufferutil@4.1.0)(utf-8-validate@6.0.6)
+      '@react-native/gradle-plugin': 0.85.3
+      '@react-native/js-polyfills': 0.85.3
+      '@react-native/normalize-colors': 0.85.3
+      '@react-native/virtualized-lists': 0.85.3(@types/react@19.2.15)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.6)(utf-8-validate@6.0.6))(react@19.2.6)
+      abort-controller: 3.0.0
+      anser: 1.4.10
+      ansi-regex: 5.0.1
+      babel-plugin-syntax-hermes-parser: 0.33.3
+      base64-js: 1.5.1
+      commander: 12.1.0
+      flow-enums-runtime: 0.0.6
+      hermes-compiler: 250829098.0.10
+      invariant: 2.2.4
+      memoize-one: 5.2.1
+      metro-runtime: 0.84.4
+      metro-source-map: 0.84.4
+      nullthrows: 1.1.1
+      pretty-format: 29.7.0
+      promise: 8.3.0
+      react: 19.2.6
+      react-devtools-core: 6.1.5(bufferutil@4.1.0)(utf-8-validate@6.0.6)
+      react-refresh: 0.14.2
+      regenerator-runtime: 0.13.11
+      scheduler: 0.27.0
+      semver: 7.8.1
+      stacktrace-parser: 0.1.11
+      tinyglobby: 0.2.16
+      whatwg-fetch: 3.6.20
+      ws: 7.5.11(bufferutil@4.1.0)(utf-8-validate@6.0.6)
+      yargs: 17.7.2
+    optionalDependencies:
+      '@types/react': 19.2.15
+    transitivePeerDependencies:
+      - '@babel/core'
+      - '@react-native-community/cli'
+      - '@react-native/metro-config'
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+    optional: true
 
   react-refresh@0.14.2: {}
 
