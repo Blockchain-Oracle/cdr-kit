@@ -1,6 +1,48 @@
 ---
 title: Quickstart
-description: Ship private, paid, license-gated data on Story in under 60 seconds.
+description: Install the React layer, wrap your app in a provider, drop in a VaultGate. That's it.
+breadcrumb: ["@cdr-kit", "Getting started", "Quickstart"]
+prev:
+  href: /docs
+  label: Introduction
+next:
+  href: /docs/theming
+  label: Theming
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Install
+
+<CodePanel title="terminal" language="bash" code="$ pnpm add @cdr-kit/react @cdr-kit/core wagmi viem" />
+
+## Wrap in &lt;CdrProvider&gt;
+
+<p><code>&lt;CdrProvider&gt;</code> wires <code>WagmiProvider</code>, react-query, and initializes the CDR crypto WASM. Pass <code>config</code> + <code>apiUrl</code> for live mode, or <code>mockKit</code> for offline dev.</p>
+
+<CodePanel title="App.tsx" code={`import { CdrProvider } from "@cdr-kit/react";
+import { wagmiConfig } from "./wagmi";
+
+export function App({ children }) {
+  return (
+    <CdrProvider config={wagmiConfig} apiUrl={process.env.NEXT_PUBLIC_CDR_API_URL!}>
+      {children}
+    </CdrProvider>
+  );
+}`} />
+
+## Gate your data
+
+<p><code>&lt;VaultGate&gt;</code> checks the on-chain condition, collects key shares, and hands you the decrypted bytes. Pass a fallback for the "not yet entitled" state.</p>
+
+<CodePanel title="SignalCard.tsx" code={`import { VaultGate } from "@cdr-kit/react";
+
+export function SignalCard() {
+  return (
+    <VaultGate uuid={4200} auto fallback={<SubscribeButton />}>
+      {(data) => <pre>{new TextDecoder().decode(data)}</pre>}
+    </VaultGate>
+  );
+}`} />
+
+## Or scaffold a starter
+
+<CodePanel title="terminal" language="bash" code="$ npm create cdr-kit" />

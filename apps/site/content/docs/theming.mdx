@@ -1,6 +1,37 @@
 ---
 title: Theming
-description: Customize cdr-kit's design tokens to match your brand.
+description: "@cdr-kit/react is intentionally headless. Theme the look through CSS custom properties passed via CdrProvider.appearance.variables."
+breadcrumb: ["@cdr-kit", "Getting started", "Theming"]
+prev:
+  href: /docs/quickstart
+  label: Quickstart
+next:
+  href: /docs/components/cdr-provider
+  label: CdrProvider
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Recognized tokens
+
+<ul>
+  <li><code>--cdr-accent</code> — primary accent</li>
+  <li><code>--cdr-border</code> — hairline border color</li>
+  <li><code>--cdr-skeleton</code> — placeholder background</li>
+  <li><code>--cdr-fg</code>, <code>--cdr-muted</code> — text colors</li>
+</ul>
+
+## Passing tokens
+
+<CodePanel title="App.tsx" code={`<CdrProvider
+  appearance={{
+    variables: {
+      "--cdr-accent": "#3E3BE3",
+      "--cdr-border": "#E6E2DA",
+      "--cdr-skeleton": "#EDEAE2",
+    },
+  }}
+  // ...
+>`} />
+
+## Styled variants
+
+<p>Want batteries-included pre-styled components instead of headless slots? See <code>@cdr-kit/react-ui</code> in the component gallery.</p>

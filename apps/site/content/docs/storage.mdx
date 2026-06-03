@@ -1,6 +1,138 @@
 ---
 title: Storage adapters
-description: S3, Storacha, Helia, Pinata, Supabase — drop-in storage providers.
+description: CDR vaults route payloads by size. Pick a CdrStorageProvider — 8 ship in @cdr-kit/core (5 core + 3 ecosystem). All speak the same upload/download 2-method interface.
+importLine: 'import { createPinataStorage, createSupabaseStorage, /* ... */ } from "@cdr-kit/core"'
+breadcrumb: ["@cdr-kit/core", "Storage adapters"]
+prev:
+  href: /docs/hooks/use-storage-backend
+  label: useStorageBackend
+next:
+  href: /docs/contracts
+  label: Condition library
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Pick the right adapter
+
+<ul>
+  <li><b>Buyer-only / dashboards</b> → <code>createReadOnlyGatewayStorage</code> (no pin creds needed, throws on upload).</li>
+  <li><b>Hosted IPFS pinning</b> → <code>createPinataStorage</code> (JWT, default Pinata gateway).</li>
+  <li><b>Already-have-Supabase shops</b> → <code>createSupabaseStorage</code> (bucket + service-role key, bare REST — no <code>@supabase/supabase-js</code> dep).</li>
+  <li><b>Self-hosted Kubo / custom pinner</b> → <code>createIpfsStorage</code> (multipart POST + JSON CID response).</li>
+  <li><b>AWS S3 / R2 / MinIO</b> → <code>createS3Storage</code> (signed-URL downloads, lazy-loads <code>@aws-sdk/client-s3</code>).</li>
+  <li><b>UCAN-backed pinning</b> → <code>createStorachaStorage</code> (peer-dep <code>@web3-storage/w3up-client</code>).</li>
+  <li><b>Browser-embedded IPFS</b> → <code>createHeliaStorage</code> (peer-dep <code>helia</code>, user is the node).</li>
+  <li><b>Tests / CI</b> → <code>createMemoryStorage</code> (content-addressed, real CIDv1).</li>
+</ul>
+
+## createPinataStorage
+
+<CodePanel title="ts" language="ts" code={`import { createPinataStorage, uploadFile } from "@cdr-kit/core";
+
+const storage = createPinataStorage({ jwt: process.env.PINATA_JWT! });
+const { uuid, cid, txHashes } = await uploadFile(client, {
+  content: fileBytes,
+  storage,
+  readConditionAddr,
+  readConditionData,
+});`} />
+
+## createSupabaseStorage
+
+<CodePanel title="ts" language="ts" code={`import { createSupabaseStorage } from "@cdr-kit/core";
+
+const storage = createSupabaseStorage({
+  supabaseUrl: process.env.SUPABASE_URL!,
+  key: process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  bucket: "cdr-secrets",
+  pathPrefix: "vaults/",       // optional, default "cdr/"
+  bucketIsPublic: false,        // download uses /authenticated/ when private
+});`} />
+
+<p>The "CID" is the bucket-relative path the object was uploaded to. Supabase doesn't speak IPFS, but <code>CdrStorageProvider</code> only requires a string round-trip handle.</p>
+
+## createReadOnlyGatewayStorage
+
+<CodePanel title="ts" language="ts" code={`import { createReadOnlyGatewayStorage, downloadFile } from "@cdr-kit/core";
+
+// Buyer-side: read from any public IPFS gateway. Throws on upload() — by design.
+const storage = createReadOnlyGatewayStorage({ gatewayUrl: "https://gateway.pinata.cloud" });
+const { content } = await downloadFile(client, { uuid, storage });`} />
+
+<p>For dashboards that consume but never produce. Pair with a seller using <code>createPinataStorage</code> (or any IPFS pinner) on the write side.</p>
+
+## createIpfsStorage
+
+<CodePanel title="ts" language="ts" code={`import { createIpfsStorage } from "@cdr-kit/core";
+
+// Self-hosted Kubo, or any pinning service with a multipart POST + JSON CID response.
+const storage = createIpfsStorage({
+  addUrl: "http://kubo:5001/api/v0/add",
+  gatewayUrl: "http://kubo:8080",
+  headers: { Authorization: "Bearer ..." },
+});`} />
+
+## createMemoryStorage
+
+<CodePanel title="ts" language="ts" code={`import { createMemoryStorage } from "@cdr-kit/core";
+
+// Unit tests, CI, mocks. Content-addressed, returns a real CIDv1.
+const storage = createMemoryStorage();`} />
+
+## Inline cap + routing
+
+<p>CDR sizes payloads at write time. The hard cap comes from the on-chain <code>CDR.maxEncryptedDataSize()</code> (currently ≈ 1 KB after TDH2 overhead). <code>getInlineLimit(client)</code> reads it once + caches; <code>shouldUseFile(content, limit)</code> picks the routing.</p>
+
+<CodePanel title="ts" language="ts" code={`import { shouldUseFile, getInlineLimit } from "@cdr-kit/core";
+
+const limit = await getInlineLimit(client);   // reads CDR.maxEncryptedDataSize() once + caches
+if (shouldUseFile(content, limit)) {
+  await uploadFile(client, { content, storage, readConditionAddr, readConditionData });
+} else {
+  await writeVaultData(client, { uuid, dataKey: content });
+}`} />
+
+## createS3Storage
+
+<p>Works against AWS S3, Cloudflare R2, or any S3-compatible store. The SDK is loaded lazily via dynamic import so non-S3 deployments don't pay the bundle cost. Install <code>@aws-sdk/client-s3</code> yourself in your project.</p>
+
+<CodePanel title="ts" language="ts" code={`import { createS3Storage } from "@cdr-kit/core";
+
+// Works against AWS S3, Cloudflare R2, MinIO, or any S3-compatible store.
+// Lazy-loads @aws-sdk/client-s3 via dynamic import — install it yourself.
+const storage = await createS3Storage({
+  bucket: "cdr-secrets",
+  region: "auto",                                     // R2: "auto"; AWS: "us-east-1" etc.
+  endpoint: "https://<acct>.r2.cloudflarestorage.com", // omit for AWS
+  accessKeyId: process.env.S3_ACCESS_KEY_ID!,
+  secretAccessKey: process.env.S3_SECRET_ACCESS_KEY!,
+  publicUrlBase: "https://<acct>.r2.dev/cdr-secrets",  // for browser-readable downloads
+  prefix: "cdr/",
+});`} />
+
+## createStorachaStorage
+
+<p>UCAN-backed pinning service. Lazy-loads <code>@web3-storage/w3up-client</code>; install it yourself. The agent address must be authorized for the Space via a base64 UCAN proof.</p>
+
+<CodePanel title="ts" language="ts" code={`import { createStorachaStorage } from "@cdr-kit/core";
+
+// Storacha-server (UCAN-backed pinning over @web3-storage/w3up-client).
+// Install: pnpm add @web3-storage/w3up-client
+const storage = await createStorachaStorage({
+  key: process.env.STORACHA_KEY!,
+  spaceDid: process.env.STORACHA_SPACE_DID!,
+  proof: process.env.STORACHA_PROOF!,    // base64 UCAN delegation
+  gatewayUrl: "https://w3s.link",         // optional, default w3s.link
+});`} />
+
+## createHeliaStorage
+
+<p>Browser-side embedded IPFS. The user's tab IS the IPFS node — no remote pinner needed. Lazy-loads <code>helia</code> + <code>@helia/unixfs</code>. Pin <code>@peculiar/webcrypto: 1.7.0</code> in <code>pnpm.overrides</code> (Helia's WASM init is sensitive to webcrypto version drift).</p>
+
+<CodePanel title="ts" language="ts" code={`import { createHeliaStorage } from "@cdr-kit/core";
+
+// Browser-side embedded IPFS via Helia — no remote pinner, the user is the node.
+// Install: pnpm add helia @helia/unixfs
+// Pin @peculiar/webcrypto: 1.7.0 in pnpm.overrides (Helia's wasm setup is fragile).
+const storage = await createHeliaStorage({
+  gatewayUrl: "https://ipfs.io",  // optional, only used by downloadFile if user is offline
+});`} />

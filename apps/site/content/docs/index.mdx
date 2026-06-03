@@ -1,6 +1,35 @@
 ---
 title: Introduction
-description: Developer toolkit for Story Protocol's Confidential Data Rails.
+description: cdr-kit is the developer toolkit for Story Protocol's Confidential Data Rails — the wagmi-style layer that makes it possible to ship private, paid, license-gated data on Story without hand-writing Solidity, hand-rolling encryption flows, or wiring IP licensing primitives by hand.
+breadcrumb: ["@cdr-kit", "Getting started", "Introduction"]
+next:
+  href: /docs/quickstart
+  label: Quickstart
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## What's in the kit
+
+<p>15 packages, MIT-licensed, all published to <a href="https://www.npmjs.com/org/cdr-kit" target="_blank" rel="noopener noreferrer">npmjs.com/org/cdr-kit</a> at v0.5.0:</p>
+
+<ul>
+  <li><a href="/docs/components/vault-gate"><code>@cdr-kit/react</code></a> — components + hooks + theming (5 new 0.5 components, 7 new hooks)</li>
+  <li><code>@cdr-kit/react-ui</code> — styled drop-ins built on the headless layer</li>
+  <li><a href="/docs/components/cdr-provider"><code>@cdr-kit/core</code></a> — typed SDK (condition encoders, 2-step flows, 8 storage adapters, mock kit, WASM init)</li>
+  <li><a href="/docs/contracts"><code>@cdr-kit/contracts</code></a> — Solidity ABIs + deployed addresses for 9 conditions (5 base + 4 advanced in 0.5)</li>
+  <li><a href="/docs/agent-kit"><code>@cdr-kit/agent</code></a> — autonomous-agent client (discover → subscribe → access; +12 advanced helpers in 0.5)</li>
+  <li><a href="/docs/story"><code>@cdr-kit/story</code></a> — Story IP creator surface (NEW in 0.5): registerIpAsset / PIL flavors / mintLicenseTokens</li>
+  <li><code>@cdr-kit/tools</code> — framework-agnostic tool definitions (34 tools)</li>
+  <li>Framework adapters: <a href="/docs/agent-kit/vercel-ai"><code>@cdr-kit/vercel-ai</code></a> · <a href="/docs/agent-kit/openai"><code>@cdr-kit/openai</code></a> · <a href="/docs/agent-kit/langchain"><code>@cdr-kit/langchain</code></a> · <a href="/docs/agent-kit/agentkit"><code>@cdr-kit/agentkit</code></a> · <a href="/docs/agent-kit/goat"><code>@cdr-kit/goat</code></a></li>
+  <li><a href="/docs/agent-kit/mcp"><code>@cdr-kit/mcp</code></a> — the MCP server (Claude Desktop / Cursor / Windsurf / OpenClaw)</li>
+  <li><a href="/docs/cli"><code>@cdr-kit/cli</code></a> — the <span className="mono">cdr</span> binary (25 commands across vault / multi-sig / escrow / IP)</li>
+  <li><a href="/docs/scaffolder"><code>create-cdr-kit-app</code></a> — the scaffolder</li>
+</ul>
+
+## Where to start
+
+<ul>
+  <li><a href="/docs/quickstart">Quickstart</a> — install, gate encrypted data in under 60s.</li>
+  <li><a href="/docs/components/vault-gate">VaultGate component</a> — the canonical drop-in.</li>
+  <li><a href="/docs/agent-kit">Agent kit overview</a> — autonomous agents that buy data.</li>
+  <li><a href="/docs/contracts">Condition library</a> — the Solidity standard library.</li>
+</ul>
