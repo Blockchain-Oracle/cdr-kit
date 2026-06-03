@@ -136,13 +136,11 @@ const { fields, submittedAt } = await readFormSubmission(vaultId, {
 
 Admin-side tile-grid for picking which `CdrStorageProvider` your platform routes form submissions through. **Not for respondent UIs** — render this in your setup screen, then wire the picked id to the matching factory on the server.
 
-```tsx
-import { StorageProviderPicker, type StorageProviderId } from "@cdr-kit/forms";
+<CodePanel title="tsx" language="tsx" code={`import { StorageProviderPicker } from "@cdr-kit/forms";
 import { useState } from "react";
 
-const [provider, setProvider] = useState<StorageProviderId>("pinata");
-return <StorageProviderPicker value={provider} onChange={setProvider} />;
-```
+const [provider, setProvider] = useState("pinata");
+return <StorageProviderPicker value={provider} onChange={setProvider} />;`} />
 
 <PropsTable rows={[
   { name: "value", type: "StorageProviderId | undefined", description: "Currently-selected provider id. Pass undefined for 'none chosen'." },

@@ -13,11 +13,11 @@ next:
 
 ## Live preview
 
-<Demo badge={<Badge>mock kit</Badge>} preview={<StorageProviderPickerDemo />} code={`import { StorageProviderPicker, type StorageProviderId } from "@cdr-kit/forms";
+<Demo badge={<Badge>mock kit</Badge>} preview={<StorageProviderPickerDemo />} code={`import { StorageProviderPicker } from "@cdr-kit/forms";
 import { useState } from "react";
 
 export function StorageSetup() {
-  const [provider, setProvider] = useState<StorageProviderId>("pinata");
+  const [provider, setProvider] = useState("pinata");
   return <StorageProviderPicker value={provider} onChange={setProvider} />;
 }`} />
 

@@ -50,6 +50,33 @@ export function DocsMockProvider({ children }: { children: ReactNode }) {
         "She told the press she was alone in Tahoe. The timeline in the official record doesn't add up — and the photo nobody published shows otherwise.",
       ),
     });
+    // Pre-seed the legacy uuid range used by the /showcase/blog story + the
+    // UnlockableDemo component (uuids 4242–4244). These are hardcoded literals
+    // in the showcase prose and the gallery demo, not the DEMO_VAULTS constants,
+    // so they need their own seed entries here.
+    void kit.writeVaultData({
+      uuid: 4242,
+      dataKey: enc.encode(
+        // Sheriff's-report exhibit — short prose redacted-style snippet so the demo's reveal feels textual.
+        "Exhibit 14B · Lakeside SO Case 0741\nWitness places a second subject on the dock at 22:47 PT. " +
+          "Description: female, 5'7\", dark coat. Conflicts with subject's solo-residence statement filed 23:10 PT.",
+      ),
+    });
+    void kit.writeVaultData({
+      uuid: 4243,
+      dataKey: enc.encode(
+        "[image · LAKESIDE-0741 · 4.4 MB · single-frame negative]\n" +
+          "(In a live deploy, this vault would carry the CID of the encrypted photograph; the mock returns the descriptor so the reveal lands cleanly.)",
+      ),
+    });
+    void kit.writeVaultData({
+      uuid: 4244,
+      dataKey: enc.encode(
+        "Closing chapter — torn page, in Arlo's hand:\n\n" +
+          "“I told them I was alone. I wasn't. The boat-house door was open for an hour and I am the only one who knows why. " +
+          "If you are reading this it means the page survived me. That was the part I did not plan for.”",
+      ),
+    });
     return kit;
   }, []);
 

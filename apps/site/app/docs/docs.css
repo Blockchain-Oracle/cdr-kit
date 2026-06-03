@@ -82,10 +82,20 @@
 .crumbs { font-family: var(--mono); font-size: 0.76rem; color: var(--ink-3); display: flex; gap: 8px; align-items: center; margin-bottom: 18px; }
 .crumbs .sep { color: var(--line-2); }
 .crumbs .cur { color: var(--ink-2); }
-.doc-title { font-family: var(--display); font-size: clamp(2.1rem, 4vw, 2.9rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.0; }
+.doc-title { font-family: var(--display); font-size: clamp(1.7rem, 6.5vw, 2.9rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; overflow-wrap: anywhere; word-break: break-word; min-width: 0; }
 .doc-titlerow { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 14px; }
 .doc-lede { font-size: 1.12rem; color: var(--ink-2); line-height: 1.55; margin-bottom: 14px; }
-.doc-imports { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 30px; }
+.doc-imports { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 30px; max-width: 100%; min-width: 0; }
+/* Import-line badge: keeps single-line code readability, but scrolls horizontally
+ * inside itself instead of pushing the whole page wider on mobile. */
+.doc-imports .badge {
+  max-width: 100%;
+  overflow-x: auto;
+  min-width: 0;
+  scrollbar-width: thin;
+}
+.doc-imports .badge::-webkit-scrollbar { height: 4px; }
+.doc-imports .badge::-webkit-scrollbar-thumb { background: var(--line-2); border-radius: 4px; }
 
 .doc h2 {
   font-family: var(--display); font-size: 1.42rem; font-weight: 700; letter-spacing: -0.02em;
@@ -127,9 +137,16 @@
 .demo-stage {
   padding: 40px 28px; min-height: 320px;
   display: grid; place-items: center;
+  /* `minmax(0, 1fr)` lets the stage shrink below intrinsic content width on mobile,
+   * so embedded pickers / forms / code blocks don't push the page horizontally. */
+  grid-template-columns: minmax(0, 1fr);
   background: radial-gradient(var(--line) 1px, transparent 1px);
   background-size: 18px 18px;
   background-position: -9px -9px;
+}
+.demo-stage > * { min-width: 0; max-width: 100%; }
+@media (max-width: 540px) {
+  .demo-stage { padding: 22px 14px; }
 }
 [data-theme="dark"] .demo-stage { background-image: radial-gradient(oklch(0.30 0.01 265) 1px, transparent 1px); }
 .demo-code-pane { display: none; }

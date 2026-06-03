@@ -100,6 +100,8 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
+  min-width: 0;     /* allow shrinking below intrinsic content width when used in narrow flex/grid containers */
+  width: 100%;
 }
 [data-theme="dark"] :where([data-cdr-provider-picker]) {
   --cdr-forms-bg: oklch(0.175 0.008 265);
@@ -119,21 +121,25 @@
   margin: 0;
 }
 
-/* chip row */
+/* chip row — CSS grid with auto-fit so chips lay out 2/3/4 per row depending on container
+ * width, never collapsing to single-column unless the container is <120px wide. */
 [data-cdr-provider-chips] {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-  padding: 7px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+  gap: 6px;
+  padding: 6px;
   background: color-mix(in oklab, var(--cdr-forms-card) 96%, var(--cdr-forms-line) 4%);
   border: 1px solid var(--cdr-forms-line);
   border-radius: var(--cdr-forms-radius);
+  min-width: 0;
 }
 [data-cdr-provider-chip] {
-  display: inline-flex;
+  display: flex;       /* grid child — `flex` so the chip fills its grid cell, contents centered */
   align-items: center;
+  justify-content: flex-start;
   gap: 7px;
-  padding: 7px 11px 7px 8px;
+  padding: 7px 10px 7px 8px;
+  min-width: 0;
   font: inherit;
   font-size: 0.86rem;
   font-weight: 500;
@@ -144,6 +150,13 @@
   border-radius: 999px;
   cursor: pointer;
   transition: background-color 0.14s ease, border-color 0.14s ease, color 0.14s ease, transform 0.12s ease;
+}
+[data-cdr-provider-chipname] {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex: 1;
 }
 [data-cdr-provider-chip]:hover {
   background: color-mix(in oklab, var(--cdr-forms-card) 70%, var(--cdr-provider-brand) 8%);
@@ -166,7 +179,6 @@
   flex-shrink: 0;
 }
 [data-cdr-provider-mark] svg { width: 18px; height: 18px; display: block; }
-[data-cdr-provider-chipname] { white-space: nowrap; }
 
 /* detail card */
 [data-cdr-provider-detail] {
@@ -174,6 +186,7 @@
   flex-direction: column;
   gap: 12px;
   padding: 18px;
+  min-width: 0;  /* prevent pre-formatted code snippet from forcing parent width on mobile */
   background:
     radial-gradient(120% 70% at 0% 0%, color-mix(in oklab, var(--cdr-provider-brand) 9%, transparent), transparent 60%),
     var(--cdr-forms-card);
@@ -202,9 +215,10 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
-  flex: 1;
+  flex: 1 1 0;
   min-width: 0;
 }
+[data-cdr-provider-detail-desc] { word-wrap: break-word; overflow-wrap: anywhere; }
 [data-cdr-provider-detail-name] {
   margin: 0;
   font-size: 1rem;

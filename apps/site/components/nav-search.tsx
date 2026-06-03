@@ -48,6 +48,17 @@ const __dynImport = (specifier: string): Promise<unknown> => {
   return dyn(specifier);
 };
 
+/** Pagefind URLs come from the prerendered html source — strip the .html so the
+ *  client links to the route Next.js actually serves. Idempotent. */
+function normalizeSearchUrl(url: string): string {
+  // Drop trailing /index.html or .html
+  let u = url.replace(/\/index\.html$/i, "/");
+  u = u.replace(/\.html$/i, "");
+  // Collapse a trailing slash (except for the root) so "/docs/" → "/docs"
+  if (u.length > 1 && u.endsWith("/")) u = u.slice(0, -1);
+  return u;
+}
+
 async function loadPagefind(): Promise<PagefindAPI | null> {
   if (typeof window === "undefined") return null;
   if (window.pagefind) return window.pagefind;
@@ -121,7 +132,10 @@ export function NavSearch() {
         data.map((d, i) => ({
           id: search.results[i]!.id,
           title: d.meta.title ?? d.url,
-          url: d.url,
+          // Pagefind indexes the prerendered .html files, so the urls come back as
+          // /docs/foo.html — Next.js's app router serves them at /docs/foo (no extension).
+          // Strip the trailing .html / index.html so clicking a result doesn't 404.
+          url: normalizeSearchUrl(d.url),
           excerpt: d.excerpt,
         })),
       );
