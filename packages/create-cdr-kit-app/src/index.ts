@@ -55,8 +55,28 @@ function printHelp(): void {
   for (const t of listTemplates()) process.stdout.write(`  ${t.name.padEnd(20)}  ${t.description}\n`);
 }
 
-// CLI entry (skipped when imported, e.g. by tests).
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+// CLI entry — fires when invoked as a binary (npx, pnpm dlx, ./dist/index.mjs, etc.).
+// We can't strictly compare `process.argv[1] === fileURLToPath(import.meta.url)` because npm/npx
+// route through a wrapper script, making argv[1] the wrapper path. Instead detect "is this the
+// entrypoint?" by checking whether argv[1] is a sibling/parent of THIS module file. Skip when
+// imported via require/import (e.g. tests do `import { scaffold } from '../src/index.js'`).
+const _isCli = (() => {
+  try {
+    const here = fileURLToPath(import.meta.url);
+    const entry = process.argv[1] ?? "";
+    if (!entry) return false;
+    // Exact path match (covers direct node invocation)
+    if (entry === here) return true;
+    // Wrapper match: bin scripts share a basename ("create-cdr-kit-app") with no extension
+    const entryBase = entry.split("/").pop() ?? "";
+    if (entryBase === "create-cdr-kit-app" || entryBase === "create-cdr-kit-app.js") return true;
+    return false;
+  } catch {
+    return false;
+  }
+})();
+
+if (_isCli) {
   try {
     const { target, template, help } = parseArgs(process.argv.slice(2));
     if (help || !target) {
