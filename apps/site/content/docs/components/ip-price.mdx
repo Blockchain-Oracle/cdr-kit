@@ -1,6 +1,29 @@
 ---
-title: IpPrice
-description: Formats wei → IP, renders License-gated for null.
+title: "<IpPrice>"
+description: 'Formats wei as n IP with an optional period suffix. Pass null for license-gated vaults — renders the standard alt label.'
+importLine: 'import { IpPrice } from "@cdr-kit/react-ui"'
+breadcrumb: ["@cdr-kit/react-ui", "DX primitives", "IpPrice"]
+prev:
+  href: /docs/components/explorer-link
+  label: ExplorerLink
+next:
+  href: /docs/components/cdr-network-chip
+  label: CdrNetworkChip
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+import { IpPrice } from "@cdr-kit/react-ui";
+
+## Live preview
+
+<Demo preview={<div style={{ display: "flex", flexWrap: "wrap", gap: 18, alignItems: "center" }}><IpPrice wei={5n * 10n ** 18n} period="/ 30d" /><IpPrice wei={null} /></div>} code={`import { IpPrice } from "@cdr-kit/react-ui";
+
+<IpPrice wei={5n * 10n ** 18n} period="/ 30d" />
+<IpPrice wei={null} />            {/* "License-gated" */}`} />
+
+## Props
+
+<PropsTable rows={[
+  { name: "wei", type: "bigint | null", required: true, description: 'Price in wei. null renders "License-gated".' },
+  { name: "period", type: "string", description: 'Suffix appended after the IP value (e.g. "/ 30d").' },
+  { name: "decimals", type: "number", defaultValue: "4", description: "Max significant decimal digits in the formatted output." },
+]} />

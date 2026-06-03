@@ -1,6 +1,25 @@
 ---
-title: CdrInspector
-description: Dev panel showing mock|live mode, WASM and API status.
+title: "<CdrInspector>"
+description: "Drop-in debug strip showing how the kit is wired (mock vs live, WASM ready, API URL). Keep it in dev builds; remove or guard for production."
+importLine: 'import { CdrInspector } from "@cdr-kit/react"'
+breadcrumb: ["@cdr-kit/react", "Components", "CdrInspector"]
+prev:
+  href: /docs/components/vault
+  label: Vault compound
+next:
+  href: /docs/components/cdr-skeleton
+  label: CdrSkeleton
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Live preview
+
+<Demo preview={<CdrInspectorDemo />} code={`import { CdrInspector } from "@cdr-kit/react";
+
+export function App() {
+  return (
+    <CdrProvider mockKit={createMockCdrKit()}>
+      {process.env.NODE_ENV !== "production" && <CdrInspector />}
+      {/* …rest of app */}
+    </CdrProvider>
+  );
+}`} />

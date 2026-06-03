@@ -1,6 +1,27 @@
 ---
-title: CdrSpinner
-description: 18px rotating border spinner.
+title: "<CdrSpinner>"
+description: "Indeterminate CSS spinner. Use when you don't have a determinate progress to show (e.g. wallet confirmation)."
+importLine: 'import { CdrSpinner } from "@cdr-kit/react-ui"'
+breadcrumb: ["@cdr-kit/react-ui", "DX primitives", "CdrSpinner"]
+prev:
+  href: /docs/components/cdr-network-chip
+  label: CdrNetworkChip
+next:
+  href: /docs/components/cdr-progress
+  label: CdrProgress
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+import { CdrSpinner } from "@cdr-kit/react-ui";
+
+## Live preview
+
+<Demo preview={<div style={{ display: "flex", gap: 18, alignItems: "center" }}><CdrSpinner /><CdrSpinner size={24} /></div>} code={`import { CdrSpinner } from "@cdr-kit/react-ui";
+
+<CdrSpinner />
+<CdrSpinner size={24} />`} />
+
+## Props
+
+<PropsTable rows={[
+  { name: "size", type: "number", defaultValue: "18", description: "Pixel size of the square spinner box." },
+]} />

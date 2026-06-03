@@ -1,6 +1,30 @@
 ---
-title: AccessStepper
-description: pay → collect-partials → decrypt ordered stepper.
+title: "<AccessStepper>"
+description: "Designed wait-state UI for the 2-step pay→access flow. Derives step state from useAccessVault's status + an optional {collected, threshold} for the determinate partial-collection bar."
+importLine: 'import { AccessStepper } from "@cdr-kit/react-ui"'
+breadcrumb: ["@cdr-kit/react-ui", "Components", "AccessStepper"]
+prev:
+  href: /docs/components/condition-badge
+  label: ConditionBadge
+next:
+  href: /docs/components/subscribe-button
+  label: SubscribeButton
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Live preview
+
+<Demo preview={<AccessStepperDemo />} code={`import { AccessStepper } from "@cdr-kit/react-ui";
+import { useAccessVault } from "@cdr-kit/react";
+
+function Stepper({ uuid }) {
+  const { status, progress } = useAccessVault(uuid);
+  return <AccessStepper status={status} progress={progress} withPay />;
+}`} badge={<Badge>phase selector</Badge>} />
+
+## Props
+
+<PropsTable rows={[
+  { name: "status", type: '"idle" | "paying" | "collecting-partials" | "ready" | "error"', required: true, description: "Drives which step is active / done / errored." },
+  { name: "progress", type: "{ collected: number; threshold: number }", description: "When provided, drives the determinate partials bar in the collecting step." },
+  { name: "withPay", type: "boolean", defaultValue: "true", description: "Include the leading Subscribe & pay step (for subscription-gated vaults)." },
+]} />

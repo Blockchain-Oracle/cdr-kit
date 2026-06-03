@@ -3,6 +3,7 @@ import { STARTER } from "./starter.js";
 import { BLOG } from "./blog.js";
 import { PAYWALL } from "./paywall.js";
 import { DATA_MARKETPLACE } from "./data-marketplace.js";
+import { FORMS } from "./forms.js";
 import { MCP_SERVER } from "./mcp-server.js";
 import { AGENT_VERCEL_AI, AGENT_OPENAI, AGENT_LANGCHAIN, AGENT_AGENTKIT, AGENT_GOAT } from "./agents.js";
 
@@ -13,6 +14,7 @@ const TEMPLATES: Partial<Record<TemplateName, Template>> = {
   blog: BLOG,
   paywall: PAYWALL,
   "data-marketplace": DATA_MARKETPLACE,
+  forms: FORMS,
   "mcp-server": MCP_SERVER,
   "agent-vercel-ai": AGENT_VERCEL_AI,
   "agent-openai": AGENT_OPENAI,

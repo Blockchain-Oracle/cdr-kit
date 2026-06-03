@@ -1,6 +1,41 @@
 ---
-title: EscrowDeliveryConfirm
-description: Buyer/seller pay + confirm-delivery flow.
+title: "<EscrowDeliveryConfirm>"
+description: "Buyer-side flow for ConditionalEscrowCondition: pay → confirm delivery → seller paid + buyer reads. Surfaces the timeout countdown after which the seller can claim unilaterally."
+importLine: 'import { EscrowDeliveryConfirm } from "@cdr-kit/react"'
+breadcrumb: ["@cdr-kit/react", "Components", "EscrowDeliveryConfirm"]
+prev:
+  href: /docs/components/multi-sig-signer
+  label: MultiSigSigner
+next:
+  href: /docs/components/condition-badge
+  label: ConditionBadge
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Live preview
+
+<Demo preview={<EscrowDeliveryConfirmDemo />} code={`import { EscrowDeliveryConfirm } from "@cdr-kit/react";
+
+<EscrowDeliveryConfirm uuid={8812} buyer={connectedAddress} />
+
+// Render-prop for the dashboard:
+<EscrowDeliveryConfirm uuid={8812} buyer={connectedAddress}>
+  {({ paid, delivered, timeoutInMs, confirmDelivery, pay }) => (
+    paid === 0n
+      ? <button onClick={() => pay()}>Pay listing price</button>
+      : delivered
+        ? <span>delivered ✓</span>
+        : <button onClick={() => confirmDelivery()}>Confirm delivery</button>
+  )}
+</EscrowDeliveryConfirm>`} badge={<Badge>mock</Badge>} />
+
+## Props
+
+<PropsTable rows={[
+  { name: "uuid", type: "number", required: true, description: "ConditionalEscrowCondition-gated vault uuid." },
+  { name: "buyer", type: "Hex | undefined", description: "Address whose paidAt/delivered state to read. Usually the connected wallet." },
+  { name: "children", type: "(state) => ReactNode", description: "Render-prop. Receives the full EscrowState including seller, price, timeoutSecs, arbiter, paidAt, delivered, timeoutInMs, plus pay() and confirmDelivery() actions." },
+]} />
+
+## Intrinsic CDR limitation
+
+<p>Once a buyer pays + confirms + reads, they hold plaintext forever. The dispute path (arbiter refund) can revoke future access but cannot "un-read." Document this in your buyer UX.</p>

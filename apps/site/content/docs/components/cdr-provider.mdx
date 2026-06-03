@@ -1,6 +1,22 @@
 ---
 title: CdrProvider
-description: Top-level provider wiring wagmi + react-query + CDR config.
+description: "Batteries-included root provider. Wires WagmiProvider, react-query, and initializes the CDR crypto WASM. Use CdrConfigProvider directly if you already have your own wagmi stack (Privy / RainbowKit)."
+importLine: 'import { CdrProvider } from "@cdr-kit/react"'
+breadcrumb: ["@cdr-kit/react", "Components", "CdrProvider"]
+prev:
+  href: /docs/theming
+  label: Theming
+next:
+  href: /docs/components/vault-gate
+  label: VaultGate
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Props
+
+<PropsTable rows={[
+  { name: "apiUrl", type: "string", required: true, description: "Story-API REST base — keeper endpoint for partial collection." },
+  { name: "mockKit", type: "MockCdrKit", description: "Pass createMockCdrKit() for offline dev. When set, no chain/wallet is touched." },
+  { name: "config", type: "Config (wagmi)", description: "Optional wagmi config. A minimal default with an injected connector ships if omitted." },
+  { name: "queryClient", type: "QueryClient", description: "Optional TanStack Query client." },
+  { name: "appearance", type: "CdrAppearance", description: "CSS custom properties applied to the cdr-kit root (see Theming)." },
+]} />

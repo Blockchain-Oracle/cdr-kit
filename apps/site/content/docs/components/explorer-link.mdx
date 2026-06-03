@@ -1,6 +1,29 @@
 ---
-title: ExplorerLink
-description: Mono primary link with external-link icon.
+title: "<ExplorerLink>"
+description: 'Mono primary-colored link with an external-link icon. Opens in a new tab with rel="noopener noreferrer".'
+importLine: 'import { ExplorerLink } from "@cdr-kit/react-ui"'
+breadcrumb: ["@cdr-kit/react-ui", "DX primitives", "ExplorerLink"]
+prev:
+  href: /docs/components/short-address
+  label: ShortAddress
+next:
+  href: /docs/components/ip-price
+  label: IpPrice
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+import { ExplorerLink } from "@cdr-kit/react-ui";
+
+## Live preview
+
+<Demo preview={<ExplorerLink href="https://aeneid.storyrpc.io/address/0xac592f165D8dD1f27A087bdB39c0b2f619FF6C8C">view on Aeneid</ExplorerLink>} code={`import { ExplorerLink } from "@cdr-kit/react-ui";
+
+<ExplorerLink href="https://aeneid.storyrpc.io/address/0xac592f…">
+  view on Aeneid
+</ExplorerLink>`} />
+
+## Props
+
+<PropsTable rows={[
+  { name: "href", type: "string", required: true, description: "Target URL (typically a block-explorer address / tx page)." },
+  { name: "children", type: "ReactNode", defaultValue: '"view"', description: "Link label." },
+]} />

@@ -4,6 +4,7 @@ import { fontVariables } from "@/lib/fonts";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import { Reveal } from "@/components/reveal";
+import { SiteProviders } from "./providers";
 import "./globals.css";
 import "@cdr-kit/react-ui/styles.css";
 
@@ -24,10 +25,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
       </head>
       <body>
-        <Reveal />
-        <Nav />
-        <main>{children}</main>
-        <Footer />
+        <SiteProviders>
+          <Reveal />
+          <Nav />
+          <main>{children}</main>
+          <Footer />
+        </SiteProviders>
       </body>
     </html>
   );

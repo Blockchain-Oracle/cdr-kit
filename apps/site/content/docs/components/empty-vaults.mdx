@@ -1,6 +1,24 @@
 ---
-title: EmptyVaults
-description: Empty-state hook for vault lists.
+title: "<EmptyVaults>"
+description: "Semantic empty-state slot — a div[data-cdr-empty] with a default copy fallback. Style at the consumer level."
+importLine: 'import { EmptyVaults } from "@cdr-kit/react"'
+breadcrumb: ["@cdr-kit/react", "Components", "EmptyVaults"]
+prev:
+  href: /docs/components/cdr-skeleton
+  label: CdrSkeleton
+next:
+  href: /docs/components/condition-badge
+  label: ConditionBadge
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Live preview
+
+<Demo preview={<EmptyVaultsDemo />} code={`import { EmptyVaults } from "@cdr-kit/react";
+
+<EmptyVaults />
+<EmptyVaults>No vaults match your filter.</EmptyVaults>
+
+// typical use:
+{vaults.length === 0
+  ? <EmptyVaults>No vaults match your filter.</EmptyVaults>
+  : <VaultGrid vaults={vaults} />}`} />

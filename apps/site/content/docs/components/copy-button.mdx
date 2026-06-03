@@ -1,6 +1,28 @@
 ---
-title: CopyButton
-description: Minimal copy-to-clipboard button.
+title: "<CopyButton>"
+description: "Minimal copy-to-clipboard control. Flashes a check icon for 1.4s on success. Composes inside other primitives (e.g. <ShortAddress>)."
+importLine: 'import { CopyButton } from "@cdr-kit/react-ui"'
+breadcrumb: ["@cdr-kit/react-ui", "DX primitives", "CopyButton"]
+prev:
+  href: /docs/components/vault-card
+  label: VaultCard
+next:
+  href: /docs/components/short-address
+  label: ShortAddress
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+import { CopyButton as UiCopyButton } from "@cdr-kit/react-ui";
+
+## Live preview
+
+<Demo preview={<span className="cdr-ui-addr-chip" data-cdr-ui="">sample value<UiCopyButton value="sample value" /></span>} code={`import { CopyButton } from "@cdr-kit/react-ui";
+
+<CopyButton value="0xac592f165D8dD1f27A087bdB39c0b2f619FF6C8C" />`} />
+
+## Props
+
+<PropsTable rows={[
+  { name: "value", type: "string", required: true, description: "Text written to the clipboard on click." },
+  { name: "label", type: "string", defaultValue: '"copy"', description: "ARIA label for the button." },
+  { name: "className", type: "string", description: "Custom class — defaults to none; style via the wrapping chip." },
+]} />

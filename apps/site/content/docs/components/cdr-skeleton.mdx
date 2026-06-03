@@ -1,6 +1,25 @@
 ---
-title: CdrSkeleton
-description: Loading placeholder driven by --cdr-skeleton CSS variable.
+title: "<CdrSkeleton>"
+description: "Default placeholder rendered by <VaultGate> / <Vault.Loading> when no custom loading slot is supplied. Themeable via --cdr-skeleton."
+importLine: 'import { CdrSkeleton } from "@cdr-kit/react"'
+breadcrumb: ["@cdr-kit/react", "Components", "CdrSkeleton"]
+prev:
+  href: /docs/components/cdr-inspector
+  label: CdrInspector
+next:
+  href: /docs/components/empty-vaults
+  label: EmptyVaults
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Live preview
+
+<Demo preview={<CdrSkeletonDemo />} code={`import { CdrSkeleton } from "@cdr-kit/react";
+
+<CdrSkeleton />
+<CdrSkeleton lines={5} />`} />
+
+## Props
+
+<PropsTable rows={[
+  { name: "lines", type: "number", defaultValue: "3", description: "Number of bar rows to render." },
+]} />

@@ -1,6 +1,67 @@
 ---
-title: MultiSigSigner
-description: EIP-712 signer for multi-sig vault approvals.
+title: "<MultiSigSigner>"
+description: "Producer half of the off-chain dual-path MultiSigCondition flow: a button that signs an EIP-712 Approval and surfaces the 65-byte sig for the signer to share with the buyer."
+importLine: 'import { MultiSigSigner } from "@cdr-kit/react"'
+breadcrumb: ["@cdr-kit/react", "Components", "MultiSigSigner"]
+prev:
+  href: /docs/components/multi-sig-approval-tracker
+  label: MultiSigApprovalTracker
+next:
+  href: /docs/components/escrow-delivery-confirm
+  label: EscrowDeliveryConfirm
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Live preview
+
+<Demo preview={<MultiSigSignerDemo />} code={`import { MultiSigSigner } from "@cdr-kit/react";
+
+// Default render — button → on click signs EIP-712 → shows the sig + copy button.
+<MultiSigSigner uuid={7331} />
+
+// With a custom caller (default = connected wallet) and 30-min deadline:
+<MultiSigSigner
+  uuid={7331}
+  caller="0xBuyerWhoWillSubmit"
+  deadline={BigInt(Math.floor(Date.now() / 1000) + 1800)}
+/>
+
+// Render-prop for full custom UI:
+<MultiSigSigner uuid={7331}>
+  {({ sign, signature, isLoading, error, onSign }) => (
+    signature
+      ? <span>Sig: {signature}</span>
+      : <button disabled={isLoading} onClick={onSign}>
+          {isLoading ? "signing…" : "Approve read"}
+        </button>
+  )}
+</MultiSigSigner>`} badge={<Badge>mock</Badge>} />
+
+## Props
+
+<PropsTable rows={[
+  { name: "uuid", type: "number", required: true, description: "MultiSigCondition-gated vault uuid." },
+  { name: "caller", type: "Hex", description: "Optional override — defaults to the connected wallet. The sig is bound to this address; only this caller can use it via accessAuxData (anyone else fails ecrecover)." },
+  { name: "deadline", type: "bigint", description: "Optional unix-seconds expiry. Default: 1 hour from when the user clicks Sign. The buyer's accessMultiSig call MUST pass the same deadline used at signing time." },
+  { name: "children", type: "(state) => ReactNode", description: "Render-prop. Receives { sign, signature, isLoading, error, onSign }. onSign is a bound zero-arg helper that calls sign(...) with the component's caller+deadline." },
+]} />
+
+## Submit threshold-many sigs
+
+<p>Once <code>threshold</code>-many signers have produced sigs, the buyer (or any caller) builds the combined <code>accessAuxData</code> and reads the vault. <code>agent.accessMultiSig</code> handles the abi-encoding; sigs must be ordered by recovered signer address ascending (the contract enforces a strict-ascending dedupe).</p>
+
+<CodePanel title="ts" language="ts" code={`// Buyer side — once threshold-many sigs collected from different signers:
+import { CdrAgent } from "@cdr-kit/agent";
+
+const bytes = await agent.accessMultiSig({
+  uuid: 7331,
+  deadline,                  // MUST match every sig's deadline
+  sigs: [sigFromAlice, sigFromBob],  // sorted by signer address ASC
+});`} />
+
+## Epoch rotation invalidates in-flight sigs
+
+<p>The hook fetches the current <code>epoch</code> from <code>getConfig(uuid)</code> immediately before signing. If <code>rotateSigners</code> lands between sign and submit, the contract recomputes the digest with the new epoch — <code>ecrecover</code> returns a different address and the sig is rejected. The signer can re-sign against the new epoch if they still want to authorize the new set (use the "re-sign" button in the default render, or call <code>sign()</code> again).</p>
+
+## Hook variant
+
+<p>Skip the component and use <code>useSignMultiSigApproval(uuid)</code> directly — returns <code>{`{ sign, signature, isLoading, error }`}</code>. Useful when the sign trigger lives in a non-button surface (drag-and-drop, gesture, programmatic flow).</p>

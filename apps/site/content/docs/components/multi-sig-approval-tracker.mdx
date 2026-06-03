@@ -1,6 +1,35 @@
 ---
-title: MultiSigApprovalTracker
-description: Tracks on-chain + off-chain multi-sig approvals.
+title: "<MultiSigApprovalTracker>"
+description: "X of Y approved + epoch — the read-side dashboard for MultiSigCondition. Combines the on-chain signer set with the off-chain set of collected sigs to render approval progress."
+importLine: 'import { MultiSigApprovalTracker } from "@cdr-kit/react"'
+breadcrumb: ["@cdr-kit/react", "Components", "MultiSigApprovalTracker"]
+prev:
+  href: /docs/components/time-window-badge
+  label: TimeWindowBadge
+next:
+  href: /docs/components/multi-sig-signer
+  label: MultiSigSigner
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Live preview
+
+<Demo preview={<MultiSigApprovalTrackerDemo />} code={`import { MultiSigApprovalTracker } from "@cdr-kit/react";
+
+// signedBy is the list of signers who have already produced a sig OFF-CHAIN
+// (the contract is stateless on approvals — no per-signer tx).
+<MultiSigApprovalTracker
+  uuid={7331}
+  signedBy={["0xAlice...", "0xBob..."]}
+/>`} badge={<Badge>mock</Badge>} />
+
+## Props
+
+<PropsTable rows={[
+  { name: "uuid", type: "number", required: true, description: "MultiSigCondition-gated vault uuid." },
+  { name: "signedBy", type: "readonly Hex[]", defaultValue: "[]", description: "Off-chain set of signers who have produced a sig (the contract stores no approvals — this comes from your sig-collection UI)." },
+  { name: "children", type: "(state) => ReactNode", description: "Render-prop. Receives { signers, threshold, epoch, signedCount, isReady, isLoading }." },
+]} />
+
+## Epoch rotation
+
+<p>Each call to <code>rotateSigners()</code> bumps <code>epoch</code>. The tracker re-reads on rotation; UI should prompt for a fresh sig collection because in-flight sigs against the previous epoch are invalidated.</p>

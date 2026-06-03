@@ -1,6 +1,29 @@
 ---
-title: CdrProgress
-description: 6px gradient progress bar.
+title: "<CdrProgress>"
+description: "Determinate progress bar with a primary→signal gradient fill. Pass a value 0–100, or pass {collected, threshold} and the component derives it."
+importLine: 'import { CdrProgress } from "@cdr-kit/react-ui"'
+breadcrumb: ["@cdr-kit/react-ui", "DX primitives", "CdrProgress"]
+prev:
+  href: /docs/components/cdr-spinner
+  label: CdrSpinner
+next:
+  href: /docs/components/cdr-error
+  label: CdrError
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+import { CdrProgress } from "@cdr-kit/react-ui";
+
+## Live preview
+
+<Demo preview={<div style={{ display: "flex", flexDirection: "column", gap: 12, width: "100%", maxWidth: 320 }}><CdrProgress value={64} /><CdrProgress collected={6} threshold={10} /></div>} code={`import { CdrProgress } from "@cdr-kit/react-ui";
+
+<CdrProgress value={64} />
+<CdrProgress collected={6} threshold={10} />`} />
+
+## Props
+
+<PropsTable rows={[
+  { name: "value", type: "number", description: "0–100 percentage. Takes precedence over collected/threshold." },
+  { name: "collected", type: "number", description: "Numerator — used when value isn't provided." },
+  { name: "threshold", type: "number", description: "Denominator — used when value isn't provided." },
+]} />

@@ -1,6 +1,40 @@
 ---
-title: HeartbeatTimer
-description: Dead-man countdown + extend-now poke button.
+title: "<HeartbeatTimer>"
+description: "Countdown to DeadManSwitchCondition.unlockAt with a creator-side poke() button. Flips into critical mode once < 25% of the window remains, so the UI can prompt the creator before silence becomes irreversible."
+importLine: 'import { HeartbeatTimer } from "@cdr-kit/react"'
+breadcrumb: ["@cdr-kit/react", "Components", "HeartbeatTimer"]
+prev:
+  href: /docs/components/empty-vaults
+  label: EmptyVaults
+next:
+  href: /docs/components/time-window-badge
+  label: TimeWindowBadge
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Live preview
+
+<Demo preview={<HeartbeatTimerDemo />} code={`import { HeartbeatTimer, useDeadManTimer } from "@cdr-kit/react";
+
+// Default headless render — countdown + extend button:
+<HeartbeatTimer uuid={4242} />
+
+// Custom render — full control via render-prop:
+<HeartbeatTimer uuid={4242}>
+  {({ remainingMs, isCritical, isUnlocked, poke }) => (
+    <div className={isCritical ? "warn" : ""}>
+      {isUnlocked ? "unlocked" : \`unlocks in \${remainingMs / 1000}s\`}
+      <button onClick={() => poke()}>extend now</button>
+    </div>
+  )}
+</HeartbeatTimer>`} badge={<Badge>mock</Badge>} />
+
+## Props
+
+<PropsTable rows={[
+  { name: "uuid", type: "number", required: true, description: "DeadManSwitchCondition-gated vault uuid." },
+  { name: "children", type: "(state: DeadManTimer) => ReactNode", description: "Optional render-prop. Receives { unlocksAt, duration, remainingMs, isUnlocked, isCritical, poke, isLoading }." },
+]} />
+
+## Hook variant
+
+<p>Skip the component and consume <code>useDeadManTimer(uuid)</code> directly. Returns the same state object the render-prop receives.</p>

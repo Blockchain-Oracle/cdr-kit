@@ -1,6 +1,37 @@
 ---
-title: SubscribeButton
-description: Batteries-included CTA wrapping useSubscribeAndAccess.
+title: "<SubscribeButton>"
+description: "Batteries-included CTA. Wraps useSubscribeAndAccess, renders an inline AccessStepper through the wait phases, then shows the decrypted JSON when access is granted."
+importLine: 'import { SubscribeButton } from "@cdr-kit/react-ui"'
+breadcrumb: ["@cdr-kit/react-ui", "Components", "SubscribeButton"]
+prev:
+  href: /docs/components/access-stepper
+  label: AccessStepper
+next:
+  href: /docs/components/vault-card
+  label: VaultCard
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+## Live preview
+
+<Demo preview={<SubscribeButtonDemo />} code={`import { CdrProvider } from "@cdr-kit/react";
+import { createMockCdrKit } from "@cdr-kit/core";
+import { SubscribeButton } from "@cdr-kit/react-ui";
+
+<CdrProvider mockKit={createMockCdrKit()}>
+  <SubscribeButton
+    uuid={4200}
+    priceWei={5n * 10n ** 18n}
+    priceLabel="5 $IP"
+  />
+</CdrProvider>`} badge={<Badge>mock kit</Badge>} />
+
+## Props
+
+<PropsTable rows={[
+  { name: "uuid", type: "number", required: true, description: "The CDR vault id to subscribe to." },
+  { name: "priceWei", type: "bigint", required: true, description: "Total value (wei) sent to subscribe. Use the maxPricePerPeriod from your condition config." },
+  { name: "priceLabel", type: "string", required: true, description: 'Human-readable price rendered on the button (e.g. "5 $IP").' },
+  { name: "periods", type: "bigint", defaultValue: "1n", description: "Number of subscription periods to pay for in this call." },
+  { name: "subscriptionCondition", type: "Hex", description: "Override the default deployed SubscriptionCondition address." },
+  { name: "onAccess", type: "(bytes: Uint8Array) => void", description: "Called with the decrypted bytes once the flow completes." },
+]} />
