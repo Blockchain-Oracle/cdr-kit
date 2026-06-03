@@ -1,13 +1,13 @@
 "use client";
 
 import { UnlockablePill } from "@cdr-kit/react-ui";
-import { DocsMockProvider } from "../providers";
+import { DocsLiveProvider } from "../providers";
 
 /** Live preview for `/docs/components/unlockable` — a realistic blog paragraph with three
  *  pills of different reveal types (text exhibit, image attachment, hidden prose). */
 export function UnlockableDemo() {
   return (
-    <DocsMockProvider>
+    <DocsLiveProvider>
       <article className="unl-demo">
         <h3 className="unl-demo-title">Trouble at the Lake House</h3>
         <p className="unl-demo-byline">Arlo Vance · 6 min read</p>
@@ -36,6 +36,6 @@ export function UnlockableDemo() {
           — written in his own hand the morning after.
         </p>
       </article>
-    </DocsMockProvider>
+    </DocsLiveProvider>
   );
 }

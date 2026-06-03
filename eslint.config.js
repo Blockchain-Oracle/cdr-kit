@@ -6,10 +6,15 @@ export default tseslint.config(
     ignores: [
       "**/dist/**",
       "**/.next/**",
+      "**/.source/**",
       "**/generated.ts",
       "**/node_modules/**",
       "contracts/**",
       "**/*.config.*",
+      // Scaffolder templates are stringified codegen — they're conceptually configs that
+      // happen to be .ts files. The 400-line cap doesn't make sense for these and any split
+      // would just scatter a single conceptual artifact across multiple files.
+      "packages/create-cdr-kit-app/src/templates/**",
     ],
   },
   js.configs.recommended,

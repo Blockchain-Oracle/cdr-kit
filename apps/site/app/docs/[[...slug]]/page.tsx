@@ -65,8 +65,10 @@ export default async function Page({ params }: Props) {
     const rel = page.url.replace(/^\/docs\/?/, "") || "index";
     const mdxPath = join(process.cwd(), "content/docs", `${rel}.mdx`);
     rawMarkdown = readFileSync(mdxPath, "utf-8");
-  } catch {
-    // Fall back silently; button still renders, copies nothing
+  } catch (err) {
+    // Surface but don't crash — the page itself is already rendered via fumadocs
+    // page.data.body; the Copy button just degrades to an empty payload.
+    console.warn(`[docs] Failed to read raw MDX for ${page.url}:`, (err as Error).message);
   }
 
   return (

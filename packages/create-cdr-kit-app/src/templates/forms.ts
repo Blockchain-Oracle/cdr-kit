@@ -1,6 +1,5 @@
 import { dedent } from "../util.js";
 import {
-  ENV_LOCAL_EXAMPLE,
   GITIGNORE,
   NEXT_CONFIG_TS,
   NEXT_ENV_DTS,

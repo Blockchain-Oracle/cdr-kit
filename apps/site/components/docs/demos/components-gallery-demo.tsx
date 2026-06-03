@@ -12,6 +12,12 @@ import {
   ShortAddress,
   ExplorerLink,
 } from "@cdr-kit/react-ui";
+import { aeneid } from "@cdr-kit/contracts";
+
+// Single source for the factory address — never hardcode the literal here
+// (CLAUDE.md: addresses live in @cdr-kit/contracts only).
+const FACTORY = aeneid.cdrKitVault as `0x${string}`;
+const FACTORY_EXPLORER = `https://aeneid.storyscan.xyz/address/${FACTORY}`;
 
 interface Tile {
   href: string;
@@ -143,16 +149,14 @@ const SECTIONS: Section[] = [
         href: "/docs/components/short-address",
         label: "<ShortAddress>",
         importLine: "@cdr-kit/react-ui",
-        preview: <ShortAddress address="0xac592f165D8dD1f27A087bdB39c0b2f619FF6C8C" />,
+        preview: <ShortAddress address={FACTORY} />,
       },
       {
         href: "/docs/components/explorer-link",
         label: "<ExplorerLink>",
         importLine: "@cdr-kit/react-ui",
         preview: (
-          <ExplorerLink href="https://aeneid.storyscan.xyz/address/0xac592f165D8dD1f27A087bdB39c0b2f619FF6C8C">
-            view on explorer
-          </ExplorerLink>
+          <ExplorerLink href={FACTORY_EXPLORER}>view on explorer</ExplorerLink>
         ),
       },
       {
