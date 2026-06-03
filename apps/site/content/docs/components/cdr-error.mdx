@@ -1,6 +1,33 @@
 ---
-title: CdrError
-description: Soft-bordered danger alert with optional retry.
+title: "<CdrError>"
+description: Soft-bordered danger state with an optional retry CTA. Pair with caught errors from useAccessVault or useSubscribeAndAccess.
+importLine: 'import { CdrError } from "@cdr-kit/react-ui"'
+breadcrumb: ["@cdr-kit/react-ui", "DX primitives", "CdrError"]
+prev:
+  href: /docs/components/cdr-progress
+  label: CdrProgress
+next:
+  href: /docs/agent-kit
+  label: Agent kit
 ---
 
-{/* Placeholder. Full content migration in T1-E. */}
+import { CdrError } from "@cdr-kit/react-ui";
+
+## Live preview
+
+<Demo preview={<CdrError title="Read timed out" message="Threshold not met in time." />} code={`import { CdrError } from "@cdr-kit/react-ui";
+
+<CdrError
+  title="Read timed out"
+  message="Threshold not met in time."
+  onRetry={() => refetch()}
+/>`} />
+
+## Props
+
+<PropsTable rows={[
+  { name: "title", type: "ReactNode", required: true, description: "Bold first line — the error title." },
+  { name: "message", type: "ReactNode", description: "Optional detail line below the title." },
+  { name: "onRetry", type: "() => void", description: "When set, renders the retry button on the right." },
+  { name: "retryLabel", type: "string", defaultValue: '"Retry"', description: "Retry button label." },
+]} />

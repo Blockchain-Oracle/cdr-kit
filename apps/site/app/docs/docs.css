@@ -234,3 +234,28 @@
   .doc-nav-foot { flex-direction: column; gap: 10px; }
   .doc-nav-foot .next { text-align: left; }
 }
+
+/* T1-F: per-page Copy Page button — appears in the title row as a "badge".
+ * Style mirrors the existing .badge with a hover affordance + flash on copy. */
+.copy-page-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--line, oklch(22% 0.012 90));
+  background: color-mix(in oklab, var(--paper, oklch(17% 0.012 90)) 80%, transparent);
+  color: var(--ink-2, oklch(70% 0.012 90));
+  font-family: ui-monospace, monospace;
+  font-size: 0.74rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+}
+.copy-page-btn:hover {
+  border-color: color-mix(in oklab, var(--accent, oklch(78% 0.16 70)) 50%, var(--line));
+  color: var(--ink, oklch(94% 0.01 90));
+  background: color-mix(in oklab, var(--paper, oklch(17% 0.012 90)) 92%, transparent);
+}
+.copy-page-btn[data-copied] {
+  color: oklch(72% 0.18 145);
+  border-color: color-mix(in oklab, oklch(72% 0.18 145) 60%, var(--line));
+}

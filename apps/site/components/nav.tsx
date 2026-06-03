@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { LockboxGlyph, Npm, Github } from "./icons";
 import { ThemeToggle } from "./theme-toggle";
+import { NavSearch } from "./nav-search";
 
 const primary = [
   { href: "/docs", label: "Docs" },
@@ -107,6 +108,7 @@ export function Nav() {
           </Link>
         </nav>
         <div className="nav-right">
+          <NavSearch />
           <a
             className="icon-btn nav-icon-md"
             href="https://www.npmjs.com/org/cdr-kit"

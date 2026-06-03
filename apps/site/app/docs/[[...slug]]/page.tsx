@@ -1,8 +1,11 @@
 import { notFound } from "next/navigation";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import type { Metadata } from "next";
 import type { ComponentType } from "react";
 import { source } from "@/lib/source";
 import { DocPage } from "@/components/docs/doc-page";
+import { CopyPageButton } from "@/components/docs/copy-page-button";
 import { getMDXComponents } from "@/lib/mdx-components";
 
 type Props = { params: Promise<{ slug?: string[] }> };
@@ -53,11 +56,25 @@ export default async function Page({ params }: Props) {
       label: typeof node.title === "string" ? node.title : "",
     }));
 
+  // Raw MDX for the per-page Copy button. Server-read once; passed as a string
+  // to the client component so there's no extra fetch round-trip. The MDX file
+  // path is derived from the URL: /docs/components/x → content/docs/components/x.mdx;
+  // /docs → content/docs/index.mdx.
+  let rawMarkdown = "";
+  try {
+    const rel = page.url.replace(/^\/docs\/?/, "") || "index";
+    const mdxPath = join(process.cwd(), "content/docs", `${rel}.mdx`);
+    rawMarkdown = readFileSync(mdxPath, "utf-8");
+  } catch {
+    // Fall back silently; button still renders, copies nothing
+  }
+
   return (
     <DocPage
       data={{
         breadcrumb: data.breadcrumb ?? [],
         title: data.title,
+        badges: <CopyPageButton markdown={rawMarkdown} />,
         lede: data.description ?? "",
         importLine: data.importLine,
         prev: data.prev,
