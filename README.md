@@ -6,6 +6,14 @@ A standard library of 9 deployed CDR condition contracts + a typed TS SDK + a Re
 
 > **Status: 0.6.0 live on npm + Aeneid.** 15 packages published to [npmjs.com/org/cdr-kit](https://www.npmjs.com/org/cdr-kit). 9 conditions deployed on Story Aeneid (5 base + 4 advanced shipped in 0.5). 110 Foundry tests + workspace lint/typecheck/build/test all green. Dashboard live at [cdrkit.xyz](https://cdrkit.xyz) (built from `apps/site/`). The full encrypt→write→read→decrypt round-trip, the dual-path MultiSig flow, the Story IP creator path (`agent.publish()`), and an autonomous LLM-driven agent paying + reading via MCP tools all run end-to-end on real chain.
 
+## Use the skills from any agent (Claude Code · Cursor · Copilot · Cline · …)
+
+```
+npx skills add Blockchain-Oracle/story-cdr
+```
+
+Installs the cdr-kit Agent Skills via [skills.sh](https://skills.sh).
+
 ## Install (any of these — pick the surface you want)
 
 ```bash

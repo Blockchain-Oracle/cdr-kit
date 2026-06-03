@@ -30,6 +30,7 @@ import {
 } from "@/components/docs/demos/headless-demos";
 import { CdrFormDemo } from "@/components/gallery/cdr-form-demo";
 import { StorageProviderPickerDemo } from "@/components/gallery/storage-provider-picker-demo";
+import { RoadmapTable } from "@/components/docs/roadmap-table";
 
 /**
  * Components available to every MDX page without per-file imports.
@@ -60,5 +61,6 @@ export function getMDXComponents(): MDXComponents {
     EmptyVaultsDemo,
     CdrFormDemo,
     StorageProviderPickerDemo,
+    RoadmapTable,
   };
 }

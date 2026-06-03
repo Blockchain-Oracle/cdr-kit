@@ -23,6 +23,7 @@ export const SIDEBAR: SideGroup[] = [
       { href: "/docs", label: "Introduction" },
       { href: "/docs/quickstart", label: "Quickstart" },
       { href: "/docs/theming", label: "Theming" },
+      { href: "/docs/roadmap", label: "Roadmap" },
     ],
   },
   {

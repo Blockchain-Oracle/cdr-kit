@@ -1,6 +1,6 @@
 {
   "name": "@cdr-kit/agent",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "Autonomous agent client for Story CDR: discover -> subscribe -> access vaults from its own wallet.",
   "type": "module",
   "sideEffects": false,

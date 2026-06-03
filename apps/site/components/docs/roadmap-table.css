@@ -1,0 +1,125 @@
+/* RoadmapTable — list of cards with status-coded left borders. */
+
+.rm {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin: 22px 0 30px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rm-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px 20px 18px 22px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--line-2);
+  border-radius: 10px;
+  scroll-margin-top: 90px;
+  transition: border-color 0.14s, transform 0.12s, box-shadow 0.14s;
+}
+.rm-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 22px -14px color-mix(in oklab, var(--ink) 22%, transparent);
+}
+.rm-card:target {
+  box-shadow:
+    0 0 0 3px color-mix(in oklab, var(--primary) 18%, transparent),
+    0 6px 22px -14px color-mix(in oklab, var(--ink) 22%, transparent);
+}
+
+.rm-card--next { border-left-color: var(--primary, oklch(0.66 0.18 30)); }
+.rm-card--queued { border-left-color: oklch(0.66 0.16 268); }
+.rm-card--exploring { border-left-color: var(--line-2); }
+
+.rm-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.rm-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 10px 4px 8px;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--paper-2);
+  color: var(--ink-2);
+}
+.rm-statusdot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: currentColor;
+  box-shadow: 0 0 0 3px color-mix(in oklab, currentColor 18%, transparent);
+}
+
+.rm-dot--next { color: var(--primary, oklch(0.66 0.18 30)); }
+.rm-dot--next .rm-statusdot { background: var(--primary, oklch(0.66 0.18 30)); }
+
+.rm-dot--queued { color: oklch(0.6 0.18 268); }
+.rm-dot--queued .rm-statusdot { background: oklch(0.6 0.18 268); }
+
+.rm-dot--exploring { color: var(--ink-3); }
+.rm-dot--exploring .rm-statusdot { background: var(--ink-3); }
+
+.rm-anchor {
+  font-family: var(--mono);
+  font-size: 0.86rem;
+  color: var(--ink-3);
+  text-decoration: none;
+  padding: 2px 8px;
+  border-radius: 6px;
+  transition: color 0.14s, background-color 0.14s;
+  opacity: 0;
+}
+.rm-card:hover .rm-anchor,
+.rm-card:focus-within .rm-anchor { opacity: 1; }
+.rm-anchor:hover { color: var(--ink); background: var(--paper-2); }
+
+.rm-title {
+  margin: 0;
+  font-family: var(--display, inherit);
+  font-size: 1.08rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.rm-body {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+.rm-body code {
+  font-family: var(--mono);
+  font-size: 0.88em;
+  padding: 1px 6px;
+  border-radius: 5px;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+
+@media (min-width: 720px) {
+  .rm { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 540px) {
+  .rm-card { padding: 16px 16px 16px 18px; }
+  .rm-title { font-size: 1rem; }
+  .rm-body { font-size: 0.88rem; }
+  .rm-anchor { opacity: 1; }
+}

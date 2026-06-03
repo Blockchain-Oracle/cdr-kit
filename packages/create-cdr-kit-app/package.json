@@ -1,6 +1,6 @@
 {
   "name": "create-cdr-kit-app",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "Scaffold a runnable cdr-kit starter (mock mode — no wallet/chain needed).",
   "type": "module",
   "bin": {

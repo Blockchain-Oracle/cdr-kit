@@ -1,0 +1,138 @@
+---
+title: Roadmap
+description: What ships next. Categorized by surface — conditions, storage adapters, agent kit, scaffolder, forms, dashboard. Excludes mainnet (CDR is still testnet-only).
+breadcrumb: ["cdr-kit", "Roadmap"]
+prev:
+  href: /docs
+  label: Introduction
+next:
+  href: /docs/quickstart
+  label: Quickstart
+---
+
+cdr-kit ships in two-week cycles. This page is the live picture of what's in flight, what's queued, and what we've explicitly ruled out. Each item carries a confidence tag: `next` (in the upcoming release), `queued` (next 1–2 cycles), `exploring` (we know it's needed, design isn't locked yet).
+
+<Callout type="warn">
+  **Mainnet support is out of scope** until Story Protocol promotes CDR off testnet. Every roadmap item below targets Aeneid (chain&nbsp;1315). When mainnet lands we'll cut a 1.0 release and migrate the address registry in `@cdr-kit/contracts` in one commit; nothing else needs to change.
+</Callout>
+
+## Condition contracts
+
+The standard library has 9 deployed conditions today. The roadmap focuses on patterns that real CDR consumers keep reinventing.
+
+<RoadmapTable rows={[
+  { id: "ratelimit-condition", status: "next", title: "RateLimitCondition", body: "Cap reads per wallet per window. Useful for API-key replacement: 1 000 reads/24h per subscription, enforced on the read condition itself rather than at an API gateway." },
+  { id: "paymenttoken-condition", status: "queued", title: "PaymentTokenCondition", body: "Subscription / tier-gate variants that accept any whitelisted ERC-20 instead of native IP. Lets sellers price in USDC / WIP / their own token without changing the SDK surface." },
+  { id: "geofence-condition", status: "queued", title: "GeoFenceCondition", body: "Read access gated by a signed location claim. Pairs with a small attestation service (out of scope for cdr-kit but documented). Use cases: regional licensing, IP-blocked publications." },
+  { id: "composable-and-or", status: "queued", title: "Composable AND/OR (v2)", body: "Today's ComposableCondition is AND-only. v2 adds OR semantics via a small bytecode (postfix booleans). Critical for 'subscribers OR holders of license token X' gating." },
+  { id: "crosschain-condition", status: "exploring", title: "CrossChainCondition", body: "Read condition that verifies a Merkle proof of state on another chain (e.g. NFT held on Base). Requires a light client; likely a wrapper over Wormhole or LayerZero rather than rolling our own." },
+  { id: "revocable-write", status: "exploring", title: "RevocableWriteCondition", body: "Author-side: invalidate every prior read of a vault by rotating a key, so leaked plaintext can't be re-distributed via the protocol. CDR can't recover already-released plaintext (that's physics) but the protocol can refuse to release future reads." },
+]} />
+
+## Storage adapters
+
+`@cdr-kit/core` ships 8 adapters. The roadmap fills the obvious ecosystem holes.
+
+<RoadmapTable rows={[
+  { id: "filecoin-direct", status: "queued", title: "createFilecoinStorage", body: "Direct lighthouse / Filecoin Onramp pinning without Storacha as a middleman. Useful when consumers want explicit storage-deal receipts." },
+  { id: "arweave-storage", status: "queued", title: "createArweaveStorage", body: "Permanent storage adapter. Good fit for dead-man-switch + escrow combos where the seller wants the encrypted blob to outlive their wallet." },
+  { id: "vercel-blob", status: "exploring", title: "createVercelBlobStorage", body: "Vercel Blob is Vercel-Postgres-tier developer ergonomics for object storage. Skipping until Vercel commits to a real pricing model — currently in preview." },
+  { id: "akave", status: "exploring", title: "createAkaveStorage", body: "S3-compatible Filecoin / web3 storage. Will likely route through `createS3Storage` with a thin config helper." },
+]} />
+
+## Framework adapters
+
+5 agent-kit adapters today (Vercel AI · OpenAI · LangChain · AgentKit · GOAT). Mostly chasing where agents are actually being built.
+
+<RoadmapTable rows={[
+  { id: "mastra-adapter", status: "next", title: "@cdr-kit/mastra", body: "Mastra is the fastest-growing TS agent framework right now. Same 34-tool surface, ships as a Mastra Tool[]." },
+  { id: "ai-sdk-v6", status: "queued", title: "Vercel AI SDK v6 migration", body: "AI SDK v6 changes the tool() shape (deprecates execute() in favour of inputSchema + result). Bump @cdr-kit/vercel-ai once v6 stabilises." },
+  { id: "openai-agents-sdk", status: "queued", title: "@cdr-kit/openai-agents", body: "OpenAI's new Agents SDK (Python + TS) has its own tool format distinct from raw function-calling. Worth a dedicated adapter, NOT reusing @cdr-kit/openai." },
+  { id: "convex", status: "exploring", title: "@cdr-kit/convex", body: "Convex agents are a niche but real; their tool format is JSON-Schema. Likely doable as a one-file wrapper if anyone asks." },
+]} />
+
+## Scaffolder templates
+
+5 templates today (starter · blog · paywall · data-marketplace · forms). The roadmap targets shippable mini-products, not category showcases.
+
+<RoadmapTable rows={[
+  { id: "newsletter-template", status: "next", title: "subscription-newsletter", body: "Substack-shaped paywall: signup → SubscriptionCondition → encrypted markdown posts. Drops in a real Vercel Blob + Resend setup." },
+  { id: "gated-podcast", status: "queued", title: "gated-podcast", body: "Premium audio episodes behind SubscriptionCondition + range-request streaming from S3. Good demo of the CDR + storage split — audio blob on S3, key gate on chain." },
+  { id: "dao-vault", status: "queued", title: "dao-vault", body: "MultiSigCondition + governance. Treasury-style vault where a DAO unlocks documents via signer-set rotation. Pairs naturally with Safe." },
+  { id: "encrypted-chat", status: "exploring", title: "encrypted-chat", body: "Two-party DM with per-message vaults and read-receipts via on-chain events. The interesting question is whether to do per-message or per-thread vaults; we'll prototype both." },
+]} />
+
+## @cdr-kit/forms
+
+The new package (0.7.2) has the picker. Forms still needs the obvious gaps.
+
+<RoadmapTable rows={[
+  { id: "file-upload-field", status: "next", title: "CdrFileField + chunked uploads", body: "File-input field that auto-routes to the storage adapter for >1 KB blobs. Handles chunking + progress reporting + drag-drop." },
+  { id: "conditional-fields", status: "queued", title: "Conditional fields", body: "Show / hide fields based on other field values (`when={{ field: 'plan', equals: 'pro' }}`). Standard form-builder primitive; nothing CDR-specific but expected." },
+  { id: "multi-step", status: "queued", title: "Multi-step wizards", body: "<CdrFormStep> wrapper for breaking long forms into screens. Each step's fields encrypted together, persisted to localStorage between steps." },
+  { id: "validation-zod", status: "queued", title: "Schema validation (Zod)", body: "<CdrForm schema={zodSchema}> for typed validation before encryption. Surfaces errors per-field via the existing context." },
+  { id: "rich-text", status: "exploring", title: "Rich-text answer field", body: "Tiptap-style answer field for long-form responses (interviews, applications). Sanitisation + serialised JSON storage." },
+]} />
+
+## Dashboard surface
+
+Today's docs site doubles as the dashboard. Splitting the dashboard into its own route family is in flight.
+
+<RoadmapTable rows={[
+  { id: "vault-explorer", status: "next", title: "Vault explorer (/explore)", body: "Live grid + search across every VaultCreated event on Aeneid. Filter by condition kind, creator, license terms id. The 'block-explorer for CDR vaults' people keep asking for." },
+  { id: "seller-dashboard", status: "queued", title: "Seller dashboard (/dashboard)", body: "Per-creator revenue view: subscriptions, escrow paid, license-token mints. Reads on-chain, no off-chain analytics service." },
+  { id: "buyer-dashboard", status: "queued", title: "Buyer dashboard (/library)", body: "Every vault the connected wallet has access to. One-click decrypt + download." },
+  { id: "audit-log", status: "exploring", title: "Audit log per vault", body: "Payment / subscription event timeline (NOT who-decrypted — CDR can't provide that). Useful for the 'who paid me?' creator question." },
+]} />
+
+## Agent kit
+
+The 34-tool surface is stable. Next moves are around orchestration.
+
+<RoadmapTable rows={[
+  { id: "a2a-protocol", status: "queued", title: "A2A (agent-to-agent) negotiation", body: "Two cdr-kit agents discover each other via the registry, negotiate a price, escrow + read. Reference impl + protocol spec; not a new SDK package." },
+  { id: "spending-limits", status: "queued", title: "Spending limits / kill switch", body: "Per-tool budget caps inside CdrAgent (`agent.setBudget({ subscribe: 5e18 })`). Prevents a misbehaving LLM from draining the wallet on one tool." },
+  { id: "delegated-execution", status: "exploring", title: "Delegated execution", body: "Agent A delegates a tool call to Agent B via signed authorization. EIP-712 over the tool args. Useful for multi-agent treasuries." },
+]} />
+
+## Story IP integration
+
+`@cdr-kit/story` covers register-IP + attach-PIL + mint-license-token + register-derivative. The wrappers below fill the rest of Story's surface.
+
+<RoadmapTable rows={[
+  { id: "royalty-distribution", status: "queued", title: "Royalty distribution wrapper", body: "Wrap Story's RoyaltyModule + RoyaltyPolicyLAP for sellers who want to programmatically claim and distribute revenue to derivative-IP holders." },
+  { id: "dispute-module", status: "queued", title: "Dispute module wrapper", body: "Story's Dispute module lets IP holders flag derivatives. Pair with cdr-kit's MultiSigCondition for arbiter signoff." },
+  { id: "ipa-graph", status: "exploring", title: "IPA graph queries (read-side)", body: "Helpers to traverse parent / derivative chains. Mostly server-side; might end up as a tiny SDK extension rather than a new package." },
+]} />
+
+## Distribution
+
+How consumers find + install the CLI / scaffolder.
+
+<RoadmapTable rows={[
+  { id: "homebrew-tap", status: "exploring", title: "Homebrew tap for cdr CLI", body: "macOS users prefer `brew install cdr-kit` over `pnpm add -g`. Low effort, real reach. Likely a 50-line tap formula." },
+]} />
+
+## Performance + DX
+
+Smaller bundles, faster build, fewer footguns.
+
+<RoadmapTable rows={[
+  { id: "abi-codesplit", status: "next", title: "Code-split @cdr-kit/contracts ABIs", body: "Today the package re-exports every ABI; consumers pull all 9 conditions even when they only use 1. Split into `@cdr-kit/contracts/condition/<name>` entries." },
+  { id: "playground", status: "queued", title: "TypeScript playground", body: "<CdrPlayground> on cdrkit.xyz — try the SDK in-browser against mock CDR. Lowers the bar from 'install + clone' to 'click and run'." },
+  { id: "viem-2.x-2.y", status: "exploring", title: "Stay on viem's stable channel", body: "viem moves fast. Track the major / dual-publish at every minor so consumers don't get caught by peer-dep drift." },
+]} />
+
+## Out of scope (deliberately)
+
+- **Mainnet** — CDR isn't on mainnet yet; cdr-kit will follow.
+- **Custom precompile** — we wrap CDR, we don't replace it. If you want a different threshold scheme, fork [`@piplabs/cdr-sdk`](https://github.com/piplabs/cdr-sdk).
+- **Whitelabel dashboard** — the dashboard at cdrkit.xyz is for demos, not for hosting other people's data marketplaces. Use `create-cdr-kit-app --template data-marketplace`.
+- **Storage gateway** — we don't host a CDN. Every adapter is "you bring the credentials". Self-hosted only.
+- **AI agent for sale** — cdr-kit ships the toolkit, not a managed agent. If you want a hosted CDR agent, deploy the `vercel-ai-chatbot` example.
+
+## How to influence this list
+
+- 👍 on a [GitHub issue](https://github.com/Blockchain-Oracle/cdr-kit/issues) bumps it up.
+- A PR with a working draft beats every prioritization argument.
+- Sellers actually using CDR on Aeneid for real revenue get priority — drop a note in the issue describing your use-case.
