@@ -5,6 +5,7 @@
     "lib": ["dom", "dom.iterable", "es2022"],
     "allowJs": false,
     "noEmit": true,
+    "declaration": false,
     "incremental": true,
     "module": "esnext",
     "moduleResolution": "bundler",
@@ -21,5 +22,5 @@
     "**/*.tsx",
     ".next/types/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "./source.config.ts", "./.source/**/*"]
 }
