@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  '@cdr-kit/forms': file:/tmp/cdr-final/cdr-kit-forms-0.7.2.tgz
+
 importers:
 
   .:
@@ -48,8 +51,8 @@ importers:
         specifier: npm:@cdr-kit/core@^0.7.1
         version: 0.7.1(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))
       '@cdr-kit/forms':
-        specifier: npm:@cdr-kit/forms@^0.7.1
-        version: 0.7.1(@cdr-kit/core@0.7.1(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)))(@cdr-kit/react@0.7.0(6de358cb6f95ccf1289d564c5e284e08))(react@19.2.4)
+        specifier: file:/tmp/cdr-final/cdr-kit-forms-0.7.2.tgz
+        version: file:../../../../../tmp/cdr-final/cdr-kit-forms-0.7.2.tgz(@cdr-kit/core@0.7.1(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)))(@cdr-kit/react@0.7.0(6de358cb6f95ccf1289d564c5e284e08))(react@19.2.4)
       '@cdr-kit/react':
         specifier: npm:@cdr-kit/react@^0.7.0
         version: 0.7.0(6de358cb6f95ccf1289d564c5e284e08)
@@ -967,8 +970,9 @@ packages:
       helia:
         optional: true
 
-  '@cdr-kit/forms@0.7.1':
-    resolution: {integrity: sha512-q/PcEdwKXnL4Fut62XzirsQFiBF7i9Fx+md4wEFdahJNF8mH+d+cs3AicnNfchpsnZ7QyaDg6uFBaXgJ6xaX1A==}
+  '@cdr-kit/forms@file:../../../../../tmp/cdr-final/cdr-kit-forms-0.7.2.tgz':
+    resolution: {integrity: sha512-g0AEc4PSfp68h35ukEsKWCxK0s0K8/sXDe59puyvWBm23elVoGtleC7tTy6FJfH5vem92KmsV8nIE0Ffn0hbqQ==, tarball: file:../../../../../tmp/cdr-final/cdr-kit-forms-0.7.2.tgz}
+    version: 0.7.2
     engines: {node: '>=20'}
     peerDependencies:
       '@cdr-kit/core': '>=0.6.0'
@@ -9876,7 +9880,7 @@ snapshots:
     transitivePeerDependencies:
       - '@filoz/synapse-sdk'
 
-  '@cdr-kit/forms@0.7.1(@cdr-kit/core@0.7.1(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)))(@cdr-kit/react@0.7.0(6de358cb6f95ccf1289d564c5e284e08))(react@19.2.4)':
+  '@cdr-kit/forms@file:../../../../../tmp/cdr-final/cdr-kit-forms-0.7.2.tgz(@cdr-kit/core@0.7.1(@helia/unixfs@5.1.0(encoding@0.1.13))(helia@5.5.1(bufferutil@4.1.0)(react-native@0.85.3(@babel/core@7.29.7)(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.4)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10))(viem@2.51.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)))(@cdr-kit/react@0.7.0(6de358cb6f95ccf1289d564c5e284e08))(react@19.2.4)':
     dependencies:
       '@cdr-kit/react': 0.7.0(6de358cb6f95ccf1289d564c5e284e08)
       consola: 3.4.2

@@ -13,7 +13,7 @@
   "dependencies": {
     "@cdr-kit/contracts": "npm:@cdr-kit/contracts@^0.7.1",
     "@cdr-kit/core": "npm:@cdr-kit/core@^0.7.1",
-    "@cdr-kit/forms": "npm:@cdr-kit/forms@^0.7.1",
+    "@cdr-kit/forms": "npm:@cdr-kit/forms@^0.7.2",
     "@cdr-kit/react": "npm:@cdr-kit/react@^0.7.0",
     "@cdr-kit/react-ui": "npm:@cdr-kit/react-ui@^0.7.0",
     "@rainbow-me/rainbowkit": "^2.2.11",

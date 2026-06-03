@@ -132,6 +132,29 @@ const { fields, submittedAt } = await readFormSubmission(vaultId, {
   { name: "options", type: "{ value: string; label: string }[]", description: "Required for select / radio / checkbox; ignored otherwise." },
 ]} />
 
+## `<StorageProviderPicker>`
+
+Admin-side tile-grid for picking which `CdrStorageProvider` your platform routes form submissions through. **Not for respondent UIs** — render this in your setup screen, then wire the picked id to the matching factory on the server.
+
+```tsx
+import { StorageProviderPicker, type StorageProviderId } from "@cdr-kit/forms";
+import { useState } from "react";
+
+const [provider, setProvider] = useState<StorageProviderId>("pinata");
+return <StorageProviderPicker value={provider} onChange={setProvider} />;
+```
+
+<PropsTable rows={[
+  { name: "value", type: "StorageProviderId | undefined", description: "Currently-selected provider id. Pass undefined for 'none chosen'." },
+  { name: "onChange", type: "(id: StorageProviderId) => void", required: true, description: "Fires when the user clicks a tile." },
+  { name: "include", type: "readonly StorageProviderId[]", description: "Restrict to a subset of providers. Order is respected. Default: all 8." },
+  { name: "heading", type: "ReactNode | null", defaultValue: '"Storage backend"', description: "Visible heading above the tiles. Pass null to hide." },
+  { name: "className", type: "string", description: "Forwarded to the root container." },
+  { name: "style", type: "CSSProperties", description: "Forwarded inline style." },
+]} />
+
+The `StorageProviderId` union covers every adapter shipped by `@cdr-kit/core`: `"pinata"`, `"supabase"`, `"storacha"`, `"ipfs"`, `"s3"`, `"helia"`, `"gateway"`, `"memory"`. Each tile renders a brand-colored cdr-kit-authored glyph (not the provider's official mark — keeps licensing clean) and a one-line description.
+
 ### `<CdrField>` type values
 
 <PropsTable rows={[

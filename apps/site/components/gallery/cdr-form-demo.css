@@ -1,117 +1,174 @@
-.cdr-form-demo {
-  width: 100%;
-  max-width: 460px;
-  display: flex;
-  flex-direction: column;
+/* CdrFormDemo — premium two-pane surface. Uses cdr-ui tokens already present in the docs site. */
+.cfd {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
   gap: 14px;
+  width: 100%;
+  font-family: var(--sans, inherit);
 }
-.cdr-form-demo form,
-.cdr-form-demo [data-cdr-form] {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.cdr-form-demo [data-cdr-field] {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-.cdr-form-demo [data-cdr-field] label {
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: var(--ink-2);
-  letter-spacing: 0.01em;
-}
-.cdr-form-demo [data-cdr-field] input,
-.cdr-form-demo [data-cdr-field] textarea {
-  font-family: inherit;
-  font-size: 0.92rem;
-  color: var(--ink);
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 9px 12px;
-  outline: none;
-  transition: border-color 0.14s, box-shadow 0.14s;
-}
-.cdr-form-demo [data-cdr-field] textarea {
-  min-height: 78px;
-  resize: vertical;
-}
-.cdr-form-demo [data-cdr-field] input:focus,
-.cdr-form-demo [data-cdr-field] textarea:focus {
-  border-color: var(--primary-line);
-  box-shadow: 0 0 0 3px var(--primary-soft);
-}
-.cdr-form-demo [data-cdr-submit] {
-  margin-top: 4px;
-  font-family: inherit;
-  font-size: 0.92rem;
-  font-weight: 600;
-  color: var(--paper);
-  background: var(--primary);
-  border: 1px solid var(--primary-line);
-  border-radius: 8px;
-  padding: 10px 14px;
-  cursor: pointer;
-  transition: background-color 0.14s, transform 0.12s;
-}
-.cdr-form-demo [data-cdr-submit]:hover {
-  transform: translateY(-1px);
-}
-.cdr-form-demo [data-cdr-submit][disabled] {
-  opacity: 0.7;
-  cursor: not-allowed;
-  transform: none;
+@media (max-width: 880px) {
+  .cfd { grid-template-columns: 1fr; }
 }
 
-.cdr-form-demo-result {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 22px;
+.cfd-pane {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 16px;
+  padding: 22px;
+  background:
+    radial-gradient(120% 80% at 0% 0%, color-mix(in oklab, var(--primary) 5%, transparent), transparent 60%),
+    var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  isolation: isolate;
 }
-.cdr-form-demo-eyebrow {
+.cfd-pane::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, transparent, color-mix(in oklab, var(--ink) 1%, transparent));
+  pointer-events: none;
+  z-index: -1;
+}
+.cfd-pane--form { border-top: 1px solid color-mix(in oklab, var(--primary) 18%, var(--line)); }
+.cfd-pane--picker { border-top: 1px solid color-mix(in oklab, #7f8cff 18%, var(--line)); }
+
+.cfd-pane-head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.cfd-eyebrow {
   font-family: var(--mono);
   font-size: 0.66rem;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--primary);
-  margin: 0;
 }
-.cdr-form-demo-vault {
-  font-size: 1.4rem;
-  font-weight: 600;
-  color: var(--ink);
-  margin: 2px 0;
-}
-.cdr-form-demo-vault b {
-  font-family: var(--mono);
+.cfd-pane--picker .cfd-eyebrow { color: #9aa3ff; }
+.cfd-title {
+  font-size: 1.18rem;
   font-weight: 700;
+  color: var(--ink);
+  margin: 0;
+  letter-spacing: -0.01em;
 }
-.cdr-form-demo-sub {
-  font-size: 0.88rem;
-  color: var(--ink-2);
+.cfd-sub {
+  font-size: 0.86rem;
   line-height: 1.5;
+  color: var(--ink-2);
   margin: 0;
 }
-.cdr-form-demo-reset {
+
+/* Inputs inside the form pane — soften so they read as on a card */
+.cfd-pane--form .cdr-forms-input {
+  background: var(--paper);
+  border-color: var(--line);
+  color: var(--ink);
+}
+.cfd-pane--form .cdr-forms-input:focus-visible {
+  border-color: color-mix(in oklab, var(--primary) 60%, var(--line));
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--primary) 18%, transparent);
+}
+.cfd-pane--form .cdr-forms-label { color: var(--ink-2); font-size: 0.78rem; font-weight: 500; letter-spacing: 0.01em; }
+.cfd-pane--form .cdr-forms-required { color: var(--primary); }
+.cfd-pane--form .cdr-forms-submit {
+  background: linear-gradient(180deg, var(--primary), color-mix(in oklab, var(--primary) 88%, black));
+  color: var(--paper);
+  border: 1px solid color-mix(in oklab, var(--primary) 40%, transparent);
+  padding: 12px 18px;
+  border-radius: 10px;
+  box-shadow: 0 1px 0 color-mix(in oklab, white 12%, transparent) inset, 0 6px 18px -8px color-mix(in oklab, var(--primary) 60%, transparent);
+  transition: transform 0.12s ease, box-shadow 0.14s ease, filter 0.14s ease;
+}
+.cfd-pane--form .cdr-forms-submit:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+
+/* Success state */
+.cfd-result {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 22px;
+  background:
+    linear-gradient(180deg, color-mix(in oklab, #22c55e 8%, transparent), color-mix(in oklab, #22c55e 2%, transparent)),
+    var(--paper);
+  border: 1px solid color-mix(in oklab, #22c55e 28%, var(--line));
+  border-radius: 12px;
+  position: relative;
+}
+.cfd-result-dot {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #22c55e;
+  box-shadow: 0 0 0 4px color-mix(in oklab, #22c55e 28%, transparent);
+}
+.cfd-result-eyebrow {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #16a34a;
+}
+.cfd-result-vault {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.015em;
+}
+.cfd-result-vault b { font-family: var(--mono); font-weight: 700; color: #16a34a; }
+.cfd-result-sub {
+  margin: 4px 0 12px 0;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+.cfd-reset {
   align-self: flex-start;
-  margin-top: 8px;
   font-family: var(--mono);
   font-size: 0.78rem;
   color: var(--ink-2);
   background: transparent;
   border: 1px solid var(--line);
-  border-radius: 6px;
-  padding: 5px 10px;
+  border-radius: 7px;
+  padding: 6px 10px;
   cursor: pointer;
+  transition: color 0.14s, border-color 0.14s;
 }
-.cdr-form-demo-reset:hover {
-  color: var(--ink);
-  border-color: var(--line-2);
+.cfd-reset:hover { color: var(--ink); border-color: var(--line-2); }
+
+/* Picker pane footer */
+.cfd-picker-foot {
+  padding: 10px 12px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
 }
+.cfd-picker-foot code {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--ink-2);
+  word-break: break-all;
+}
+
+/* Bring the picker tiles in line with the docs site tokens */
+.cfd-pane--picker [data-cdr-provider-option] {
+  background: var(--paper);
+  border-color: var(--line);
+}
+.cfd-pane--picker [data-cdr-provider-option]:hover { border-color: var(--line-2); }
+.cfd-pane--picker [data-cdr-provider-name] { color: var(--ink); }
+.cfd-pane--picker [data-cdr-provider-desc] { color: var(--ink-2); }

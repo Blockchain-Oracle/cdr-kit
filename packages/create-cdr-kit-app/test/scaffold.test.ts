@@ -151,7 +151,10 @@ describe("create-cdr-kit-app scaffold", () => {
     expect(page).toContain("CdrForm");
     expect(page).toContain("CdrField");
     expect(page).toContain("CdrSubmitButton");
-    // Picker is gone — storage adapter is a server concern, not a respondent UX choice.
+    // The respondent form does NOT render StorageProviderPicker — picking a backend
+    // is an admin/setup concern (see @cdr-kit/forms exports for that surface), the
+    // respondent just fills the form and submits. Keep the scaffolded public page
+    // clean of that affordance.
     expect(page).not.toContain("StorageProviderPicker");
     expect(page).not.toContain("createMockCdrKit");
 

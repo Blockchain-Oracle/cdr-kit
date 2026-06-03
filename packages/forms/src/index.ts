@@ -9,3 +9,10 @@ export type { CdrSubmitButtonProps } from "./cdr-submit-button.js";
 
 export { useCdrSubmit } from "./use-cdr-submit.js";
 export type { CdrSubmitOptions, CdrSubmitResult } from "./use-cdr-submit.js";
+
+export { StorageProviderPicker, STORAGE_PROVIDERS } from "./storage-provider-picker.js";
+export type {
+  StorageProviderPickerProps,
+  StorageProviderOption,
+  StorageProviderId,
+} from "./storage-provider-picker.js";
