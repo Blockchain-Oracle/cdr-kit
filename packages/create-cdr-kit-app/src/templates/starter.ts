@@ -56,7 +56,8 @@ export const STARTER: Template = {
       content: dedent(`
         import "dotenv/config";
         import { CdrAgent } from "@cdr-kit/agent";
-        import { aeneid } from "@cdr-kit/contracts";
+        import { aeneid, cdrKitVaultAbi } from "@cdr-kit/contracts";
+        import { encodeAbiParameters, parseEventLogs } from "viem";
         import { consola } from "consola";
 
         const privateKey = process.env.WALLET_PRIVATE_KEY as \`0x\${string}\` | undefined;
@@ -67,23 +68,37 @@ export const STARTER: Template = {
         }
 
         const agent = new CdrAgent({ privateKey, rpcUrl: "https://aeneid.storyrpc.io" });
-        if (!agent.address) throw new Error("agent has no wallet address");
 
         const secret = new TextEncoder().encode("hello from cdr-kit on real Aeneid");
 
+        // The CDR precompile charges an allocate fee — must be passed as msg.value or
+        // createVault reverts with "CDR: Invalid fee amount". Read it live from the chain.
+        const fees = await agent.getFees();
+        consola.info(\`  allocate fee: \${fees.allocateWei} wei\`);
+
+        // TimeWindowCondition with (startTs=1, endTs=0) = "always open from genesis, no upper
+        // bound" — the cleanest factory-compatible "always allow" gate on the current Aeneid
+        // deployment. OpenCondition exists but isn't yet ConditionBase-derived so the factory
+        // _configure() step reverts (planned 0.7.x contract fix).
+        const readConfig = encodeAbiParameters(
+          [{ type: "uint64" }, { type: "uint64" }, { type: "bool" }],
+          [1n, 0n, false], // startTs=1 → since genesis, endTs=0 → forever, time-based (not block)
+        );
+
         consola.start("creating real CDR vault on Aeneid…");
         const txHash = await agent.createVault({
-          readConditionAddr: aeneid.openCondition as \`0x\${string}\`,
-          readConfig: "0x",
+          readConditionAddr: aeneid.timeWindowCondition as \`0x\${string}\`,
+          readConfig,
+          valueWei: fees.allocateWei,
         });
         consola.info(\`  tx=\${txHash}\`);
 
-        // createVault returns just the tx hash; the uuid is in the VaultCreated event.
-        // Read it off the latest vault this wallet owns.
-        const owned = await agent.getCreatorVaults(agent.address);
-        const latest = owned[owned.length - 1];
-        if (!latest) throw new Error("createVault confirmed but no vault visible on-chain yet");
-        const uuid = latest.uuid;
+        // createVault returns just the tx hash. The uuid is in the VaultCreated event —
+        // parse the receipt directly (avoids the post-tx read race in getCreatorVaults).
+        const receipt = await agent.client.publicClient.waitForTransactionReceipt({ hash: txHash });
+        const events = parseEventLogs({ abi: cdrKitVaultAbi, logs: receipt.logs, eventName: "VaultCreated" });
+        if (events.length === 0) throw new Error("createVault tx confirmed but no VaultCreated event found");
+        const uuid = Number(events[0]!.args.uuid);
         consola.success(\`vault uuid=\${uuid}\`);
 
         consola.start("writing encrypted data via CDR precompile…");

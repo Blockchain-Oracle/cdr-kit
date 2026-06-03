@@ -33,7 +33,8 @@ describe("create-cdr-kit-app scaffold", () => {
     expect(index).toContain("new CdrAgent");
     expect(index).toContain("aeneid.storyrpc.io");
     expect(index).toContain("WALLET_PRIVATE_KEY");
-    expect(index).toContain("getCreatorVaults");
+    expect(index).toContain("parseEventLogs");
+    expect(index).toContain("VaultCreated");
   });
 
   it("refuses to overwrite an existing path", () => {
