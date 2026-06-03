@@ -10,22 +10,39 @@ next:
   label: Contracts
 ---
 
-## Install (three paths)
+## Install (four paths)
 
-<CodePanel title="terminal" language="bash" code={`# 1. via the cdr CLI (recommended)
+<CodePanel title="terminal" language="bash" code={`# 1. skills.sh — works across Claude Code, Cursor, Copilot, Cline, 18+ agents (recommended)
+$ npx skills add Blockchain-Oracle/cdr-kit
+# adds all 11 cdr-kit skills, auto-detects your agent
+# Pick a subset:
+$ npx skills add Blockchain-Oracle/cdr-kit --skill design-condition
+$ npx skills add Blockchain-Oracle/cdr-kit --skill 'design-*'
+# Install to every agent on your machine:
+$ npx skills add Blockchain-Oracle/cdr-kit --all
+
+# 2. via the cdr CLI (cdr-kit-bundled, Claude Code only)
 $ npm install -g @cdr-kit/cli
 $ cdr skill install
 
-# 2. via Claude Code's plugin marketplace
+# 3. via Claude Code's plugin marketplace
 $ claude
 /plugin marketplace add Blockchain-Oracle/cdr-kit
 /plugin install cdr-kit@cdr-kit
 
-# 3. manual
+# 4. manual
 $ git clone https://github.com/Blockchain-Oracle/cdr-kit
 $ cp -r cdr-kit/packages/plugin/cdr-kit ~/.claude/skills/cdr-kit`} />
 
-## Skills (8)
+<Callout type="warn">
+**How `skills.sh` actually packages cdr-kit** — the CLI treats the whole GitHub repo as the **package** (`Blockchain-Oracle/cdr-kit`), then walks the repo's top-level `skills/` directory to discover each individual **skill** inside it. So `npx skills add Blockchain-Oracle/cdr-kit` installs **all 11** by default; `--skill <name>` picks one or more, `--skill '*'` is shorthand for all, and `--all` installs every skill into every detected agent.
+
+The CLI clones the repo into a cache, copies (or symlinks with `--copy` off) the matching `SKILL.md` files into your agent's skill folder (e.g. `~/.claude/skills/<name>/`), and writes a `skills-lock.json` next to your project so re-installs are reproducible. Update everything later with `npx skills update`.
+
+This means cdr-kit ships **once** (one repo, one badge) but each consumer can pull in only the skills they actually use — same model as a JS monorepo.
+</Callout>
+
+## Skills (11)
 
 <table className="props">
   <thead><tr><th>Skill</th><th>When it fires</th><th>What it teaches</th></tr></thead>
