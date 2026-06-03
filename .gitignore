@@ -20,3 +20,7 @@ screenshots/
 contracts/broadcast/
 # Next.js fumadocs generated content cache
 apps/site/.source/
+# local Claude Code state (agent memory, worktree scratch — per-machine)
+.claude/
+# internal designer brief (lives on disk for reference, not for the public repo)
+BRIEF.md
